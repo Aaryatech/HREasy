@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#334583</color>
+    <color name="colorPrimaryDark">#21316C</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorBlue">#002469</color>
+    <color name="colorRed">#FF0000</color>
+    <color name="colorGrey">#A9A9A9</color>
+    <color name="colorOrange">#FFA500</color>
+    <color name="twitterColor">#00ADEF</color>
+    <color name="fbColor">#465993</color>
+    <color name="colorTrans">#55ffffff</color>
+    <color name="colorTransfer">#55000000</color>
+</resources>
