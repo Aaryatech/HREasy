@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#E4E4E4"
     tools:context=".activity.SplashScreenActivity">
 
     <LinearLayout
@@ -16,7 +17,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center"
-            android:src="@drawable/logo"
+            android:src="@drawable/infrabeat_logo"
             />
 
 

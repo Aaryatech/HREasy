@@ -1,89 +1,38 @@
 package com.ats.hreasy.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.ats.hreasy.R;
 import com.ats.hreasy.fragment.AddLeaveFragment;
 import com.ats.hreasy.fragment.EmployeeListFragment;
 import com.ats.hreasy.fragment.HomeFragment;
+import com.ats.hreasy.fragment.LeaveFragment;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-//    private FloatingActionButton fab1, fab2, fab;
-//    private Animation fab_open, fab_close, fab_clock, fab_anticlock;
-//    TextView tv_fab1, tv_fab2;
-//    Boolean isOpen = false;
+    boolean doubleBackToExitPressedOnce = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-//        tv_fab1 = (TextView) findViewById(R.id.tv_fab1);
-//        tv_fab2 = (TextView) findViewById(R.id.tv_fab2);
-//
-//        fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
-//        fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
-//
-//        fab = (FloatingActionButton) findViewById(R.id.fab);
-//         fab1 = (FloatingActionButton) findViewById(R.id.fab1);
-//         fab2 = (FloatingActionButton) findViewById(R.id.fab2);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-////                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-////                        .setAction("Action", null).show();
-//
-//                if (isOpen) {
-//
-//                    tv_fab1.setVisibility(View.INVISIBLE);
-//                    tv_fab2.setVisibility(View.INVISIBLE);
-//                    fab1.startAnimation(fab_close);
-//                    fab2.startAnimation(fab_close);
-//                    fab1.setClickable(false);
-//                    fab2.setClickable(false);
-//                    isOpen = false;
-//
-//                } else {
-//                    tv_fab1.setVisibility(View.VISIBLE);
-//                    tv_fab2.setVisibility(View.VISIBLE);
-//                    fab1.setClickable(true);
-//                    fab2.setClickable(true);
-//                    fab1.startAnimation(fab_open);
-//                    fab2.startAnimation(fab_open);
-//                    isOpen = true;
-//                }
-//
-//            }
-//        });
-//
-//        fab1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                Toast.makeText(getApplicationContext(), "Fab1", Toast.LENGTH_SHORT).show();
-//
-//            }
-//        });
-//
-//        fab2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(getApplicationContext(), "Fab2", Toast.LENGTH_SHORT).show();
-//
-//            }
-//        });
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -102,9 +51,37 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+
+        Fragment exit = getSupportFragmentManager().findFragmentByTag("Exit");
+        Fragment homeFragment = getSupportFragmentManager().findFragmentByTag("HomeFragment");
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (exit instanceof HomeFragment && exit.isVisible()) {
+            if (doubleBackToExitPressedOnce) {
+                super.onBackPressed();
+                return;
+            }
+
+            doubleBackToExitPressedOnce = true;
+            Toast.makeText(HomeActivity.this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 2000);
+
+        } else if (homeFragment instanceof LeaveFragment && homeFragment.isVisible()) {
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, new HomeFragment(), "Exit");
+            ft.commit();
+
         } else {
             super.onBackPressed();
         }

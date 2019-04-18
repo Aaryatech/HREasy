@@ -80,7 +80,7 @@ public class EmployeeListFragment extends Fragment {
 
     private void prepareMovieData() {
 
-        EmpListTemp empListTemp = new EmpListTemp(R.drawable.event_image, "Action & Adventure", "Student");
+        EmpListTemp empListTemp = new EmpListTemp(R.drawable.logo, "Action & Adventure", "Student");
         empList.add(empListTemp);
 
          empListTemp = new EmpListTemp(R.drawable.logo, "Action & Adventure", "Student");

@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.ats.hreasy.R;
 import com.ats.hreasy.adapter.BalanceLeaveAdapter;
+import com.ats.hreasy.interfaces.AddLeaveInterface;
 import com.ats.hreasy.model.BalanceLeaveTemp;
 
 import java.text.ParseException;
@@ -37,7 +38,7 @@ import java.util.Date;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddLeaveFragment extends Fragment implements View.OnClickListener {
+public class AddLeaveFragment extends Fragment implements View.OnClickListener, AddLeaveInterface {
     public Spinner spType;
     private EditText edFromDate, edToDate;
     private TextView tvFromDate, tvToDate, tvViewBalnceLeave;
@@ -190,6 +191,11 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener {
             toDateMillis = calendar.getTimeInMillis();
         }
     };
+
+    @Override
+    public void fragmentBecameVisible() {
+
+    }
 
     private class FilterDialog extends Dialog {
 
