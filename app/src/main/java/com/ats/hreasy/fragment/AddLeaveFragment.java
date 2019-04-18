@@ -166,21 +166,6 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
             dd = dayOfMonth;
             edToDate.setText(dd + "-" + mm + "-" + yyyy);
             tvToDate.setText(yyyy + "-" + mm + "-" + dd);
-
-//            Date todate = null;
-//            try {
-//                todate = formatter1.parse(toDate);
-//            } catch (Exception e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
-//
-//            if (formatter1.format(fromdate).compareTo((formatter1.format(todate))) > 0){
-//                edToDate.setError("Invalid Date");
-//            }else{
-//                edToDate.setError(null);
-//            }
-
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DATE, -7);
             calendar.set(yyyy, mm - 1, dd);

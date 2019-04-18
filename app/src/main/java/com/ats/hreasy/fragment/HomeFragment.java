@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ats.hreasy.R;
 
@@ -85,7 +84,9 @@ public class HomeFragment extends Fragment {
         fabClaim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "Fab2", Toast.LENGTH_SHORT).show();
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.content_frame, new ClaimFragment(), "HomeFragment");
+                ft.commit();
 
             }
         });

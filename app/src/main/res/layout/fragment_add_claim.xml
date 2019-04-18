@@ -52,6 +52,15 @@
     </LinearLayout>
 
     <Spinner
+        android:id="@+id/spProject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/spinner_bg"/>
+
+    <Spinner
         android:id="@+id/spType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -60,98 +69,6 @@
         android:layout_marginRight="20dp"
         android:background="@drawable/spinner_bg"/>
 
-    <RadioGroup
-        android:id="@+id/rg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp">
-
-        <RadioButton
-            android:id="@+id/rbHalfDay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_weight="1"
-            android:buttonTint="@color/colorPrimaryDark"
-            android:text="Half Day" />
-
-        <RadioButton
-            android:id="@+id/rbFullday"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="25dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1"
-            android:textColor="@color/colorPrimaryDark"
-            android:buttonTint="@color/colorPrimaryDark"
-            android:text="Full day" />
-
-    </RadioGroup>
-
-    <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="3dp">
-
-            <EditText
-                android:id="@+id/edFromDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:drawable/editbox_background_normal"
-                android:editable="false"
-                android:hint="From Date"
-                android:inputType="none"
-                android:drawableRight="@drawable/ic_action_calender"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="20dp"
-                android:maxLines="1"
-                android:padding="15dp"
-                android:singleLine="true" />
-        </android.support.design.widget.TextInputLayout>
-
-        <TextView
-            android:id="@+id/tvFromDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="3dp"
-            android:layout_marginTop="10dp">
-
-            <EditText
-                android:id="@+id/edToDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:drawable/editbox_background_normal"
-                android:editable="false"
-                android:drawableRight="@drawable/ic_action_calender"
-                android:hint="To Date"
-                android:inputType="none"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="20dp"
-                android:maxLines="1"
-                android:padding="15dp"
-                android:singleLine="true" />
-        </android.support.design.widget.TextInputLayout>
-
-        <TextView
-            android:id="@+id/tvToDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -159,12 +76,41 @@
         android:layout_margin="3dp">
 
         <EditText
-            android:id="@+id/edTotalDayes"
+            android:id="@+id/edDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:drawable/editbox_background_normal"
             android:editable="false"
-            android:hint="Total Dayes"
+            android:hint="Date"
+            android:inputType="none"
+            android:drawableRight="@drawable/ic_action_calender"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:maxLines="1"
+            android:padding="15dp"
+            android:singleLine="true" />
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tvFromDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp">
+
+        <EditText
+            android:id="@+id/edAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/editbox_background_normal"
+            android:editable="false"
+            android:hint="Amount"
             android:inputType="none"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
@@ -194,18 +140,6 @@
             android:padding="15dp"
             android:singleLine="false" />
     </android.support.design.widget.TextInputLayout>
-
-    <TextView
-        android:id="@+id/tv_balanceLeave"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:gravity="right"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="16sp"
-        android:text="View Balance Leave"/>
 
     <Button
         android:id="@+id/btn_apply"
