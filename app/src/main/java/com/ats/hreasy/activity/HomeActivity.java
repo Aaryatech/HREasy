@@ -13,6 +13,7 @@ import android.view.MenuItem;
 
 import com.ats.hreasy.R;
 import com.ats.hreasy.fragment.AddLeaveFragment;
+import com.ats.hreasy.fragment.EmployeeListFragment;
 import com.ats.hreasy.fragment.HomeFragment;
 
 public class HomeActivity extends AppCompatActivity
@@ -141,8 +142,10 @@ public class HomeActivity extends AppCompatActivity
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, new AddLeaveFragment(), "HomeFragment");
             ft.commit();
-        } else if (id == R.id.nav_gallery) {
-
+        } else if (id == R.id.nav_empList) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, new EmployeeListFragment(), "HomeFragment");
+            ft.commit();
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {

@@ -150,13 +150,25 @@
             android:singleLine="false" />
     </android.support.design.widget.TextInputLayout>
 
+    <TextView
+        android:id="@+id/tv_balanceLeave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="right"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp"
+        android:text="View Balance Leave"/>
+
     <Button
         android:id="@+id/btn_apply"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/button_background"
         android:text="Apply"
         android:textColor="@color/colorWhite"/>
