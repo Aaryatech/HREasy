@@ -1,6 +1,5 @@
 package com.ats.hreasy.activity;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -9,7 +8,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -17,10 +15,10 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.ats.hreasy.R;
-import com.ats.hreasy.fragment.AddLeaveFragment;
 import com.ats.hreasy.fragment.EmployeeListFragment;
 import com.ats.hreasy.fragment.HomeFragment;
 import com.ats.hreasy.fragment.LeaveFragment;
+import com.ats.hreasy.fragment.PendingLeaveListFragment;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -115,9 +113,9 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_addLeave) {
+        if (id == R.id.nav_leavePendingList) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.content_frame, new AddLeaveFragment(), "HomeFragment");
+            ft.replace(R.id.content_frame, new PendingLeaveListFragment(), "HomeFragment");
             ft.commit();
         } else if (id == R.id.nav_empList) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

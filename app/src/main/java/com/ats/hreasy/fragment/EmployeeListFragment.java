@@ -64,7 +64,7 @@ public class EmployeeListFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
-        prepareMovieData();
+        prepareData();
         return view;
     }
 
@@ -78,7 +78,7 @@ public class EmployeeListFragment extends Fragment {
         mAdapter.updateList(temp);
     }
 
-    private void prepareMovieData() {
+    private void prepareData() {
 
         EmpListTemp empListTemp = new EmpListTemp(R.drawable.logo, "Action & Adventure", "Student");
         empList.add(empListTemp);

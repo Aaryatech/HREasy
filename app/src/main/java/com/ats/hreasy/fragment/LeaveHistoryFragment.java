@@ -41,12 +41,12 @@ private LeaveHistoryAdapter mAdapter;
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
-        prepareMovieData();
+        prepareData();
 
         return view;
     }
 
-    private void prepareMovieData() {
+    private void prepareData() {
         LeaveHistoryTemp leaveHistoryTemp = new LeaveHistoryTemp("Medical Leave","Half Day","15/4/2019 to 18/4/2019","3dayes","Pending");
         historyList.add(leaveHistoryTemp);
 

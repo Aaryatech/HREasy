@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 
 public class LeaveHistoryDetailActivity extends AppCompatActivity {
     LeaveHistoryTemp leaveHistoryTemp;
-    public TextView tvLeaveType,tvDayesType,tvDayes,tvDate,tvStatus;
+    public TextView tvLeaveType,tvDayesType,tvDayes,tvDate,tvStatus,tvEmpRemark,tvApproveRemark;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +22,8 @@ public class LeaveHistoryDetailActivity extends AppCompatActivity {
         tvDayes=(TextView)findViewById(R.id.tvDays);
         tvDate=(TextView)findViewById(R.id.tvDate);
         tvStatus=(TextView)findViewById(R.id.tvStatus);
+        tvEmpRemark=(TextView)findViewById(R.id.tvEmpRemark);
+        tvApproveRemark=(TextView)findViewById(R.id.tvApproveRemark);
 
         String upcomingStr = getIntent().getStringExtra("model");
         Gson gson = new Gson();
