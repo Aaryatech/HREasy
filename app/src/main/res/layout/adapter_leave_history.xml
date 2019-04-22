@@ -4,6 +4,7 @@
     android:id="@+id/cardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="3dp"
     app:cardBackgroundColor="@color/colorWhite"
     app:cardElevation="3dp"
     app:cardUseCompatPadding="true">
@@ -11,9 +12,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp">
+        android:orientation="vertical"
+        android:padding="3dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -21,6 +24,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:gravity="center_vertical"
                 android:id="@+id/tvLeaveType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -28,7 +32,7 @@
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_leave_blue"
                 android:drawablePadding="10dp"
-                android:fontFamily="@font/open_sans_regular"
+                android:fontFamily="@font/sofiapro_light"
                 android:text="Medical Leave" />
 
             <TextView
@@ -36,11 +40,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
-                android:drawablePadding="10dp"
                 android:layout_marginRight="10dp"
-                android:fontFamily="@font/open_sans_regular"
-                android:text="Half day"
-                android:textColor="@color/colorAccent" />
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/sofiapro_light"
+                android:text="Half day" />
 
         </LinearLayout>
 
@@ -56,9 +59,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
+                android:gravity="center_vertical"
                 android:drawableLeft="@drawable/ic_date_blue"
                 android:drawablePadding="10dp"
-                android:fontFamily="@font/open_sans_regular"
+                android:fontFamily="@font/sofiapro_light"
                 android:text="15/4/2019 to 18/4/2019" />
 
             <TextView
@@ -66,9 +70,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
-                android:fontFamily="@font/open_sans_semi_bold"
-                android:gravity="end"
                 android:layout_marginRight="10dp"
+                android:fontFamily="@font/sofiapro_light"
+                android:gravity="end"
                 android:text="5 days"
                 android:textAlignment="textEnd" />
         </LinearLayout>
@@ -77,12 +81,13 @@
             android:id="@+id/tvStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pending"
-           android:layout_gravity="right"
-            android:layout_marginRight="10dp"
+            android:layout_gravity="right"
             android:layout_marginTop="10dp"
-            android:fontFamily="@font/open_sans_bold"
-            android:textColor="@color/colorPrimaryDark"/>
+            android:layout_marginRight="10dp"
+            android:fontFamily="@font/sofiapro_bold"
+            android:text="Pending"
+            android:textSize="15sp"
+            android:textColor="@color/colorAccent" />
 
     </LinearLayout>
 

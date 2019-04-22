@@ -1,14 +1,20 @@
 package com.ats.hreasy.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ats.hreasy.R;
+import com.ats.hreasy.activity.HomeActivity;
+import com.ats.hreasy.fragment.UpdateLeaveStatusFragment;
 import com.ats.hreasy.model.LeaveAppTemp;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -27,6 +33,7 @@ public class LeaveApprovalPendingAdapter extends RecyclerView.Adapter<LeaveAppro
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public CircleImageView ivPhoto;
         public TextView tvEmpName, tvEmpDesg, tvDate, tvType, tvDayType, tvDay;
+        public LinearLayout linearLayout;
 
         public MyViewHolder(View view) {
             super(view);
@@ -37,6 +44,7 @@ public class LeaveApprovalPendingAdapter extends RecyclerView.Adapter<LeaveAppro
             tvType = view.findViewById(R.id.tvLeaveType);
             tvDayType = view.findViewById(R.id.tvDayType);
             tvDay = view.findViewById(R.id.tvDays);
+            linearLayout = view.findViewById(R.id.linearLayout);
         }
     }
 
@@ -52,8 +60,30 @@ public class LeaveApprovalPendingAdapter extends RecyclerView.Adapter<LeaveAppro
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final LeaveAppTemp model = leaveList.get(position);
 
-//        holder.tvQue.setHtml(model.getFaqQue());
-//        holder.tvAns.setHtml(model.getFaqAns());
+        holder.tvEmpName.setText(model.getName());
+        //holder.tvEmpDesg.setText(model.getName());
+        holder.tvDate.setText(model.getFromDate() + " to " + model.getToDate());
+        holder.tvType.setText(model.getType());
+        holder.tvDay.setText(model.getDays() + " days");
+        holder.tvDayType.setText("Full Day");
+
+        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Gson gson = new Gson();
+                String json = gson.toJson(model);
+
+                HomeActivity activity = (HomeActivity) context;
+
+                Fragment adf = new UpdateLeaveStatusFragment();
+                Bundle args = new Bundle();
+                args.putString("model", json);
+                adf.setArguments(args);
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "LeaveApprovalPendingFragment").commit();
+
+            }
+        });
 
 
     }

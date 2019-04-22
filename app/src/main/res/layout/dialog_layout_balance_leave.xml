@@ -7,32 +7,34 @@
 
     <TextView
         android:id="@+id/tv_heading"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:padding="5dp"
-            android:gravity="center"
-            android:layout_marginTop="10dp"
-            android:text="Balance Leave"
-            android:textColor="@color/colorBlack"
-            android:textSize="19sp"
-            android:textStyle="bold" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/sofiapro_bold"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="Balance Leave"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_below="@+id/tv_heading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="20dp"/>
+        android:layout_below="@+id/tv_heading"
+        android:layout_above="@id/btnCancel"
+        android:layout_marginTop="20dp" />
 
     <Button
         android:id="@+id/btnCancel"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
-        android:text="Cancel"
+        android:fontFamily="@font/sofiapro_bold"
+        android:text="Close"
         android:textColor="@color/colorWhite" />
 
 

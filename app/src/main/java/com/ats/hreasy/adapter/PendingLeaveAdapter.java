@@ -12,17 +12,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ats.hreasy.R;
+import com.ats.hreasy.activity.LeaveHistoryDetailActivity;
 import com.ats.hreasy.activity.LeavePendingDetailActivity;
+import com.ats.hreasy.model.LeaveHistoryTemp;
 import com.ats.hreasy.model.LeavePendingTemp;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
 public class PendingLeaveAdapter extends RecyclerView.Adapter<PendingLeaveAdapter.MyViewHolder>{
-    private ArrayList<LeavePendingTemp> pendingLeaveList;
+    private ArrayList<LeaveHistoryTemp> pendingLeaveList;
     private Context context;
 
-    public PendingLeaveAdapter(ArrayList<LeavePendingTemp> pendingLeaveList, Context context) {
+    public PendingLeaveAdapter(ArrayList<LeaveHistoryTemp> pendingLeaveList, Context context) {
         this.pendingLeaveList = pendingLeaveList;
         this.context = context;
     }
@@ -38,7 +40,7 @@ public class PendingLeaveAdapter extends RecyclerView.Adapter<PendingLeaveAdapte
 
     @Override
     public void onBindViewHolder(@NonNull PendingLeaveAdapter.MyViewHolder myViewHolder, int i) {
-        final LeavePendingTemp model = pendingLeaveList.get(i);
+        final LeaveHistoryTemp model = pendingLeaveList.get(i);
         myViewHolder.tvType.setText(model.getLeaveType());
         myViewHolder.tvDayType.setText(model.getDayType());
         myViewHolder.tvDay.setText(model.getDayes());
@@ -51,7 +53,7 @@ public class PendingLeaveAdapter extends RecyclerView.Adapter<PendingLeaveAdapte
                 Gson gson = new Gson();
                 String json = gson.toJson(model);
 
-                Intent intent=new Intent(context, LeavePendingDetailActivity.class);
+                Intent intent=new Intent(context, LeaveHistoryDetailActivity.class);
                 Bundle args = new Bundle();
                 args.putString("model", json);
                 intent.putExtra("model", json);

@@ -34,13 +34,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class AddLeaveFragment extends Fragment implements View.OnClickListener, AddLeaveInterface {
     public Spinner spType;
-    private EditText edFromDate, edToDate;
+    private EditText edFromDate, edToDate,edDays;
     private TextView tvFromDate, tvToDate, tvViewBalnceLeave;
     long fromDateMillis, toDateMillis;
     int yyyy, mm, dd;
@@ -59,6 +60,7 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
         tvFromDate = view.findViewById(R.id.tvFromDate);
         tvToDate = view.findViewById(R.id.tvToDate);
         tvViewBalnceLeave = view.findViewById(R.id.tv_balanceLeave);
+        edDays = view.findViewById(R.id.edTotalDays);
 
         edFromDate.setOnClickListener(this);
         edToDate.setOnClickListener(this);
@@ -82,6 +84,10 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
 
         String toDate = edFromDate.getText().toString();
         edToDate.setText(toDate);
+
+        getDays(edFromDate.getText().toString().trim(),edToDate.getText().toString().trim());
+
+
         return view;
     }
 
@@ -155,6 +161,10 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
             calendar.set(Calendar.MINUTE, 0);
             calendar.set(Calendar.HOUR, 0);
             fromDateMillis = calendar.getTimeInMillis();
+
+
+            getDays(edFromDate.getText().toString().trim(),edToDate.getText().toString().trim());
+
         }
     };
 
@@ -174,6 +184,8 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
             calendar.set(Calendar.MINUTE, 0);
             calendar.set(Calendar.HOUR, 0);
             toDateMillis = calendar.getTimeInMillis();
+
+            getDays(edFromDate.getText().toString().trim(),edToDate.getText().toString().trim());
         }
     };
 
@@ -270,4 +282,28 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
 
         }
     }
+
+
+    public float getDays(String dt1, String dt2) {
+
+        SimpleDateFormat myFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+        float result = 0;
+
+        try {
+            Date date1 = myFormat.parse(dt1);
+            Date date2 = myFormat.parse(dt2);
+            long diff = date2.getTime() - date1.getTime();
+            System.out.println("Days: " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
+            Log.e("DAYS----------------", "***************------------ " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
+            result = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+            edDays.setText(""+((int)result+1));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            result = 0;
+            edDays.setText(""+(int)result);
+        }
+        return result;
+    }
+
 }

@@ -23,5 +23,9 @@
         <item name="android:textColorPrimary">@color/colorBlack</item>
     </style>
 
+    <style name="NavigationText" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/sofiapro_light</item>
+    </style>
 
 </resources>

@@ -10,6 +10,16 @@ public class LeaveAppTemp {
     private String days;
     private String remark;
 
+    public LeaveAppTemp(int id, String name, String type, String fromDate, String toDate, String days, String remark) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.fromDate = fromDate;
+        this.toDate = toDate;
+        this.days = days;
+        this.remark = remark;
+    }
+
     public int getId() {
         return id;
     }

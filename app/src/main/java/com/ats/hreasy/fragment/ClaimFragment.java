@@ -16,9 +16,6 @@ import com.ats.hreasy.R;
 import com.ats.hreasy.interfaces.AddClaimInterface;
 import com.ats.hreasy.interfaces.ClaimHistoryInterface;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ClaimFragment extends Fragment {
     private ViewPager viewPager;
     private TabLayout tab;
@@ -27,8 +24,9 @@ public class ClaimFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_claim, container, false);
+        getActivity().setTitle("Claim");
+
         viewPager = view.findViewById(R.id.viewPager);
         tab = view.findViewById(R.id.tab);
 

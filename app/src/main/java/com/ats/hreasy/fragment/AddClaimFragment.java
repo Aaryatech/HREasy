@@ -32,9 +32,6 @@ import java.util.Calendar;
 
 import static android.app.Activity.RESULT_OK;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class AddClaimFragment extends Fragment implements AddClaimInterface,View.OnClickListener {
     public Spinner spType,spProject;
     public EditText edDate,edAmount,edRemark;
@@ -73,17 +70,17 @@ public class AddClaimFragment extends Fragment implements AddClaimInterface,View
         imageViewPhotoAttach1.setOnClickListener(this);
         imageViewPhotoAttach2.setOnClickListener(this);
 
-        typeNameArray.add("Leave Type");
-        typeNameArray.add("Sick Leave");
-        typeNameArray.add("Casual Leave");
-        typeNameArray.add("Maternity Leave");
+        typeNameArray.add("Select Claim Type");
+        typeNameArray.add("Claim Type 1");
+        typeNameArray.add("Claim Type 2");
+        typeNameArray.add("Claim Type 3");
 
         final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, typeNameArray);
         spinnerAdapter.setDropDownViewResource(R.layout.spinner_item);
         // android.R.layout.simple_spinner_dropdown_item
         spType.setAdapter(spinnerAdapter);
 
-        projectArray.add("Project Type");
+        projectArray.add("Select Project");
         projectArray.add("Java");
         projectArray.add("Android");
         projectArray.add("Php");

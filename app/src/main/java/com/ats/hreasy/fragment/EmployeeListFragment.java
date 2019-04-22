@@ -19,24 +19,28 @@ import com.ats.hreasy.model.EmpListTemp;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class EmployeeListFragment extends Fragment {
     private ArrayList<EmpListTemp> empList = new ArrayList<>();
     ArrayList<EmpListTemp> temp;
     private RecyclerView recyclerView;
     private EmployeeListAdapter mAdapter;
     private EditText ed_search;
+    static String type;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_employee_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_employee_list, container, false);
+        getActivity().setTitle("Team");
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        ed_search=(EditText)view.findViewById(R.id.ed_search);
+        ed_search = (EditText) view.findViewById(R.id.ed_search);
+
+        try {
+            type = getArguments().getString("type");
+        } catch (Exception e) {
+        }
 
         ed_search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -57,8 +61,7 @@ public class EmployeeListFragment extends Fragment {
         });
 
 
-
-        mAdapter = new EmployeeListAdapter(empList,getActivity());
+        mAdapter = new EmployeeListAdapter(empList, getActivity(), type);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -80,50 +83,35 @@ public class EmployeeListFragment extends Fragment {
 
     private void prepareData() {
 
-        EmpListTemp empListTemp = new EmpListTemp(R.drawable.logo, "Action & Adventure", "Student");
+        EmpListTemp empListTemp = new EmpListTemp(R.drawable.profile, "Ajinkya Aher", "Student");
         empList.add(empListTemp);
 
-         empListTemp = new EmpListTemp(R.drawable.logo, "Action & Adventure", "Student");
+        empListTemp = new EmpListTemp(R.drawable.profile, "Sachin Handge", "Student");
         empList.add(empListTemp);
 
-         empListTemp = new EmpListTemp(R.drawable.logo, "Action & Adventure", "Student");
+        empListTemp = new EmpListTemp(R.drawable.profile, "Aditya Joshi", "Student");
         empList.add(empListTemp);
 
-        empListTemp = new EmpListTemp(R.drawable.logo, "Action & Adventure", "Student");
+        empListTemp = new EmpListTemp(R.drawable.profile, "Anmol Shirke", "Student");
         empList.add(empListTemp);
 
-        empListTemp = new EmpListTemp(R.drawable.logo, "Action & Adventure", "Student");
+        empListTemp = new EmpListTemp(R.drawable.profile, "Pravin Bhamre", "Student");
         empList.add(empListTemp);
 
-        empListTemp = new EmpListTemp(R.drawable.logo, "Action & Adventure", "Student");
+        empListTemp = new EmpListTemp(R.drawable.profile, "Jayant Patil", "Student");
         empList.add(empListTemp);
 
-        empListTemp = new EmpListTemp(R.drawable.logo, "Action & Adventure", "Student");
+        empListTemp = new EmpListTemp(R.drawable.profile, "Tejas Patil", "Student");
         empList.add(empListTemp);
 
-        empListTemp = new EmpListTemp(R.drawable.logo, "Action & Adventure", "Student");
+        empListTemp = new EmpListTemp(R.drawable.profile, "Action & Adventure", "Student");
         empList.add(empListTemp);
 
-        empListTemp = new EmpListTemp(R.drawable.logo, "Action & Adventure", "Student");
+        empListTemp = new EmpListTemp(R.drawable.profile, "Monika", "Student");
         empList.add(empListTemp);
 
-        empListTemp = new EmpListTemp(R.drawable.logo, "Action & Adventure", "Student");
+        empListTemp = new EmpListTemp(R.drawable.profile, "Action & Adventure", "Student");
         empList.add(empListTemp);
-
-        empListTemp = new EmpListTemp(R.drawable.logo, "Action & Adventure", "Student");
-        empList.add(empListTemp);
-
-        empListTemp = new EmpListTemp(R.drawable.logo, "Action & Adventure", "Student");
-        empList.add(empListTemp);
-
-        empListTemp = new EmpListTemp(R.drawable.logo, "Monika", "Student");
-        empList.add(empListTemp);
-
-        empListTemp = new EmpListTemp(R.drawable.logo, "Action & Adventure", "Student");
-        empList.add(empListTemp);
-
-
-
 
 
     }

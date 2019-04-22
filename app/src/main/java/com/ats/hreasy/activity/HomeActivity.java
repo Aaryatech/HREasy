@@ -1,5 +1,7 @@
 package com.ats.hreasy.activity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -8,17 +10,29 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ats.hreasy.R;
+import com.ats.hreasy.adapter.LeaveApprovalPendingAdapter;
+import com.ats.hreasy.fragment.AddLeaveFragment;
+import com.ats.hreasy.fragment.ClaimApprovalPendingFragment;
+import com.ats.hreasy.fragment.ClaimFragment;
 import com.ats.hreasy.fragment.EmployeeListFragment;
 import com.ats.hreasy.fragment.HomeFragment;
+import com.ats.hreasy.fragment.LeaveApprovalPendingFragment;
 import com.ats.hreasy.fragment.LeaveFragment;
 import com.ats.hreasy.fragment.PendingLeaveListFragment;
+import com.ats.hreasy.fragment.UpdateClaimStatusFragment;
+import com.ats.hreasy.fragment.UpdateLeaveStatusFragment;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -42,6 +56,15 @@ public class HomeActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        View header = navigationView.getHeaderView(0);
+
+        TextView tvNavHeadName = header.findViewById(R.id.tvNavHeadName);
+        TextView tvNavHeadDesg = header.findViewById(R.id.tvNavHeadDesg);
+        CircleImageView ivNavHeadPhoto = header.findViewById(R.id.ivNavHeadPhoto);
+
+        tvNavHeadName.setText("Anmol Shirke");
+        tvNavHeadDesg.setText("Developer");
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_frame, new HomeFragment(), "Exit");
         ft.commit();
@@ -52,6 +75,9 @@ public class HomeActivity extends AppCompatActivity
 
         Fragment exit = getSupportFragmentManager().findFragmentByTag("Exit");
         Fragment homeFragment = getSupportFragmentManager().findFragmentByTag("HomeFragment");
+        Fragment leaveApprovalPendingFragment = getSupportFragmentManager().findFragmentByTag("LeaveApprovalPendingFragment");
+        Fragment employeeListFragment = getSupportFragmentManager().findFragmentByTag("EmployeeListFragment");
+        Fragment claimApprovalPendingFragment = getSupportFragmentManager().findFragmentByTag("ClaimApprovalPendingFragment");
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -74,10 +100,32 @@ public class HomeActivity extends AppCompatActivity
                 }
             }, 2000);
 
-        } else if (homeFragment instanceof LeaveFragment && homeFragment.isVisible()) {
+        } else if (homeFragment instanceof LeaveApprovalPendingFragment && homeFragment.isVisible() ||
+                homeFragment instanceof ClaimApprovalPendingFragment && homeFragment.isVisible() ||
+                homeFragment instanceof EmployeeListFragment && homeFragment.isVisible() ||
+                homeFragment instanceof PendingLeaveListFragment && homeFragment.isVisible()) {
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, new HomeFragment(), "Exit");
+            ft.commit();
+
+        } else if (leaveApprovalPendingFragment instanceof UpdateLeaveStatusFragment && leaveApprovalPendingFragment.isVisible()) {
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, new LeaveApprovalPendingFragment(), "HomeFragment");
+            ft.commit();
+
+        } else if (claimApprovalPendingFragment instanceof UpdateClaimStatusFragment && claimApprovalPendingFragment.isVisible()) {
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, new ClaimApprovalPendingFragment(), "HomeFragment");
+            ft.commit();
+
+        } else if (employeeListFragment instanceof LeaveFragment && employeeListFragment.isVisible() ||
+                employeeListFragment instanceof ClaimFragment && employeeListFragment.isVisible()) {
+
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, new EmployeeListFragment(), "HomeFragment");
             ft.commit();
 
         } else {
@@ -94,13 +142,12 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_notification) {
+
+            startActivity(new Intent(HomeActivity.this,NotificationActivity.class));
+
             return true;
         }
 
@@ -113,17 +160,29 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_leavePendingList) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.content_frame, new PendingLeaveListFragment(), "HomeFragment");
-            ft.commit();
-        } else if (id == R.id.nav_empList) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.content_frame, new EmployeeListFragment(), "HomeFragment");
-            ft.commit();
-        } else if (id == R.id.nav_slideshow) {
+        if (id == R.id.nav_home) {
 
-        } else if (id == R.id.nav_manage) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, new HomeFragment(), "Exit");
+            ft.commit();
+
+        } else if (id == R.id.nav_add_leave) {
+
+            Fragment adf = new EmployeeListFragment();
+            Bundle args = new Bundle();
+            args.putString("type", "leave");
+            adf.setArguments(args);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "HomeFragment").commit();
+
+        } else if (id == R.id.nav_add_claim) {
+
+            Fragment adf = new EmployeeListFragment();
+            Bundle args = new Bundle();
+            args.putString("type", "claim");
+            adf.setArguments(args);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "HomeFragment").commit();
+
+        } else if (id == R.id.nav_logout) {
 
         }
 

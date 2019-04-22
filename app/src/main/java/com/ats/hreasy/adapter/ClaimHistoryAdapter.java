@@ -39,9 +39,10 @@ public class ClaimHistoryAdapter extends RecyclerView.Adapter<ClaimHistoryAdapte
     @Override
     public void onBindViewHolder(@NonNull ClaimHistoryAdapter.MyViewHolder myViewHolder, int i) {
         final ClaimHistoryTemp model = ClaimHistoryList.get(i);
+
         myViewHolder.tvType.setText(model.getLeaveType());
         myViewHolder.tvProjectName.setText(model.getProjectType());
-        myViewHolder.tvAmount.setText(""+model.getAmt());
+        myViewHolder.tvAmount.setText(""+model.getAmt()+"/-");
         myViewHolder.tvDate.setText(model.getDate());
 
         myViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -72,7 +73,7 @@ public class ClaimHistoryAdapter extends RecyclerView.Adapter<ClaimHistoryAdapte
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvDate = itemView.findViewById(R.id.tvDate);
-            tvType = itemView.findViewById(R.id.tvLeaveType);
+            tvType = itemView.findViewById(R.id.tvClaimType);
             tvProjectName = itemView.findViewById(R.id.tvProjectName);
             tvAmount = itemView.findViewById(R.id.tvAmount);
             cardView=itemView.findViewById(R.id.cardView);

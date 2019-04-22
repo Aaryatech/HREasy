@@ -11,14 +11,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp">
+        android:orientation="vertical"
+        android:padding="3dp">
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="3dp">
 
             <TextView
                 android:id="@+id/tvProjectName"
@@ -26,21 +30,12 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
-                android:drawableLeft="@drawable/ic_leave_blue"
+                android:drawableLeft="@drawable/ic_project_blue"
                 android:drawablePadding="10dp"
-                android:fontFamily="@font/open_sans_regular"
-                android:text="ShieShambu" />
+                android:fontFamily="@font/sofiapro_light"
+                android:gravity="center_vertical"
+                android:text="HR Management System" />
 
-            <TextView
-                android:id="@+id/tvLeaveType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="3dp"
-                android:drawablePadding="10dp"
-                android:layout_marginRight="10dp"
-                android:fontFamily="@font/open_sans_regular"
-                android:text="Medical Leave"
-                android:textColor="@color/colorAccent" />
 
         </LinearLayout>
 
@@ -48,7 +43,42 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="3dp">
+
+
+            <TextView
+                android:id="@+id/tvClaimType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_claim_type_blue"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/sofiapro_light"
+                android:gravity="center_vertical"
+                android:text="Claim Type" />
+
+            <TextView
+                android:id="@+id/tvAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:drawableLeft="@drawable/ic_amount_blue"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/sofiapro_bold"
+                android:gravity="center_vertical"
+                android:text="1500/-"
+                android:textSize="17sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="3dp">
 
             <TextView
                 android:id="@+id/tvDate"
@@ -58,20 +88,22 @@
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_date_blue"
                 android:drawablePadding="10dp"
-                android:fontFamily="@font/open_sans_regular"
-                android:text="15/4/2019 to 18/4/2019" />
+                android:fontFamily="@font/sofiapro_light"
+                android:gravity="center_vertical"
+                android:text="15/4/2019" />
+
 
             <TextView
-                android:id="@+id/tvAmount"
+                android:id="@+id/tvStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="3dp"
-                android:fontFamily="@font/open_sans_semi_bold"
-                android:gravity="end"
-                android:layout_marginRight="10dp"
-                android:text="100"
-                android:textAlignment="textEnd" />
+                android:layout_margin="5dp"
+                android:fontFamily="@font/sofiapro_bold"
+                android:text="Pending"
+                android:textColor="@color/colorAccent"
+                android:textSize="15sp" />
         </LinearLayout>
+
 
     </LinearLayout>
 

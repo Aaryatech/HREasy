@@ -5,16 +5,23 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ats.hreasy.R;
 
-public class HomeFragment extends Fragment {
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
+public class HomeFragment extends Fragment implements View.OnClickListener {
     private FloatingActionButton fabLeave, fabClaim, fab;
     private Animation fab_open, fab_close;
     TextView tv_fab1, tv_fab2;
@@ -26,6 +33,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        getActivity().setTitle("Home");
 
         tv_fab1 = (TextView) view.findViewById(R.id.tv_fab1);
         tv_fab2 = (TextView) view.findViewById(R.id.tv_fab2);
@@ -42,6 +50,10 @@ public class HomeFragment extends Fragment {
         cvMyLeavePend = view.findViewById(R.id.cvMyLeavePend);
         cvMyClaimPend = view.findViewById(R.id.cvMyClaimPend);
 
+        cvLeaveAppPend.setOnClickListener(this);
+        cvClaimAppPend.setOnClickListener(this);
+        cvMyLeavePend.setOnClickListener(this);
+        cvMyClaimPend.setOnClickListener(this);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,9 +86,11 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.content_frame, new LeaveFragment(), "HomeFragment");
-                ft.commit();
+                Fragment adf = new EmployeeListFragment();
+                Bundle args = new Bundle();
+                args.putString("type", "leave");
+                adf.setArguments(args);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "HomeFragment").commit();
 
             }
         });
@@ -84,15 +98,42 @@ public class HomeFragment extends Fragment {
         fabClaim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.content_frame, new ClaimFragment(), "HomeFragment");
-                ft.commit();
+
+                Fragment adf = new EmployeeListFragment();
+                Bundle args = new Bundle();
+                args.putString("type", "claim");
+                adf.setArguments(args);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "HomeFragment").commit();
 
             }
         });
 
 
+
+
         return view;
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.cvLeaveAppPend) {
+
+            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, new LeaveApprovalPendingFragment(), "HomeFragment");
+            ft.commit();
+        }else  if (v.getId() == R.id.cvClaimAppPend) {
+
+            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, new ClaimApprovalPendingFragment(), "HomeFragment");
+            ft.commit();
+        }else  if (v.getId() == R.id.cvMyLeavePend) {
+
+            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, new PendingLeaveListFragment(), "HomeFragment");
+            ft.commit();
+        }else  if (v.getId() == R.id.cvMyClaimPend) {
+
+
+        }
+    }
 }
