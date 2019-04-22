@@ -49,28 +49,28 @@ public class ClaimHistoryFragment extends Fragment implements ClaimHistoryInterf
     }
 
     private void prepareData() {
-        ClaimHistoryTemp claimHistoryTemp = new ClaimHistoryTemp("Shiv shambhoo","Claim Type","18/4/2019",100,"An employee can call in sick if he is not in a state to come to office for work. Usually, an employee is entitled to sick leave only after a stipulated period of employment in an organization");
+        ClaimHistoryTemp claimHistoryTemp = new ClaimHistoryTemp("Shiv shambhoo","Claim Type","18/4/2019",100,"An employee can call in sick if he is not in a state to come to office for work. Usually, an employee is entitled to sick leave only after a stipulated period of employment in an organization","Pending");
         claimHistoryList.add(claimHistoryTemp);
 
-         claimHistoryTemp = new ClaimHistoryTemp("Shiv shambhoo","Claim Type","18/4/2019",100,"An employee can call in sick if he is not in a state to come to office for work. Usually, an employee is entitled to sick leave only after a stipulated period of employment in an organization");
+         claimHistoryTemp = new ClaimHistoryTemp("Shiv shambhoo","Claim Type","18/4/2019",100,"An employee can call in sick if he is not in a state to come to office for work. Usually, an employee is entitled to sick leave only after a stipulated period of employment in an organization","Pending");
         claimHistoryList.add(claimHistoryTemp);
 
-         claimHistoryTemp = new ClaimHistoryTemp("Shiv shambhoo","Claim Type","18/4/2019",100,"An employee can call in sick if he is not in a state to come to office for work. Usually, an employee is entitled to sick leave only after a stipulated period of employment in an organization");
+         claimHistoryTemp = new ClaimHistoryTemp("Shiv shambhoo","Claim Type","18/4/2019",100,"An employee can call in sick if he is not in a state to come to office for work. Usually, an employee is entitled to sick leave only after a stipulated period of employment in an organization","Pending");
         claimHistoryList.add(claimHistoryTemp);
 
-         claimHistoryTemp = new ClaimHistoryTemp("Rusa Application","Claim Type","18/4/2019",100,"An employee can call in sick if he is not in a state to come to office for work. Usually, an employee is entitled to sick leave only after a stipulated period of employment in an organization");
+         claimHistoryTemp = new ClaimHistoryTemp("Rusa Application","Claim Type","18/4/2019",100,"An employee can call in sick if he is not in a state to come to office for work. Usually, an employee is entitled to sick leave only after a stipulated period of employment in an organization","Pending");
         claimHistoryList.add(claimHistoryTemp);
 
-         claimHistoryTemp = new ClaimHistoryTemp("HREasy","Claim Type","18/4/2019",100,"An employee can call in sick if he is not in a state to come to office for work. Usually, an employee is entitled to sick leave only after a stipulated period of employment in an organization");
+         claimHistoryTemp = new ClaimHistoryTemp("HREasy","Claim Type","18/4/2019",100,"An employee can call in sick if he is not in a state to come to office for work. Usually, an employee is entitled to sick leave only after a stipulated period of employment in an organization","Approve");
         claimHistoryList.add(claimHistoryTemp);
 
-        claimHistoryTemp = new ClaimHistoryTemp("HREasy","Claim Type","18/4/2019",100,"An employee can call in sick if he is not in a state to come to office for work. Usually, an employee is entitled to sick leave only after a stipulated period of employment in an organization");
+        claimHistoryTemp = new ClaimHistoryTemp("HREasy","Claim Type","18/4/2019",100,"An employee can call in sick if he is not in a state to come to office for work. Usually, an employee is entitled to sick leave only after a stipulated period of employment in an organization","Pending");
         claimHistoryList.add(claimHistoryTemp);
 
-        claimHistoryTemp = new ClaimHistoryTemp("HREasy","Claim Type","18/4/2019",100,"An employee can call in sick if he is not in a state to come to office for work. Usually, an employee is entitled to sick leave only after a stipulated period of employment in an organization");
+        claimHistoryTemp = new ClaimHistoryTemp("HREasy","Claim Type","18/4/2019",100,"An employee can call in sick if he is not in a state to come to office for work. Usually, an employee is entitled to sick leave only after a stipulated period of employment in an organization","Pending");
         claimHistoryList.add(claimHistoryTemp);
 
-        claimHistoryTemp = new ClaimHistoryTemp("HREasy","Claim Type","15/4/2019",100,"An employee can call in sick if he is not in a state to come to office for work. Usually, an employee is entitled to sick leave only after a stipulated period of employment in an organization");
+        claimHistoryTemp = new ClaimHistoryTemp("HREasy","Claim Type","15/4/2019",100,"An employee can call in sick if he is not in a state to come to office for work. Usually, an employee is entitled to sick leave only after a stipulated period of employment in an organization","Pending");
         claimHistoryList.add(claimHistoryTemp);
     }
 

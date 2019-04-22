@@ -6,6 +6,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ats.hreasy.R;
 import com.ats.hreasy.adapter.LeaveTrailAdapter;
@@ -17,7 +19,8 @@ import java.util.ArrayList;
 
 public class ClaimHistoryActivity extends AppCompatActivity {
     ClaimHistoryTemp claimHistoryTemp;
-
+    private TextView tvProject,tvClaimType,tvDate,tvAmount,tvRemark,tvStatus;
+    private ImageView tvPhoto1,ivPhoto2,ivPhoto3;
     private RecyclerView recyclerView;
 
     @Override
@@ -30,11 +33,24 @@ public class ClaimHistoryActivity extends AppCompatActivity {
 
         setTitle("Claim History");
 
+        tvProject=(TextView)findViewById(R.id.tvProject);
+        tvClaimType=(TextView)findViewById(R.id.tvClaimType);
+        tvDate=(TextView)findViewById(R.id.tvDate);
+        tvAmount=(TextView)findViewById(R.id.tvAmount);
+        tvRemark=(TextView)findViewById(R.id.tvRemark);
+        tvStatus=(TextView)findViewById(R.id.tvStatus);
 
         String upcomingStr = getIntent().getStringExtra("model");
         Gson gson = new Gson();
         claimHistoryTemp = gson.fromJson(upcomingStr, ClaimHistoryTemp.class);
         Log.e("responce", "-----------------------" + claimHistoryTemp);
+
+        tvProject.setText(claimHistoryTemp.getProjectType());
+        tvClaimType.setText(claimHistoryTemp.getLeaveType());
+        tvDate.setText(claimHistoryTemp.getDate());
+        tvAmount.setText(""+claimHistoryTemp.getAmt());
+        tvRemark.setText(claimHistoryTemp.getRemark());
+        tvStatus.setText(claimHistoryTemp.getStatus());
 
         recyclerView=findViewById(R.id.recyclerView);
 

@@ -5,21 +5,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ats.hreasy.R;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
     private FloatingActionButton fabLeave, fabClaim, fab;
@@ -132,7 +125,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             ft.replace(R.id.content_frame, new PendingLeaveListFragment(), "HomeFragment");
             ft.commit();
         }else  if (v.getId() == R.id.cvMyClaimPend) {
-
+            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_frame, new PendingClaimListFragment(), "HomeFragment");
+            ft.commit();
 
         }
     }

@@ -6,13 +6,15 @@ public class ClaimHistoryTemp {
     String date;
     int amt;
     String remark;
+    String status;
 
-    public ClaimHistoryTemp(String projectType, String leaveType, String date, int amt, String remark) {
+    public ClaimHistoryTemp(String projectType, String leaveType, String date, int amt, String remark,String status) {
         this.projectType = projectType;
         this.leaveType = leaveType;
         this.date = date;
         this.amt = amt;
         this.remark = remark;
+        this.status = status;
     }
 
     public String getProjectType() {
@@ -53,6 +55,14 @@ public class ClaimHistoryTemp {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override

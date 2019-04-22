@@ -162,7 +162,6 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
             calendar.set(Calendar.HOUR, 0);
             fromDateMillis = calendar.getTimeInMillis();
 
-
             getDays(edFromDate.getText().toString().trim(),edToDate.getText().toString().trim());
 
         }
@@ -231,7 +230,6 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
                     dismiss();
                 }
             });
-
 
             mAdapter = new BalanceLeaveAdapter(balanceList, getActivity());
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());

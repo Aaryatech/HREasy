@@ -18,18 +18,18 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-public class ClaimHistoryAdapter extends RecyclerView.Adapter<ClaimHistoryAdapter.MyViewHolder>{
-    private ArrayList<ClaimHistoryTemp> ClaimHistoryList;
+public class PendingClaimAdapter extends RecyclerView.Adapter<PendingClaimAdapter.MyViewHolder> {
+    private ArrayList<ClaimHistoryTemp> pendingClaimList;
     private Context context;
 
-    public ClaimHistoryAdapter(ArrayList<ClaimHistoryTemp> claimHistoryList, Context context) {
-        ClaimHistoryList = claimHistoryList;
+    public PendingClaimAdapter(ArrayList<ClaimHistoryTemp> pendingClaimList, Context context) {
+        this.pendingClaimList = pendingClaimList;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public ClaimHistoryAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public PendingClaimAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.adapter_claim_history, viewGroup, false);
 
@@ -37,14 +37,13 @@ public class ClaimHistoryAdapter extends RecyclerView.Adapter<ClaimHistoryAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ClaimHistoryAdapter.MyViewHolder myViewHolder, int i) {
-        final ClaimHistoryTemp model = ClaimHistoryList.get(i);
-
-        myViewHolder.tvType.setText(model.getLeaveType());
-        myViewHolder.tvProjectName.setText(model.getProjectType());
-        myViewHolder.tvAmount.setText(""+model.getAmt()+"/-");
+    public void onBindViewHolder(@NonNull PendingClaimAdapter.MyViewHolder myViewHolder, int i) {
+        final ClaimHistoryTemp model = pendingClaimList.get(i);
         myViewHolder.tvDate.setText(model.getDate());
+        myViewHolder.tvClaimType.setText(model.getLeaveType());
+        myViewHolder.tvProject.setText(model.getProjectType());
         myViewHolder.tvStatus.setText(model.getStatus());
+        myViewHolder.tvAmount.setText("" + model.getAmt() + "/-");
 
         myViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,25 +59,24 @@ public class ClaimHistoryAdapter extends RecyclerView.Adapter<ClaimHistoryAdapte
                 context.startActivity(intent);
             }
         });
-
     }
 
     @Override
     public int getItemCount() {
-        return ClaimHistoryList.size();
+        return pendingClaimList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvDate, tvType, tvProjectName, tvAmount,tvStatus;
+        public TextView  tvDate, tvClaimType, tvProject, tvAmount,tvStatus;
         public CardView cardView;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tvDate = itemView.findViewById(R.id.tvDate);
-            tvType = itemView.findViewById(R.id.tvClaimType);
-            tvProjectName = itemView.findViewById(R.id.tvProjectName);
+            tvClaimType = itemView.findViewById(R.id.tvClaimType);
+            tvProject = itemView.findViewById(R.id.tvProjectName);
             tvAmount = itemView.findViewById(R.id.tvAmount);
             tvStatus = itemView.findViewById(R.id.tvStatus);
-            cardView=itemView.findViewById(R.id.cardView);
+            cardView = itemView.findViewById(R.id.cardView);
         }
     }
 }

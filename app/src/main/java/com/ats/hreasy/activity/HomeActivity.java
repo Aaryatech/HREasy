@@ -1,6 +1,5 @@
 package com.ats.hreasy.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,7 +9,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -20,14 +18,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ats.hreasy.R;
-import com.ats.hreasy.adapter.LeaveApprovalPendingAdapter;
-import com.ats.hreasy.fragment.AddLeaveFragment;
 import com.ats.hreasy.fragment.ClaimApprovalPendingFragment;
 import com.ats.hreasy.fragment.ClaimFragment;
 import com.ats.hreasy.fragment.EmployeeListFragment;
 import com.ats.hreasy.fragment.HomeFragment;
 import com.ats.hreasy.fragment.LeaveApprovalPendingFragment;
 import com.ats.hreasy.fragment.LeaveFragment;
+import com.ats.hreasy.fragment.PendingClaimListFragment;
 import com.ats.hreasy.fragment.PendingLeaveListFragment;
 import com.ats.hreasy.fragment.UpdateClaimStatusFragment;
 import com.ats.hreasy.fragment.UpdateLeaveStatusFragment;
@@ -103,7 +100,8 @@ public class HomeActivity extends AppCompatActivity
         } else if (homeFragment instanceof LeaveApprovalPendingFragment && homeFragment.isVisible() ||
                 homeFragment instanceof ClaimApprovalPendingFragment && homeFragment.isVisible() ||
                 homeFragment instanceof EmployeeListFragment && homeFragment.isVisible() ||
-                homeFragment instanceof PendingLeaveListFragment && homeFragment.isVisible()) {
+                homeFragment instanceof PendingLeaveListFragment && homeFragment.isVisible() ||
+                homeFragment instanceof PendingClaimListFragment && homeFragment.isVisible()) {
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, new HomeFragment(), "Exit");
