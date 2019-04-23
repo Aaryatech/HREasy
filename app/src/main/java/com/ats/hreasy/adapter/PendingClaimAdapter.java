@@ -50,7 +50,6 @@ public class PendingClaimAdapter extends RecyclerView.Adapter<PendingClaimAdapte
             public void onClick(View v) {
                 Gson gson = new Gson();
                 String json = gson.toJson(model);
-
                 Intent intent=new Intent(context, ClaimHistoryActivity.class);
                 Bundle args = new Bundle();
                 args.putString("model", json);
