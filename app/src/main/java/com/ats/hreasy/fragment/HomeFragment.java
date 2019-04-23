@@ -5,20 +5,33 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ats.hreasy.R;
+import com.ats.hreasy.constant.Constants;
+import com.ats.hreasy.model.DashboardCount;
+import com.ats.hreasy.model.Login;
+import com.ats.hreasy.utils.CommonDialog;
+import com.ats.hreasy.utils.CustomSharedPreference;
+import com.google.gson.Gson;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
     private FloatingActionButton fabLeave, fabClaim, fab;
     private Animation fab_open, fab_close;
     TextView tv_fab1, tv_fab2;
     Boolean isOpen = false;
+    Login loginUser;
 
     private CardView cvLeaveAppPend, cvClaimAppPend, cvMyLeavePend, cvMyClaimPend;
 
@@ -42,6 +55,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         cvClaimAppPend = view.findViewById(R.id.cvClaimAppPend);
         cvMyLeavePend = view.findViewById(R.id.cvMyLeavePend);
         cvMyClaimPend = view.findViewById(R.id.cvMyClaimPend);
+
+        String userStr = CustomSharedPreference.getString(getActivity(), CustomSharedPreference.KEY_USER);
+        Gson gson = new Gson();
+        loginUser = gson.fromJson(userStr, Login.class);
+        Log.e("HOME_ACTIVITY : ", "--------USER-------" + loginUser);
+
+        getDashboardCount(3);
 
         cvLeaveAppPend.setOnClickListener(this);
         cvClaimAppPend.setOnClickListener(this);
@@ -105,6 +125,49 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
 
         return view;
+    }
+
+    private void getDashboardCount(Integer empId) {
+        Log.e("PARAMETERS : ", "       EMPID : " + empId );
+        if (Constants.isOnline(getActivity())) {
+            final CommonDialog commonDialog = new CommonDialog(getActivity(), "Loading", "Please Wait...");
+            commonDialog.show();
+
+            Call<DashboardCount> listCall = Constants.myInterface.getDashboardCount(empId);
+            listCall.enqueue(new Callback<DashboardCount>() {
+                @Override
+                public void onResponse(Call<DashboardCount> call, Response<DashboardCount> response) {
+                    try {
+                        if (response.body() != null) {
+
+                            Log.e("Dashboard Count : ", "------------" + response.body());
+
+                            DashboardCount data = response.body();
+
+                            Log.e("Dashboard Count data : ", "------------" + data);
+
+                        } else {
+                            commonDialog.dismiss();
+                            Log.e("Data Null : ", "-----------");
+                        }
+                    } catch (Exception e) {
+                        commonDialog.dismiss();
+                        Log.e("Exception : ", "-----------" + e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<DashboardCount> call, Throwable t) {
+                    commonDialog.dismiss();
+                    Log.e("onFailure : ", "-----------" + t.getMessage());
+                    t.printStackTrace();
+                }
+            });
+        } else {
+            Toast.makeText(getActivity(), "No Internet Connection !", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override

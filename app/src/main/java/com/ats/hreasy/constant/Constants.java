@@ -20,7 +20,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Constants {
 
-    public static final String BASE_URL ="http://192.168.2.23:8096/";
+    public static final String BASE_URL ="http://192.168.2.13:8096/";
+
+    public static final String userName="aaryatech";
+
+    public static final String password ="Aaryatech@1cr";
 
 
     public static OkHttpClient client = new OkHttpClient.Builder()

@@ -1,5 +1,6 @@
 package com.ats.hreasy.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,8 +10,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +31,9 @@ import com.ats.hreasy.fragment.PendingClaimListFragment;
 import com.ats.hreasy.fragment.PendingLeaveListFragment;
 import com.ats.hreasy.fragment.UpdateClaimStatusFragment;
 import com.ats.hreasy.fragment.UpdateLeaveStatusFragment;
+import com.ats.hreasy.model.Login;
+import com.ats.hreasy.utils.CustomSharedPreference;
+import com.google.gson.Gson;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -35,7 +41,7 @@ public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     boolean doubleBackToExitPressedOnce = false;
-
+    Login loginUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +68,17 @@ public class HomeActivity extends AppCompatActivity
         tvNavHeadName.setText("Anmol Shirke");
         tvNavHeadDesg.setText("Developer");
 
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        String userStr = CustomSharedPreference.getString(this, CustomSharedPreference.KEY_USER);
+        Gson gson = new Gson();
+        loginUser = gson.fromJson(userStr, Login.class);
+        Log.e("HOME_ACTIVITY : ", "--------USER-------" + loginUser);
+
+        if (loginUser == null) {
+            startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+            finish();
+
+        }
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_frame, new HomeFragment(), "Exit");
         ft.commit();
     }
@@ -181,7 +197,29 @@ public class HomeActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "HomeFragment").commit();
 
         } else if (id == R.id.nav_logout) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this, R.style.AlertDialogTheme);
+            builder.setTitle("Logout");
+            builder.setMessage("Are you sure you want to logout?");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
+                    CustomSharedPreference.deletePreference(HomeActivity.this);
+                    Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
+
+                }
+            });
+            builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
