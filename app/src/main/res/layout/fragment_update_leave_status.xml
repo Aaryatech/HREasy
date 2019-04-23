@@ -34,7 +34,7 @@
                     android:id="@+id/tvEmpName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/open_sans_semi_bold"
+                    android:fontFamily="@font/sofiapro_light"
                     android:paddingLeft="5dp"
                     android:paddingTop="5dp"
                     android:paddingRight="5dp"
@@ -46,7 +46,7 @@
                     android:id="@+id/tvEmpDesg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/open_sans_regular"
+                    android:fontFamily="@font/sofiapro_light"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:paddingBottom="5dp"
@@ -64,6 +64,7 @@
             android:padding="3dp">
 
             <TextView
+                android:gravity="center_vertical"
                 android:id="@+id/tvLeaveType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,9 +72,8 @@
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_leave_blue"
                 android:drawablePadding="10dp"
-                android:fontFamily="@font/open_sans_semi_bold"
+                android:fontFamily="@font/sofiapro_light"
                 android:text="Medical Leave"
-                android:textColor="@color/colorAccent"
                 android:textSize="15sp" />
 
             <TextView
@@ -81,9 +81,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:fontFamily="@font/open_sans_semi_bold"
-                android:text="Full Day"
-                android:textColor="@color/colorAccent" />
+                android:fontFamily="@font/sofiapro_light"
+                android:text="Full Day" />
 
         </LinearLayout>
 
@@ -97,12 +96,13 @@
             <TextView
                 android:id="@+id/tvDate"
                 android:layout_width="match_parent"
+                android:gravity="center_vertical"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_date_blue"
                 android:drawablePadding="10dp"
-                android:fontFamily="@font/open_sans_regular"
+                android:fontFamily="@font/sofiapro_light"
                 android:text="14/4/2019 to 18/4/2019" />
 
             <TextView
@@ -110,7 +110,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:fontFamily="@font/open_sans_bold"
+                android:fontFamily="@font/sofiapro_light"
                 android:text="4 days" />
 
         </LinearLayout>
@@ -122,10 +122,20 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:drawableLeft="@drawable/ic_remark_blue"
+            android:gravity="center_vertical"
             android:drawablePadding="10dp"
-            android:fontFamily="@font/open_sans_regular"
+            android:fontFamily="@font/sofiapro_light"
             android:padding="3dp"
             android:text="Remark" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"/>
 
 
         <EditText
@@ -134,7 +144,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@android:drawable/editbox_background_normal"
-            android:fontFamily="@font/open_sans_regular"
+            android:fontFamily="@font/sofiapro_light"
             android:gravity="start"
             android:hint="Remark"
             android:lines="3" />
@@ -153,7 +163,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:background="#E1FDCA"
-                android:fontFamily="@font/open_sans_semi_bold"
+                android:fontFamily="@font/sofiapro_bold"
                 android:text="Approve" />
 
             <Button
@@ -163,7 +173,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:background="#FDCACA"
-                android:fontFamily="@font/open_sans_semi_bold"
+                android:fontFamily="@font/sofiapro_bold"
                 android:text="Reject" />
 
         </LinearLayout>

@@ -54,7 +54,7 @@ public class LeaveHistoryDetailActivity extends AppCompatActivity {
         tvStatus.setText(leaveHistoryTemp.getStatus());
 
 
-        LeaveTrailTemp temp1 = new LeaveTrailTemp(1, "Anmol Shirke", "Leave rejected because you already taken leave thin month", "Rejected", "15 APR 2019");
+        LeaveTrailTemp temp1 = new LeaveTrailTemp(1, "Anmol Shirke", "Leave rejected because you already taken leave this month", "Rejected", "15 APR 2019");
         LeaveTrailTemp temp2 = new LeaveTrailTemp(2, "Amit Patil", "Leave approved", "Approved", "16 APR 2019");
 
         ArrayList<LeaveTrailTemp> leaveTrailTemps=new ArrayList<>();

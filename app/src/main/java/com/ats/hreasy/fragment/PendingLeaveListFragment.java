@@ -30,6 +30,7 @@ public class PendingLeaveListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pending_leave_list, container, false);
+        getActivity().setTitle("My Leave");
 
         recyclerView=(RecyclerView)view.findViewById(R.id.recyclerView);
         tv_empName=(TextView)view.findViewById(R.id.tvEmpName);

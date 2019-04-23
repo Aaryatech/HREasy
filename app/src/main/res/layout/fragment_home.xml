@@ -60,14 +60,16 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="end"
                                 android:layout_weight="1"
-                                android:fontFamily="@font/open_sans_semi_bold"
+                                android:fontFamily="@font/sofiapro_light"
                                 android:gravity="end"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:text="0"
+                                android:text="4/4"
                                 android:textAlignment="textEnd"
                                 android:textColor="@android:color/black"
                                 android:textSize="40sp" />
+
+
                         </LinearLayout>
 
                         <TextView
@@ -128,11 +130,11 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="end"
                                 android:layout_weight="1"
-                                android:fontFamily="@font/open_sans_semi_bold"
+                                android:fontFamily="@font/sofiapro_light"
                                 android:gravity="end"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:text="0"
+                                android:text="4/4"
                                 android:textAlignment="textEnd"
                                 android:textColor="@android:color/black"
                                 android:textSize="40sp" />
@@ -196,11 +198,11 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="end"
                                 android:layout_weight="1"
-                                android:fontFamily="@font/open_sans_semi_bold"
+                                android:fontFamily="@font/sofiapro_light"
                                 android:gravity="end"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:text="0"
+                                android:text="9"
                                 android:textAlignment="textEnd"
                                 android:textColor="@android:color/black"
                                 android:textSize="40sp" />
@@ -264,11 +266,11 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="end"
                                 android:layout_weight="1"
-                                android:fontFamily="@font/open_sans_semi_bold"
+                                android:fontFamily="@font/sofiapro_light"
                                 android:gravity="end"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:text="0"
+                                android:text="4"
                                 android:textAlignment="textEnd"
                                 android:textColor="@android:color/black"
                                 android:textSize="40sp" />

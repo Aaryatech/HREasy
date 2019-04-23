@@ -18,9 +18,6 @@ import com.ats.hreasy.model.ClaimHistoryTemp;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class PendingClaimListFragment extends Fragment {
 public TextView tvEmpName,tvEmpDesg;
 public ImageView ivPhoto;
@@ -29,8 +26,9 @@ PendingClaimAdapter adapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_pending_claim_list, container, false);
+        getActivity().setTitle("My Claim");
+
         tvEmpName=(TextView)view.findViewById(R.id.tvEmpName);
         tvEmpDesg=(TextView)view.findViewById(R.id.tvEmpDesg);
         ivPhoto=(ImageView) view.findViewById(R.id.ivPhoto);

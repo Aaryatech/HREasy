@@ -58,6 +58,19 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tv_balanceLeave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:fontFamily="@font/sofiapro_light"
+            android:gravity="right"
+            android:text="View Balance Leave"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="16sp" />
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -86,6 +99,18 @@
             android:orientation="horizontal">
 
             <RadioButton
+                android:id="@+id/rbFullday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:buttonTint="@color/colorPrimaryDark"
+                android:fontFamily="@font/sofiapro_light"
+                android:text="Full day" />
+
+            <RadioButton
                 android:id="@+id/rbHalfDay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -98,17 +123,7 @@
                 android:fontFamily="@font/sofiapro_light"
                 android:text="Half Day"/>
 
-            <RadioButton
-                android:id="@+id/rbFullday"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="25dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:buttonTint="@color/colorPrimaryDark"
-                android:fontFamily="@font/sofiapro_light"
-                android:text="Full day" />
+
 
         </RadioGroup>
 
@@ -206,18 +221,7 @@
                 android:singleLine="false" />
         </android.support.design.widget.TextInputLayout>
 
-        <TextView
-            android:id="@+id/tv_balanceLeave"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
-            android:fontFamily="@font/sofiapro_light"
-            android:gravity="right"
-            android:text="View Balance Leave"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="16sp" />
+
 
         <Button
             android:id="@+id/btn_apply"

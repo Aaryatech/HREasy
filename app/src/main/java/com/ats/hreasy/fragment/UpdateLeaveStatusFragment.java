@@ -3,6 +3,9 @@ package com.ats.hreasy.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +14,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.ats.hreasy.R;
+import com.ats.hreasy.adapter.LeaveTrailAdapter;
 import com.ats.hreasy.model.LeaveAppTemp;
+import com.ats.hreasy.model.LeaveTrailTemp;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
 
 public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickListener {
 
@@ -21,6 +28,8 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
     private TextView tvEmpName, tvEmpDesg, tvLeaveType, tvDayType, tvDays, tvRemark, tvDate;
     private EditText edRemark;
     private Button btnApprove, btnReject;
+
+    private RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,6 +46,7 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
         edRemark = view.findViewById(R.id.edRemark);
         btnApprove = view.findViewById(R.id.btnApprove);
         btnReject = view.findViewById(R.id.btnReject);
+        recyclerView = view.findViewById(R.id.recyclerView);
 
         try {
             String json = getArguments().getString("model");
@@ -54,6 +64,20 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
             tvDays.setText("" + leaveModel.getDays() + " days");
             tvRemark.setText("" + leaveModel.getRemark());
         }
+
+
+        LeaveTrailTemp temp1 = new LeaveTrailTemp(1, "Anmol Shirke", "Leave rejected because you already taken leave this month", "Rejected", "15 APR 2019");
+        LeaveTrailTemp temp2 = new LeaveTrailTemp(2, "Amit Patil", "Leave approved", "Approved", "16 APR 2019");
+
+        ArrayList<LeaveTrailTemp> leaveTrailTemps=new ArrayList<>();
+        leaveTrailTemps.add(temp1);
+        leaveTrailTemps.add(temp2);
+
+        LeaveTrailAdapter adapter = new LeaveTrailAdapter(leaveTrailTemps, getContext());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
 
         return view;
     }

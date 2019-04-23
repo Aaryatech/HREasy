@@ -78,11 +78,11 @@ public class ClaimApprovalPendingAdapter extends RecyclerView.Adapter<ClaimAppro
 
                 HomeActivity activity = (HomeActivity) context;
 
-//                Fragment adf = new UpdateClaimStatusFragment();
-//                Bundle args = new Bundle();
-//                args.putString("model", json);
-//                adf.setArguments(args);
-//                activity.getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "ClaimApprovalPendingFragment").commit();
+                Fragment adf = new UpdateClaimStatusFragment();
+                Bundle args = new Bundle();
+                args.putString("model", json);
+                adf.setArguments(args);
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "ClaimApprovalPendingFragment").commit();
 
             }
         });

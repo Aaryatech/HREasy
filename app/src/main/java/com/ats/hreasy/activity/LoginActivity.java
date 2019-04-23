@@ -3,13 +3,14 @@ package com.ats.hreasy.activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.ats.hreasy.R;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     public EditText ed_userName, ed_password;
     public Button btn_login;
     public TextView tv_forgotPass;
@@ -24,6 +25,11 @@ public class LoginActivity extends AppCompatActivity {
         tv_forgotPass = (TextView) findViewById(R.id.tv_forgotPassword);
         btn_login = (Button) findViewById(R.id.btn_login);
         
+
+    }
+
+    @Override
+    public void onClick(View v) {
 
     }
 }

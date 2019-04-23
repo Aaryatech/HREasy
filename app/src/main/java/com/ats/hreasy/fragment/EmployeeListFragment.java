@@ -83,7 +83,7 @@ public class EmployeeListFragment extends Fragment {
 
     private void prepareData() {
 
-        EmpListTemp empListTemp = new EmpListTemp(R.drawable.profile, "Ajinkya Aher", "Student");
+        EmpListTemp empListTemp = new EmpListTemp(R.drawable.profile, "Anmol Shirke", "Developer");
         empList.add(empListTemp);
 
         empListTemp = new EmpListTemp(R.drawable.profile, "Sachin Handge", "Student");

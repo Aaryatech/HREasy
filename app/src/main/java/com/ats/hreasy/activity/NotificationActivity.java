@@ -45,7 +45,7 @@ public class NotificationActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-       // recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);
 
     }
 

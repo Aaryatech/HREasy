@@ -87,6 +87,10 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
             }
         });
 
+        if (i==0){
+            myViewHolder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.colorSelected));
+        }
+
     }
 
     @Override

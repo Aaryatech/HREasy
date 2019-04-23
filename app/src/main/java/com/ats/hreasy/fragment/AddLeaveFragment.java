@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -45,6 +46,7 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
     private TextView tvFromDate, tvToDate, tvViewBalnceLeave;
     long fromDateMillis, toDateMillis;
     int yyyy, mm, dd;
+    private RadioButton rbFullDay,rbHalfDay;
 
 
     ArrayList<String> typeNameArray = new ArrayList<>();
@@ -61,6 +63,11 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
         tvToDate = view.findViewById(R.id.tvToDate);
         tvViewBalnceLeave = view.findViewById(R.id.tv_balanceLeave);
         edDays = view.findViewById(R.id.edTotalDays);
+
+        rbFullDay = view.findViewById(R.id.rbFullday);
+        rbHalfDay = view.findViewById(R.id.rbHalfDay);
+
+        rbFullDay.setChecked(true);
 
         edFromDate.setOnClickListener(this);
         edToDate.setOnClickListener(this);
@@ -86,6 +93,8 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
         edToDate.setText(toDate);
 
         getDays(edFromDate.getText().toString().trim(),edToDate.getText().toString().trim());
+
+
 
 
         return view;
@@ -242,41 +251,28 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
 
         private void prepareMovieData() {
 
-            BalanceLeaveTemp balanceLeaveTemp = new BalanceLeaveTemp("Medical Leave", 10);
+            BalanceLeaveTemp balanceLeaveTemp = new BalanceLeaveTemp("Medical Leave", 8);
             balanceList.add(balanceLeaveTemp);
 
-            balanceLeaveTemp = new BalanceLeaveTemp("Sick Leave", 10);
+            balanceLeaveTemp = new BalanceLeaveTemp("Sick Leave", 8);
             balanceList.add(balanceLeaveTemp);
 
-            balanceLeaveTemp = new BalanceLeaveTemp("Casual Leave", 2);
+            balanceLeaveTemp = new BalanceLeaveTemp("Casual Leave", 8);
             balanceList.add(balanceLeaveTemp);
 
-            balanceLeaveTemp = new BalanceLeaveTemp("Maternity Leave", 7);
+           balanceLeaveTemp = new BalanceLeaveTemp("Maternity Leave", 8);
             balanceList.add(balanceLeaveTemp);
 
-            balanceLeaveTemp = new BalanceLeaveTemp("Maternity Leave", 10);
-            balanceList.add(balanceLeaveTemp);
-
-            balanceLeaveTemp = new BalanceLeaveTemp("Action & Adventure Leave", 10);
+           /*  balanceLeaveTemp = new BalanceLeaveTemp("Maternity Leave", 10);
             balanceList.add(balanceLeaveTemp);
 
             balanceLeaveTemp = new BalanceLeaveTemp("Action & Adventure Leave", 10);
             balanceList.add(balanceLeaveTemp);
 
             balanceLeaveTemp = new BalanceLeaveTemp("Action & Adventure Leave", 10);
-            balanceList.add(balanceLeaveTemp);
+            balanceList.add(balanceLeaveTemp);*/
 
-            balanceLeaveTemp = new BalanceLeaveTemp("Maternity Leave", 7);
-            balanceList.add(balanceLeaveTemp);
 
-            balanceLeaveTemp = new BalanceLeaveTemp("Maternity Leave", 7);
-            balanceList.add(balanceLeaveTemp);
-
-            balanceLeaveTemp = new BalanceLeaveTemp("Maternity Leave", 7);
-            balanceList.add(balanceLeaveTemp);
-
-            balanceLeaveTemp = new BalanceLeaveTemp("Maternity Leave", 7);
-            balanceList.add(balanceLeaveTemp);
 
         }
     }

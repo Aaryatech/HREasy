@@ -13,4 +13,6 @@
     <color name="fbColor">#465993</color>
     <color name="colorTrans">#55ffffff</color>
     <color name="colorTransfer">#55000000</color>
+
+    <color name="colorSelected">#DDF4FC</color>
 </resources>

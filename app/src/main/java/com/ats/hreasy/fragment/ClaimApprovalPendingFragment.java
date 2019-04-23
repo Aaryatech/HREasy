@@ -104,9 +104,9 @@ public class ClaimApprovalPendingFragment extends Fragment {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "My Task";
+                    return "Pending Task";
                 case 1:
-                    return "All Task";
+                    return "Info";
                 default:
                     return null;
             }

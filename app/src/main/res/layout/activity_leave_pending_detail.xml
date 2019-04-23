@@ -21,7 +21,7 @@
             android:layout_weight="1.9"
             android:text="Leave Type :"
             android:textSize="16dp"
-            android:fontFamily="@font/open_sans_bold"
+            android:fontFamily="@font/sofiapro_bold"
             android:textColor="@color/colorPrimaryDark" />
 
         <TextView
@@ -32,7 +32,7 @@
             android:text=""
             android:gravity="start"
             android:textSize="16dp"
-            android:fontFamily="@font/open_sans_regular"/>
+            android:fontFamily="@font/sofiapro_light"/>
 
     </LinearLayout>
 
@@ -50,7 +50,7 @@
             android:layout_weight="2"
             android:text="Day Type :"
             android:textSize="16dp"
-            android:fontFamily="@font/open_sans_bold"
+            android:fontFamily="@font/sofiapro_bold"
             android:textColor="@color/colorPrimaryDark" />
 
         <TextView
@@ -61,7 +61,7 @@
             android:text=""
             android:gravity="start"
             android:textSize="16dp"
-            android:fontFamily="@font/open_sans_regular"/>
+            android:fontFamily="@font/sofiapro_light"/>
 
 
     </LinearLayout>
@@ -81,7 +81,7 @@
             android:layout_weight="2.5"
             android:text="Day :"
             android:textSize="16dp"
-            android:fontFamily="@font/open_sans_bold"
+            android:fontFamily="@font/sofiapro_bold"
             android:textColor="@color/colorPrimaryDark" />
 
         <TextView
@@ -93,7 +93,7 @@
             android:gravity="start"
             android:textSize="16dp"
             android:layout_marginRight="20dp"
-            android:fontFamily="@font/open_sans_regular"/>
+            android:fontFamily="@font/sofiapro_light"/>
 
     </LinearLayout>
 
@@ -111,7 +111,7 @@
             android:layout_weight="2.5"
             android:text="Date :"
             android:textSize="16dp"
-            android:fontFamily="@font/open_sans_bold"
+            android:fontFamily="@font/sofiapro_bold"
             android:textColor="@color/colorPrimaryDark" />
 
         <TextView
@@ -122,7 +122,7 @@
             android:text=""
             android:gravity="start"
             android:textSize="16dp"
-            android:fontFamily="@font/open_sans_regular"/>
+            android:fontFamily="@font/sofiapro_light"/>
 
     </LinearLayout>
 
@@ -140,7 +140,7 @@
             android:layout_weight="2.5"
             android:text="Status :"
             android:textSize="16dp"
-            android:fontFamily="@font/open_sans_bold"
+            android:fontFamily="@font/sofiapro_bold"
             android:textColor="@color/colorPrimaryDark" />
 
         <TextView
@@ -151,7 +151,7 @@
             android:text=""
             android:gravity="start"
             android:textSize="16dp"
-            android:fontFamily="@font/open_sans_regular"/>
+            android:fontFamily="@font/sofiapro_light"/>
 
     </LinearLayout>
 
@@ -171,7 +171,7 @@
             android:layout_weight="1"
             android:text="Remark :"
             android:textSize="16dp"
-            android:fontFamily="@font/open_sans_bold"
+            android:fontFamily="@font/sofiapro_bold"
             android:textColor="@color/colorPrimaryDark" />
 
         <TextView
@@ -183,7 +183,7 @@
             android:text="An employee can call in sick if he is not in a state to come to office for work. Usually, an employee is entitled to sick leave only after a stipulated period of employment in an organization"
             android:lines="5"
             android:textSize="16dp"
-            android:fontFamily="@font/open_sans_regular"/>
+            android:fontFamily="@font/sofiapro_light"/>
 
     </LinearLayout>
 
