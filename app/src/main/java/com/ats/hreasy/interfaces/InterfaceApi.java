@@ -1,7 +1,11 @@
 package com.ats.hreasy.interfaces;
 
 import com.ats.hreasy.model.DashboardCount;
+import com.ats.hreasy.model.LeaveApp;
 import com.ats.hreasy.model.Login;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Header;
@@ -16,7 +20,10 @@ public interface InterfaceApi {
 //    @Header("Authorization") String authHeader,
 
     @POST("getDashboardCount")
-    Call<DashboardCount> getDashboardCount(@Query("empId") int empId);
+    Call<DashboardCount> getDashboardCount(@Header("Authorization") String authHeader,@Query("empId") int empId);
+
+    @POST("getLeaveApplyListForAuth")
+    Call<ArrayList<LeaveApp>> getLeaveApplyListForAuth(@Header("Authorization") String authHeader, @Query("empId") int empId, @Query("statusList") List<Integer> statusList, @Query("authTypeId") int authTypeId, @Query("currYrId") int currYrId);
 
 
 }

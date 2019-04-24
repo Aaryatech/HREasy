@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.ats.hreasy.R;
 import com.ats.hreasy.activity.HomeActivity;
 import com.ats.hreasy.fragment.UpdateLeaveStatusFragment;
-import com.ats.hreasy.model.LeaveAppTemp;
+import com.ats.hreasy.model.LeaveApp;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -22,10 +22,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class LeaveApprovalPendingAdapter extends RecyclerView.Adapter<LeaveApprovalPendingAdapter.MyViewHolder> {
 
-    private ArrayList<LeaveAppTemp> leaveList;
+    private ArrayList<LeaveApp> leaveList;
     private Context context;
 
-    public LeaveApprovalPendingAdapter(ArrayList<LeaveAppTemp> leaveList, Context context) {
+    public LeaveApprovalPendingAdapter(ArrayList<LeaveApp> leaveList, Context context) {
         this.leaveList = leaveList;
         this.context = context;
     }
@@ -58,14 +58,20 @@ public class LeaveApprovalPendingAdapter extends RecyclerView.Adapter<LeaveAppro
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        final LeaveAppTemp model = leaveList.get(position);
+        final LeaveApp model = leaveList.get(position);
 
-        holder.tvEmpName.setText(model.getName());
+        holder.tvEmpName.setText(model.getEmpFname()+ " "+model.getEmpSname());
         //holder.tvEmpDesg.setText(model.getName());
-        holder.tvDate.setText(model.getFromDate() + " to " + model.getToDate());
-        holder.tvType.setText(model.getType());
-        holder.tvDay.setText(model.getDays() + " days");
-        holder.tvDayType.setText("Full Day");
+        holder.tvDate.setText(model.getLeaveFromdt() + " to " + model.getLeaveTodt());
+        holder.tvType.setText(model.getLeaveTitle());
+        holder.tvDay.setText(model.getLeaveNumDays() + " days");
+
+        if(model.getLeaveDuration().equals("1"))
+        {
+            holder.tvDayType.setText("Full Day");
+        }else {
+            holder.tvDayType.setText("Half Day");
+        }
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -357,7 +357,8 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:visibility="visible"
-        app:srcCompat="@drawable/ic_fab_add" />
+        app:srcCompat="@drawable/ic_fab_add"
+        tools:ignore="VectorDrawableCompat" />
 
 
 </RelativeLayout>

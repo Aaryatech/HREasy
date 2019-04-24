@@ -11,11 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ats.hreasy.R;
 import com.ats.hreasy.adapter.LeaveTrailAdapter;
-import com.ats.hreasy.model.LeaveAppTemp;
+import com.ats.hreasy.model.LeaveApp;
 import com.ats.hreasy.model.LeaveTrailTemp;
 import com.google.gson.Gson;
 
@@ -23,11 +24,12 @@ import java.util.ArrayList;
 
 public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickListener {
 
-    LeaveAppTemp leaveModel;
+    LeaveApp leaveModel;
 
     private TextView tvEmpName, tvEmpDesg, tvLeaveType, tvDayType, tvDays, tvRemark, tvDate;
     private EditText edRemark;
     private Button btnApprove, btnReject;
+    private ImageView ivPhoto;
 
     private RecyclerView recyclerView;
 
@@ -38,6 +40,7 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
 
         tvEmpName = view.findViewById(R.id.tvEmpName);
         tvEmpDesg = view.findViewById(R.id.tvEmpDesg);
+        ivPhoto=view.findViewById(R.id.ivPhoto);
         tvLeaveType = view.findViewById(R.id.tvLeaveType);
         tvDayType = view.findViewById(R.id.tvDayType);
         tvDays = view.findViewById(R.id.tvDays);
@@ -51,18 +54,24 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
         try {
             String json = getArguments().getString("model");
             Gson gsonPlant = new Gson();
-            leaveModel = gsonPlant.fromJson(json, LeaveAppTemp.class);
+            leaveModel = gsonPlant.fromJson(json, LeaveApp.class);
         } catch (Exception e) {
         }
 
 
         if (leaveModel != null) {
+            tvEmpName.setText(""+leaveModel.getEmpFname()+ " "+leaveModel.getEmpSname());
+            tvLeaveType.setText("" + leaveModel.getLeaveTitle());
+            tvDate.setText("" + leaveModel.getLeaveFromdt() + " to " + leaveModel.getLeaveTodt());
+            tvDays.setText("" + leaveModel.getLeaveNumDays() + " days");
+            tvRemark.setText("" + leaveModel.getLeaveEmpReason());
+            if(leaveModel.getLeaveDuration().equals("1"))
+            {
+                tvDayType.setText("Full Day");
+            }else {
+                tvDayType.setText("Half Day");
+            }
 
-            tvLeaveType.setText("" + leaveModel.getType());
-            tvDayType.setText("Full Day");
-            tvDate.setText("" + leaveModel.getFromDate() + " to " + leaveModel.getToDate());
-            tvDays.setText("" + leaveModel.getDays() + " days");
-            tvRemark.setText("" + leaveModel.getRemark());
         }
 
 

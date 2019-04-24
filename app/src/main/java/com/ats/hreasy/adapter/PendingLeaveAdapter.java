@@ -13,9 +13,7 @@ import android.widget.TextView;
 
 import com.ats.hreasy.R;
 import com.ats.hreasy.activity.LeaveHistoryDetailActivity;
-import com.ats.hreasy.activity.LeavePendingDetailActivity;
 import com.ats.hreasy.model.LeaveHistoryTemp;
-import com.ats.hreasy.model.LeavePendingTemp;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;

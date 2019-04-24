@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     Login loginUser;
 
     private CardView cvLeaveAppPend, cvClaimAppPend, cvMyLeavePend, cvMyClaimPend;
+    private TextView tvLeaveAppPendingCount,tvLeavependingCount;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,6 +57,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         cvClaimAppPend = view.findViewById(R.id.cvClaimAppPend);
         cvMyLeavePend = view.findViewById(R.id.cvMyLeavePend);
         cvMyClaimPend = view.findViewById(R.id.cvMyClaimPend);
+        tvLeaveAppPendingCount=view.findViewById(R.id.tvHome_leaveAppPendingCount);
+        tvLeavependingCount=view.findViewById(R.id.tvHome_leavePendingCount);
 
         String userStr = CustomSharedPreference.getString(getActivity(), CustomSharedPreference.KEY_USER);
         Gson gson = new Gson();
@@ -133,7 +137,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             final CommonDialog commonDialog = new CommonDialog(getActivity(), "Loading", "Please Wait...");
             commonDialog.show();
 
-            Call<DashboardCount> listCall = Constants.myInterface.getDashboardCount(empId);
+            String base= Constants.userName +":" +Constants.password;
+            String authHeader= "Basic "+ Base64.encodeToString(base.getBytes(),Base64.NO_WRAP);
+
+            Call<DashboardCount> listCall = Constants.myInterface.getDashboardCount(authHeader,empId);
             listCall.enqueue(new Callback<DashboardCount>() {
                 @Override
                 public void onResponse(Call<DashboardCount> call, Response<DashboardCount> response) {
@@ -143,9 +150,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                             Log.e("Dashboard Count : ", "------------" + response.body());
 
                             DashboardCount data = response.body();
+                            tvLeaveAppPendingCount.setText(""+data.getPendingRequest()+"/" +data.getInfo());
+                            tvLeavependingCount.setText(""+data.getMyLeave());
 
-                            Log.e("Dashboard Count data : ", "------------" + data);
-
+                            if(data.getIsAuthorized()==1)
+                            {
+                                cvClaimAppPend.setVisibility(View.VISIBLE);
+                                cvLeaveAppPend.setVisibility(View.VISIBLE);
+                            }else{
+                                cvClaimAppPend.setVisibility(View.GONE);
+                                cvLeaveAppPend.setVisibility(View.GONE);
+                            }
+                            commonDialog.dismiss();
                         } else {
                             commonDialog.dismiss();
                             Log.e("Data Null : ", "-----------");
