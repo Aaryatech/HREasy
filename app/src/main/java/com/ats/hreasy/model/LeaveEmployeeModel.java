@@ -1,9 +1,7 @@
 package com.ats.hreasy.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+public class LeaveEmployeeModel {
 
-public class Login {
     private Integer empId;
     private String empCode;
     private Integer companyId;
@@ -41,14 +39,46 @@ public class Login {
     private String exVar1;
     private String exVar2;
     private String exVar3;
-    private Object companyName;
-    private Object empCatName;
-    private Object empTypeName;
-    private Object empTypeAccess;
-    private Object empDeptName;
-    private Object locName;
-    private String msg;
-    private Boolean error;
+
+    public LeaveEmployeeModel(Integer empId, String empCode, Integer companyId, Integer empCatId, Integer empTypeId, Integer empDeptId, Integer locId, String empFname, String empMname, String empSname, String empPhoto, String empMobile1, String empMobile2, String empEmail, String empAddressTemp, String empAddressPerm, String empBloodgrp, String empEmergencyPerson1, String empEmergencyNo1, String empEmergencyPerson2, String empEmergencyNo2, Integer empRatePerhr, String empJoiningDate, Integer empPrevExpYrs, Integer empPrevExpMonths, String empLeavingDate, String empLeavingReason, Integer delStatus, Integer isActive, Integer makerUserId, String makerEnterDatetime, Integer exInt1, Integer exInt2, Integer exInt3, String exVar1, String exVar2, String exVar3) {
+        this.empId = empId;
+        this.empCode = empCode;
+        this.companyId = companyId;
+        this.empCatId = empCatId;
+        this.empTypeId = empTypeId;
+        this.empDeptId = empDeptId;
+        this.locId = locId;
+        this.empFname = empFname;
+        this.empMname = empMname;
+        this.empSname = empSname;
+        this.empPhoto = empPhoto;
+        this.empMobile1 = empMobile1;
+        this.empMobile2 = empMobile2;
+        this.empEmail = empEmail;
+        this.empAddressTemp = empAddressTemp;
+        this.empAddressPerm = empAddressPerm;
+        this.empBloodgrp = empBloodgrp;
+        this.empEmergencyPerson1 = empEmergencyPerson1;
+        this.empEmergencyNo1 = empEmergencyNo1;
+        this.empEmergencyPerson2 = empEmergencyPerson2;
+        this.empEmergencyNo2 = empEmergencyNo2;
+        this.empRatePerhr = empRatePerhr;
+        this.empJoiningDate = empJoiningDate;
+        this.empPrevExpYrs = empPrevExpYrs;
+        this.empPrevExpMonths = empPrevExpMonths;
+        this.empLeavingDate = empLeavingDate;
+        this.empLeavingReason = empLeavingReason;
+        this.delStatus = delStatus;
+        this.isActive = isActive;
+        this.makerUserId = makerUserId;
+        this.makerEnterDatetime = makerEnterDatetime;
+        this.exInt1 = exInt1;
+        this.exInt2 = exInt2;
+        this.exInt3 = exInt3;
+        this.exVar1 = exVar1;
+        this.exVar2 = exVar2;
+        this.exVar3 = exVar3;
+    }
 
     public Integer getEmpId() {
         return empId;
@@ -346,73 +376,9 @@ public class Login {
         this.exVar3 = exVar3;
     }
 
-    public Object getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(Object companyName) {
-        this.companyName = companyName;
-    }
-
-    public Object getEmpCatName() {
-        return empCatName;
-    }
-
-    public void setEmpCatName(Object empCatName) {
-        this.empCatName = empCatName;
-    }
-
-    public Object getEmpTypeName() {
-        return empTypeName;
-    }
-
-    public void setEmpTypeName(Object empTypeName) {
-        this.empTypeName = empTypeName;
-    }
-
-    public Object getEmpTypeAccess() {
-        return empTypeAccess;
-    }
-
-    public void setEmpTypeAccess(Object empTypeAccess) {
-        this.empTypeAccess = empTypeAccess;
-    }
-
-    public Object getEmpDeptName() {
-        return empDeptName;
-    }
-
-    public void setEmpDeptName(Object empDeptName) {
-        this.empDeptName = empDeptName;
-    }
-
-    public Object getLocName() {
-        return locName;
-    }
-
-    public void setLocName(Object locName) {
-        this.locName = locName;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public Boolean getError() {
-        return error;
-    }
-
-    public void setError(Boolean error) {
-        this.error = error;
-    }
-
     @Override
     public String toString() {
-        return "Login{" +
+        return "LeaveEmployeeModel{" +
                 "empId=" + empId +
                 ", empCode='" + empCode + '\'' +
                 ", companyId=" + companyId +
@@ -450,14 +416,6 @@ public class Login {
                 ", exVar1='" + exVar1 + '\'' +
                 ", exVar2='" + exVar2 + '\'' +
                 ", exVar3='" + exVar3 + '\'' +
-                ", companyName=" + companyName +
-                ", empCatName=" + empCatName +
-                ", empTypeName=" + empTypeName +
-                ", empTypeAccess=" + empTypeAccess +
-                ", empDeptName=" + empDeptName +
-                ", locName=" + locName +
-                ", msg='" + msg + '\'' +
-                ", error=" + error +
                 '}';
     }
 }
