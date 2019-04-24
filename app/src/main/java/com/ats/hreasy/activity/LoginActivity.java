@@ -77,12 +77,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             final CommonDialog commonDialog = new CommonDialog(this, "Loading", "Please Wait...");
             commonDialog.show();
 
-            String userName="aaryatech";
-            String password="Aaryatech@1cr";
-            String base= Constants.userName +":" +Constants.password;
-            String authHeader= "Basic "+ Base64.encodeToString(base.getBytes(),Base64.NO_WRAP);
+            String userName = "aaryatech";
+            String password = "Aaryatech@1cr";
+            String base = Constants.userName + ":" + Constants.password;
+            String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
 
-            Call<Login> listCall = Constants.myInterface.doLogin(authHeader,strUserName, strPass);
+            Call<Login> listCall = Constants.myInterface.doLogin(authHeader, strUserName, strPass);
             listCall.enqueue(new Callback<Login>() {
                 @Override
                 public void onResponse(Call<Login> call, Response<Login> response) {
