@@ -64,7 +64,7 @@
                                 android:gravity="end"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:text="4/4"
+                                android:text="0/0"
                                 android:textAlignment="textEnd"
                                 android:textColor="@android:color/black"
                                 android:textSize="40sp" />
@@ -202,7 +202,7 @@
                                 android:gravity="end"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:text="9"
+                                android:text="0"
                                 android:textAlignment="textEnd"
                                 android:textColor="@android:color/black"
                                 android:textSize="40sp" />

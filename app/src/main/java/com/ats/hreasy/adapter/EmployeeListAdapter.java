@@ -15,22 +15,24 @@ import com.ats.hreasy.R;
 import com.ats.hreasy.activity.HomeActivity;
 import com.ats.hreasy.fragment.ClaimFragment;
 import com.ats.hreasy.fragment.LeaveFragment;
-import com.ats.hreasy.model.EmpListTemp;
+import com.ats.hreasy.model.LeaveEmployeeModel;
+import com.ats.hreasy.model.Login;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapter.MyViewHolder> {
-    private ArrayList<EmpListTemp> empList;
+    private ArrayList<LeaveEmployeeModel> empList;
     private Context context;
     private String pageType;
+    Login loginUser;
 
-    public EmployeeListAdapter(ArrayList<EmpListTemp> empList, Context context) {
+    public EmployeeListAdapter(ArrayList<LeaveEmployeeModel> empList, Context context) {
         this.empList = empList;
         this.context = context;
     }
 
-    public EmployeeListAdapter(ArrayList<EmpListTemp> empList, Context context, String pageType) {
+    public EmployeeListAdapter(ArrayList<LeaveEmployeeModel> empList, Context context, String pageType) {
         this.empList = empList;
         this.context = context;
         this.pageType = pageType;
@@ -47,22 +49,22 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
 
     @Override
     public void onBindViewHolder(@NonNull EmployeeListAdapter.MyViewHolder myViewHolder, int i) {
-        EmpListTemp model = empList.get(i);
-        myViewHolder.tv_empName.setText(model.getName());
-        myViewHolder.tv_empDesignation.setText(model.getDesignation());
-        String imageUri = String.valueOf(model.getImg());
-        try {
-            Picasso.with(context).load(imageUri).placeholder(context.getResources().getDrawable(R.drawable.profile)).into(myViewHolder.imageView_emp);
+        LeaveEmployeeModel model = empList.get(i);
 
-        } catch (Exception e) {
+            myViewHolder.tv_empName.setText(model.getEmpFname() + " " +model.getEmpMname() + " " + model.getEmpSname());
+            myViewHolder.tv_empMob.setText("" + model.getEmpMobile1());
+            String imageUri = String.valueOf(model.getEmpPhoto());
+            try {
+                Picasso.with(context).load(imageUri).placeholder(context.getResources().getDrawable(R.drawable.profile)).into(myViewHolder.imageView_emp);
+
+            } catch (Exception e) {
+
         }
-
         myViewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if (pageType.equalsIgnoreCase("leave")) {
-
 
                     HomeActivity activity = (HomeActivity) context;
 
@@ -95,20 +97,20 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
         return empList.size();
     }
 
-    public void updateList(ArrayList<EmpListTemp> temp) {
+    public void updateList(ArrayList<LeaveEmployeeModel> temp) {
         empList = temp;
         notifyDataSetChanged();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_empName, tv_empDesignation;
+        TextView tv_empName, tv_empMob;
         ImageView imageView_emp;
         LinearLayout linearLayout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_empName = itemView.findViewById(R.id.tv_emp_name);
-            tv_empDesignation = itemView.findViewById(R.id.tv_emp_designation);
+            tv_empMob = itemView.findViewById(R.id.tv_emp_mob);
             imageView_emp = itemView.findViewById(R.id.iv_emp);
             linearLayout = itemView.findViewById(R.id.linearLayout);
         }

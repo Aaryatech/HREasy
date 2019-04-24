@@ -13,16 +13,16 @@ import android.widget.TextView;
 
 import com.ats.hreasy.R;
 import com.ats.hreasy.activity.LeaveHistoryDetailActivity;
-import com.ats.hreasy.model.LeaveHistoryTemp;
+import com.ats.hreasy.model.MyLeaveData;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
 public class PendingLeaveAdapter extends RecyclerView.Adapter<PendingLeaveAdapter.MyViewHolder>{
-    private ArrayList<LeaveHistoryTemp> pendingLeaveList;
+    private ArrayList<MyLeaveData> pendingLeaveList;
     private Context context;
 
-    public PendingLeaveAdapter(ArrayList<LeaveHistoryTemp> pendingLeaveList, Context context) {
+    public PendingLeaveAdapter(ArrayList<MyLeaveData> pendingLeaveList, Context context) {
         this.pendingLeaveList = pendingLeaveList;
         this.context = context;
     }
@@ -38,12 +38,21 @@ public class PendingLeaveAdapter extends RecyclerView.Adapter<PendingLeaveAdapte
 
     @Override
     public void onBindViewHolder(@NonNull PendingLeaveAdapter.MyViewHolder myViewHolder, int i) {
-        final LeaveHistoryTemp model = pendingLeaveList.get(i);
-        myViewHolder.tvType.setText(model.getLeaveType());
-        myViewHolder.tvDayType.setText(model.getDayType());
-        myViewHolder.tvDay.setText(model.getDayes());
-        myViewHolder.tvDate.setText(model.getDate());
-        myViewHolder.tvStatus.setText(model.getStatus());
+        final MyLeaveData model = pendingLeaveList.get(i);
+        myViewHolder.tvType.setText(model.getLvTitle());
+        myViewHolder.tvDay.setText(""+model.getLeaveNumDays()+ " dayes");
+        myViewHolder.tvDate.setText(""+model.getLeaveFromdt() + " to " + model.getLeaveTodt());
+        if(model.getExInt1()==1) {
+            myViewHolder.tvStatus.setText("Pending");
+        }
+
+        if(model.getLeaveDuration().equals("1"))
+        {
+            myViewHolder.tvDayType.setText("Full Day");
+        }else {
+            myViewHolder.tvDayType.setText("Half Day");
+        }
+
 
         myViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override

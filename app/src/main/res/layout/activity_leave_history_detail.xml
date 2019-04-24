@@ -56,7 +56,7 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:paddingBottom="5dp"
-                    android:text="Developer"
+                    android:text=""
                     android:textSize="15sp" />
 
             </LinearLayout>
@@ -190,9 +190,11 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/sofiapro_light"
-            android:text="An employee can call in sick if he is not in a state to come to office for work. Usually, an employee is entitled to sick leave only after a stipulated period of employment in an organization"
+            android:text=""
             android:textColor="@color/colorPrimaryDark"
             android:textSize="15sp" />
+
+        <!--An employee can call in sick if he is not in a state to come to office for work. Usually, an employee is entitled to sick leave only after a stipulated period of employment in an organization-->
 
 
         <android.support.v7.widget.RecyclerView

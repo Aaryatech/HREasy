@@ -21,7 +21,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="8dp"
-            android:src="@drawable/logo"
+            android:src="@drawable/profile"
 
             />
 
@@ -43,7 +43,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/tv_emp_designation"
+                android:id="@+id/tv_emp_mob"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
