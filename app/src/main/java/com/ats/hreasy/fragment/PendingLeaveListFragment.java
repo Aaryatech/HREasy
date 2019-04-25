@@ -23,6 +23,7 @@ import com.ats.hreasy.model.MyLeaveData;
 import com.ats.hreasy.utils.CommonDialog;
 import com.ats.hreasy.utils.CustomSharedPreference;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -32,7 +33,7 @@ import retrofit2.Response;
 
 public class PendingLeaveListFragment extends Fragment {
     public RecyclerView recyclerView;
-    public TextView tv_empName,tv_empDesignation;
+    public TextView tv_empName, tv_empDesignation;
     public ImageView iv_empPhoto;
     private ArrayList<MyLeaveData> LeaveList = new ArrayList<>();
     private PendingLeaveAdapter mAdapter;
@@ -44,35 +45,49 @@ public class PendingLeaveListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_pending_leave_list, container, false);
         getActivity().setTitle("My Leave");
 
-        recyclerView=(RecyclerView)view.findViewById(R.id.recyclerView);
-        tv_empName=(TextView)view.findViewById(R.id.tvEmpName);
-        tv_empDesignation=(TextView)view.findViewById(R.id.tvEmpDesg);
-        iv_empPhoto=(ImageView) view.findViewById(R.id.ivPhoto);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        tv_empName = (TextView) view.findViewById(R.id.tvEmpName);
+        tv_empDesignation = (TextView) view.findViewById(R.id.tvEmpDesg);
+        iv_empPhoto = (ImageView) view.findViewById(R.id.ivPhoto);
 
         String userStr = CustomSharedPreference.getString(getActivity(), CustomSharedPreference.KEY_USER);
         Gson gson = new Gson();
         loginUser = gson.fromJson(userStr, Login.class);
         Log.e("HOME_ACTIVITY : ", "--------USER-------" + loginUser);
 
-        tv_empName.setText(""+loginUser.getEmpFname()+ " "+loginUser.getEmpSname());
+        if (loginUser != null) {
+            tv_empName.setText("" + loginUser.getEmpFname() + " " + loginUser.getEmpMname() + " " + loginUser.getEmpSname());
+            tv_empDesignation.setText("" + loginUser.getEmpMobile1());
+            getLeaveList(loginUser.getEmpId());
 
-        getLeaveList(loginUser.getEmpId(),1);
+            String imageUri = String.valueOf(loginUser.getEmpPhoto());
+            try {
+                Picasso.with(getContext()).load(imageUri).placeholder(getActivity().getResources().getDrawable(R.drawable.profile)).into(iv_empPhoto);
 
-       // prepareData();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
         return view;
     }
 
-    private void getLeaveList(int empId, int status) {
-        Log.e("PARAMETERS : ", "        EMP ID : " + empId + "      STATUS : " + status);
+    private void getLeaveList(int empId) {
+        Log.e("PARAMETERS : ", "        EMP ID : " + empId);
 
-        String base= Constants.userName +":" +Constants.password;
-        String authHeader= "Basic "+ Base64.encodeToString(base.getBytes(),Base64.NO_WRAP);
+        ArrayList<Integer> statusList = new ArrayList<>();
+        statusList.add(1);
+        statusList.add(2);
+
+        String base = Constants.userName + ":" + Constants.password;
+        String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
 
         if (Constants.isOnline(getContext())) {
             final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
             commonDialog.show();
 
-            Call<ArrayList<MyLeaveData>> listCall = Constants.myInterface.getLeaveStatusList(authHeader,empId, status);
+            Call<ArrayList<MyLeaveData>> listCall = Constants.myInterface.getLeaveStatusList(authHeader, empId, statusList);
             listCall.enqueue(new Callback<ArrayList<MyLeaveData>>() {
                 @Override
                 public void onResponse(Call<ArrayList<MyLeaveData>> call, Response<ArrayList<MyLeaveData>> response) {
@@ -84,7 +99,7 @@ public class PendingLeaveListFragment extends Fragment {
                             LeaveList.clear();
                             LeaveList = response.body();
 
-                            mAdapter = new PendingLeaveAdapter(LeaveList,getActivity());
+                            mAdapter = new PendingLeaveAdapter(LeaveList, getActivity());
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                             recyclerView.setLayoutManager(mLayoutManager);
                             recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -115,34 +130,5 @@ public class PendingLeaveListFragment extends Fragment {
             Toast.makeText(getContext(), "No Internet Connection !", Toast.LENGTH_SHORT).show();
         }
     }
-
-//    private void prepareData() {
-//        LeaveHistoryTemp leaveHistoryTemp = new LeaveHistoryTemp("Medical Leave","Half Day","15/4/2019 to 18/4/2019","3 Days","Pending");
-//        historyList.add(leaveHistoryTemp);
-//
-//        leaveHistoryTemp = new LeaveHistoryTemp("Medical Leave","Half Day","15/4/2019 to 18/4/2019","1 Days","Pending");
-//        historyList.add(leaveHistoryTemp);
-//
-//        leaveHistoryTemp = new LeaveHistoryTemp("Medical Leave","Full Day","15/4/2019 to 18/4/2019","3 Days","Approve");
-//        historyList.add(leaveHistoryTemp);
-//
-//        leaveHistoryTemp = new LeaveHistoryTemp("Sick Leave","Half Day","15/4/2019 to 18/4/2019","4 Days","Pending");
-//        historyList.add(leaveHistoryTemp);
-//
-//        leaveHistoryTemp = new LeaveHistoryTemp("Medical Leave","Full Day","15/4/2019 to 18/4/2019","3 Days","Rejected");
-//        historyList.add(leaveHistoryTemp);
-//
-//        leaveHistoryTemp = new LeaveHistoryTemp("Casual Leave","Half Day","15/4/2019 to 18/4/2019","5 Days","Pending");
-//        historyList.add(leaveHistoryTemp);
-//
-//        leaveHistoryTemp = new LeaveHistoryTemp("Medical Leave","Full Day","15/4/2019 to 18/4/2019","3 Days","Approve");
-//        historyList.add(leaveHistoryTemp);
-//
-//        leaveHistoryTemp = new LeaveHistoryTemp("Medical Leave","Half Day","15/4/2019 to 18/4/2019","3 Days","Pending");
-//        historyList.add(leaveHistoryTemp);
-//
-//        leaveHistoryTemp = new LeaveHistoryTemp("Medical Leave","Half Day","15/4/2019 to 18/4/2019","3 Days","Pending");
-//        historyList.add(leaveHistoryTemp);
-//    }
 
 }

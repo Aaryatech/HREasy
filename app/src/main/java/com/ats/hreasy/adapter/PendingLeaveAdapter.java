@@ -42,11 +42,29 @@ public class PendingLeaveAdapter extends RecyclerView.Adapter<PendingLeaveAdapte
         myViewHolder.tvType.setText(model.getLvTitle());
         myViewHolder.tvDay.setText(""+model.getLeaveNumDays()+ " dayes");
         myViewHolder.tvDate.setText(""+model.getLeaveFromdt() + " to " + model.getLeaveTodt());
-        if(model.getExInt1()==1) {
-            myViewHolder.tvStatus.setText("Pending");
+
+        if (model.getExInt1() == 1) {
+            myViewHolder.tvStatus.setText("Initial Pending");
+            myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+        } else if (model.getExInt1() == 2) {
+            myViewHolder.tvStatus.setText("Final Pending");
+            myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+        } else if (model.getExInt1() == 3) {
+            myViewHolder.tvStatus.setText("Final Approved");
+            myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorApproved));
+        } else if (model.getExInt1() == 8) {
+            myViewHolder.tvStatus.setText("Initial Rejected");
+            myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorRejected));
+        } else if (model.getExInt1() == 9) {
+            myViewHolder.tvStatus.setText("Final Rejected");
+            myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorRejected));
+        } else if (model.getExInt1() == 7) {
+            myViewHolder.tvStatus.setText("Leave Cancelled");
+            myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
         }
 
-        if(model.getLeaveDuration().equals("1"))
+
+        if(model.getLeaveDuration().equals("2"))
         {
             myViewHolder.tvDayType.setText("Full Day");
         }else {
