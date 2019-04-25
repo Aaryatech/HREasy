@@ -20,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Constants {
 
-    public static final String BASE_URL ="http://192.168.2.8:8096/";
+    public static final String BASE_URL ="http://192.168.2.11:8096/";
 
     public static final String userName="aaryatech";
 

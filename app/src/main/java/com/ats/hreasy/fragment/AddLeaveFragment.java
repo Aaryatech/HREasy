@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,14 +22,23 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ats.hreasy.R;
 import com.ats.hreasy.adapter.BalanceLeaveAdapter;
+import com.ats.hreasy.adapter.EmployeeListAdapter;
+import com.ats.hreasy.constant.Constants;
 import com.ats.hreasy.interfaces.AddLeaveInterface;
+import com.ats.hreasy.model.BalanceLeaveModel;
 import com.ats.hreasy.model.BalanceLeaveTemp;
+import com.ats.hreasy.model.CurrentYearModel;
+import com.ats.hreasy.model.LeaveEmployeeModel;
+import com.ats.hreasy.utils.CommonDialog;
+import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,16 +47,26 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.ats.hreasy.fragment.LeaveFragment.staticEmpModel;
+
 public class AddLeaveFragment extends Fragment implements View.OnClickListener, AddLeaveInterface {
+
     public Spinner spType;
-    private EditText edFromDate, edToDate,edDays;
-    private TextView tvFromDate, tvToDate, tvViewBalnceLeave;
+    private EditText edFromDate, edToDate, edDays;
+    private TextView tvFromDate, tvToDate, tvViewBalnceLeave, tvEmpName, tvEmpDesg;
+    private CircleImageView ivPhoto;
     long fromDateMillis, toDateMillis;
     int yyyy, mm, dd;
-    private RadioButton rbFullDay,rbHalfDay;
+    private RadioButton rbFullDay, rbHalfDay;
+
+    ArrayList<BalanceLeaveModel> balanceLeaveList = new ArrayList<>();
+    ArrayList<String> leaveTypeNameArray = new ArrayList<>();
+    ArrayList<Integer> leaveTypeBalArray = new ArrayList<>();
 
 
     ArrayList<String> typeNameArray = new ArrayList<>();
@@ -54,7 +74,6 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_leave, container, false);
         spType = (Spinner) view.findViewById(R.id.spType);
         edFromDate = view.findViewById(R.id.edFromDate);
@@ -63,6 +82,10 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
         tvToDate = view.findViewById(R.id.tvToDate);
         tvViewBalnceLeave = view.findViewById(R.id.tv_balanceLeave);
         edDays = view.findViewById(R.id.edTotalDays);
+
+        tvEmpName = view.findViewById(R.id.tvEmpName);
+        tvEmpDesg = view.findViewById(R.id.tvEmpDesg);
+        ivPhoto = view.findViewById(R.id.ivPhoto);
 
         rbFullDay = view.findViewById(R.id.rbFullday);
         rbHalfDay = view.findViewById(R.id.rbHalfDay);
@@ -73,15 +96,14 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
         edToDate.setOnClickListener(this);
         tvViewBalnceLeave.setOnClickListener(this);
 
-        typeNameArray.add("Leave Type");
-        typeNameArray.add("Sick Leave");
-        typeNameArray.add("Casual Leave");
-        typeNameArray.add("Maternity Leave");
+//        typeNameArray.add("Leave Type");
+//        typeNameArray.add("Sick Leave");
+//        typeNameArray.add("Casual Leave");
+//        typeNameArray.add("Maternity Leave");
 
-        final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, typeNameArray);
-        spinnerAdapter.setDropDownViewResource(R.layout.spinner_item);
-        // android.R.layout.simple_spinner_dropdown_item
-        spType.setAdapter(spinnerAdapter);
+//        final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, typeNameArray);
+//        spinnerAdapter.setDropDownViewResource(R.layout.spinner_item);
+//        spType.setAdapter(spinnerAdapter);
 
         Date todayDate = Calendar.getInstance().getTime();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
@@ -92,19 +114,34 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
         String toDate = edFromDate.getText().toString();
         edToDate.setText(toDate);
 
-        getDays(edFromDate.getText().toString().trim(),edToDate.getText().toString().trim());
+        getDays(edFromDate.getText().toString().trim(), edToDate.getText().toString().trim());
 
+        try {
+            if (staticEmpModel != null) {
 
+                tvEmpName.setText("" + staticEmpModel.getEmpFname() + " " + staticEmpModel.getEmpMname() + " " + staticEmpModel.getEmpSname());
+                tvEmpDesg.setText("" + staticEmpModel.getEmpMobile1());
+
+                String imageUri = String.valueOf(staticEmpModel.getEmpPhoto());
+                try {
+                    Picasso.with(getContext()).load(imageUri).placeholder(getActivity().getResources().getDrawable(R.drawable.profile)).into(ivPhoto);
+
+                } catch (Exception e) {
+                }
+
+                getCurrentYear(staticEmpModel.getEmpId());
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
         return view;
     }
 
-    /**
-     * Called when a view has been clicked.
-     *
-     * @param v The view that was clicked.
-     */
+
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.edFromDate) {
@@ -123,18 +160,20 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
             dialog.show();
 
         } else if (v.getId() == R.id.edToDate) {
+
             int yr, mn, dy;
             long minValue = 0;
             Calendar purchaseCal;
             SimpleDateFormat formatter1 = new SimpleDateFormat("dd-MM-yyyy");
             String fromDate = edFromDate.getText().toString().trim();
             Date fromdate = null;
+
             try {
                 fromdate = formatter1.parse(fromDate);//catch exception
             } catch (ParseException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+
             purchaseCal = Calendar.getInstance();
             purchaseCal.add(Calendar.DAY_OF_MONTH, -7);
             minValue = purchaseCal.getTime().getTime();
@@ -148,7 +187,7 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
             dialog.show();
 
         } else if (v.getId() == R.id.tv_balanceLeave) {
-            new FilterDialog(getContext()).show();
+            new LeaveTypeDialog(getContext()).show();
         }
     }
 
@@ -171,7 +210,7 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
             calendar.set(Calendar.HOUR, 0);
             fromDateMillis = calendar.getTimeInMillis();
 
-            getDays(edFromDate.getText().toString().trim(),edToDate.getText().toString().trim());
+            getDays(edFromDate.getText().toString().trim(), edToDate.getText().toString().trim());
 
         }
     };
@@ -193,7 +232,7 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
             calendar.set(Calendar.HOUR, 0);
             toDateMillis = calendar.getTimeInMillis();
 
-            getDays(edFromDate.getText().toString().trim(),edToDate.getText().toString().trim());
+            getDays(edFromDate.getText().toString().trim(), edToDate.getText().toString().trim());
         }
     };
 
@@ -202,14 +241,14 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
 
     }
 
-    private class FilterDialog extends Dialog {
+    private class LeaveTypeDialog extends Dialog {
 
         public Button btnCancel;
         public RecyclerView recyclerView;
         private BalanceLeaveAdapter mAdapter;
         private ArrayList<BalanceLeaveTemp> balanceList = new ArrayList<>();
 
-        public FilterDialog(@NonNull Context context) {
+        public LeaveTypeDialog(@NonNull Context context) {
             super(context);
         }
 
@@ -240,13 +279,13 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
                 }
             });
 
-            mAdapter = new BalanceLeaveAdapter(balanceList, getActivity());
+            mAdapter = new BalanceLeaveAdapter(balanceLeaveList, getActivity());
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setAdapter(mAdapter);
 
-            prepareMovieData();
+            //prepareMovieData();
         }
 
         private void prepareMovieData() {
@@ -260,7 +299,7 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
             balanceLeaveTemp = new BalanceLeaveTemp("Casual Leave", 8);
             balanceList.add(balanceLeaveTemp);
 
-           balanceLeaveTemp = new BalanceLeaveTemp("Maternity Leave", 8);
+            balanceLeaveTemp = new BalanceLeaveTemp("Maternity Leave", 8);
             balanceList.add(balanceLeaveTemp);
 
            /*  balanceLeaveTemp = new BalanceLeaveTemp("Maternity Leave", 10);
@@ -271,7 +310,6 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
 
             balanceLeaveTemp = new BalanceLeaveTemp("Action & Adventure Leave", 10);
             balanceList.add(balanceLeaveTemp);*/
-
 
 
         }
@@ -291,13 +329,127 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
             System.out.println("Days: " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
             Log.e("DAYS----------------", "***************------------ " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
             result = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-            edDays.setText(""+((int)result+1));
+            edDays.setText("" + ((int) result + 1));
         } catch (ParseException e) {
             e.printStackTrace();
             result = 0;
-            edDays.setText(""+(int)result);
+            edDays.setText("" + (int) result);
         }
         return result;
     }
+
+    private void getCurrentYear(final Integer empId) {
+
+        String base = Constants.userName + ":" + Constants.password;
+        String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
+
+        if (Constants.isOnline(getContext())) {
+            final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
+            commonDialog.show();
+
+            Call<CurrentYearModel> listCall = Constants.myInterface.getCurrentYear(authHeader);
+            listCall.enqueue(new Callback<CurrentYearModel>() {
+                @Override
+                public void onResponse(Call<CurrentYearModel> call, Response<CurrentYearModel> response) {
+                    try {
+                        if (response.body() != null) {
+
+                            Log.e("CURRENT YEAR : ", " - " + response.body());
+
+                            getBalanceLeave(empId, response.body().getCalYrId());
+
+                            commonDialog.dismiss();
+
+                        } else {
+                            commonDialog.dismiss();
+                            Log.e("Data Null : ", "-----------");
+
+                        }
+                    } catch (Exception e) {
+                        commonDialog.dismiss();
+                        Log.e("Exception : ", "-----------" + e.getMessage());
+                        e.printStackTrace();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CurrentYearModel> call, Throwable t) {
+                    commonDialog.dismiss();
+                    Log.e("onFailure : ", "-----------" + t.getMessage());
+                    t.printStackTrace();
+
+                }
+            });
+        } else {
+            Toast.makeText(getContext(), "No Internet Connection !", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    private void getBalanceLeave(Integer empId, int curYrId) {
+        Log.e("PARAMETERS : ", "        EMP ID : " + empId + "           CURR_YEAR_ID : " + curYrId);
+
+        String base = Constants.userName + ":" + Constants.password;
+        String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
+
+        if (Constants.isOnline(getContext())) {
+            final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
+            commonDialog.show();
+
+            Call<ArrayList<BalanceLeaveModel>> listCall = Constants.myInterface.getBalanceLeave(authHeader, empId, curYrId);
+            listCall.enqueue(new Callback<ArrayList<BalanceLeaveModel>>() {
+                @Override
+                public void onResponse(Call<ArrayList<BalanceLeaveModel>> call, Response<ArrayList<BalanceLeaveModel>> response) {
+                    try {
+                        if (response.body() != null) {
+
+                            Log.e("BALANCE LIST : ", " - " + response.body());
+                            balanceLeaveList.clear();
+                            leaveTypeNameArray.clear();
+                            leaveTypeBalArray.clear();
+
+                            leaveTypeNameArray.add("Select Leave Type");
+                            leaveTypeBalArray.add(0);
+
+                            balanceLeaveList = response.body();
+                            for (int i = 0; i < balanceLeaveList.size(); i++) {
+                                leaveTypeNameArray.add(balanceLeaveList.get(i).getLvTitleShort());
+                                leaveTypeBalArray.add(balanceLeaveList.get(i).getBalLeave());
+                            }
+
+                            final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, leaveTypeNameArray);
+                            spinnerAdapter.setDropDownViewResource(R.layout.spinner_item);
+                            spType.setAdapter(spinnerAdapter);
+
+
+                            commonDialog.dismiss();
+
+                        } else {
+                            commonDialog.dismiss();
+                            Log.e("Data Null : ", "-----------");
+
+                        }
+                    } catch (Exception e) {
+                        commonDialog.dismiss();
+                        Log.e("Exception : ", "-----------" + e.getMessage());
+                        e.printStackTrace();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ArrayList<BalanceLeaveModel>> call, Throwable t) {
+                    commonDialog.dismiss();
+                    Log.e("onFailure : ", "-----------" + t.getMessage());
+                    t.printStackTrace();
+
+                }
+            });
+        } else {
+            Toast.makeText(getContext(), "No Internet Connection !", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
 }

@@ -19,6 +19,7 @@ import com.ats.hreasy.R;
 import com.ats.hreasy.constant.Constants;
 import com.ats.hreasy.interfaces.AllTaskLeaveInterface;
 import com.ats.hreasy.interfaces.MyTaskLeaveInterface;
+import com.ats.hreasy.model.CurrentYearModel;
 import com.ats.hreasy.model.LeaveApp;
 import com.ats.hreasy.model.Login;
 import com.ats.hreasy.utils.CommonDialog;
@@ -36,8 +37,9 @@ public class LeaveApprovalPendingFragment extends Fragment {
     private ViewPager viewPager;
     private TabLayout tab;
     FragmentPagerAdapter adapterViewPager;
-    public static ArrayList<LeaveApp>  staticPendingLeave =new ArrayList<>();
-    public static ArrayList<LeaveApp>  staticInfoLeave =new ArrayList<>();
+    public static ArrayList<LeaveApp> staticPendingLeave = new ArrayList<>();
+    public static ArrayList<LeaveApp> staticInfoLeave = new ArrayList<>();
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,8 +54,10 @@ public class LeaveApprovalPendingFragment extends Fragment {
         Gson gson = new Gson();
         Login loginUser = gson.fromJson(userStr, Login.class);
         Log.e("HOME_ACTIVITY : ", "--------USER-------" + loginUser);
-        getLeaveList(loginUser.getEmpId(),1,1,1);
-        getLeaveInfoList(loginUser.getEmpId(),1,2,1);
+
+        if (loginUser != null) {
+            getCurrentYear(loginUser.getEmpId());
+        }
 
 
         adapterViewPager = new ViewPagerAdapter(getChildFragmentManager(), getContext());
@@ -139,32 +143,84 @@ public class LeaveApprovalPendingFragment extends Fragment {
         }
     }
 
-    private void getLeaveList(Integer empId, int status, int authTypeId, int currId) {
-        Log.e("PARAMETERS : ", "        EMP ID : " + empId + "      STATUS : " + status + "         AUTHTYPEID : " + authTypeId + "        CURR ID : " + currId);
+    private void getCurrentYear(final Integer empId) {
 
-        ArrayList<Integer> statusList=new ArrayList<>();
-        statusList.add(1);
-
-
-        String base= Constants.userName +":" +Constants.password;
-        String authHeader= "Basic "+ Base64.encodeToString(base.getBytes(),Base64.NO_WRAP);
+        String base = Constants.userName + ":" + Constants.password;
+        String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
 
         if (Constants.isOnline(getContext())) {
             final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
             commonDialog.show();
 
-            Call<ArrayList<LeaveApp>> listCall = Constants.myInterface.getLeaveApplyListForAuth(authHeader,empId, statusList, authTypeId, currId);
+            Call<CurrentYearModel> listCall = Constants.myInterface.getCurrentYear(authHeader);
+            listCall.enqueue(new Callback<CurrentYearModel>() {
+                @Override
+                public void onResponse(Call<CurrentYearModel> call, Response<CurrentYearModel> response) {
+                    try {
+                        if (response.body() != null) {
+
+                            Log.e("CURRENT YEAR : ", " - " + response.body());
+
+                            getLeaveList(empId, response.body().getCalYrId());
+                            getLeaveInfoList(empId, response.body().getCalYrId());
+
+
+                            commonDialog.dismiss();
+
+                        } else {
+                            commonDialog.dismiss();
+                            Log.e("Data Null : ", "-----------");
+
+                        }
+                    } catch (Exception e) {
+                        commonDialog.dismiss();
+                        Log.e("Exception : ", "-----------" + e.getMessage());
+                        e.printStackTrace();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CurrentYearModel> call, Throwable t) {
+                    commonDialog.dismiss();
+                    Log.e("onFailure : ", "-----------" + t.getMessage());
+                    t.printStackTrace();
+
+                }
+            });
+        } else {
+            Toast.makeText(getContext(), "No Internet Connection !", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void getLeaveList(Integer empId, int currId) {
+        Log.e("PARAMETERS : ", "        EMP ID : " + empId + "            CURR ID : " + currId);
+
+        ArrayList<Integer> statusList = new ArrayList<>();
+        statusList.add(1);
+
+
+        String base = Constants.userName + ":" + Constants.password;
+        String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
+
+        if (Constants.isOnline(getContext())) {
+            final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
+            commonDialog.show();
+
+            Call<ArrayList<LeaveApp>> listCall = Constants.myInterface.getLeaveApplyListForPending(authHeader, empId, currId);
             listCall.enqueue(new Callback<ArrayList<LeaveApp>>() {
                 @Override
                 public void onResponse(Call<ArrayList<LeaveApp>> call, Response<ArrayList<LeaveApp>> response) {
                     try {
                         if (response.body() != null) {
 
-                            Log.e("LEAVE LIST : ", " - " + response.body());
+                            Log.e("PENDING LEAVE LIST : ", " - " + response.body());
 
                             staticPendingLeave.clear();
                             staticPendingLeave = response.body();
                             // createQuotationPDF(quotList);
+                            viewPager.setCurrentItem(1);
+                            viewPager.setCurrentItem(0);
 
                             commonDialog.dismiss();
 
@@ -191,29 +247,29 @@ public class LeaveApprovalPendingFragment extends Fragment {
         }
     }
 
-    private void getLeaveInfoList(Integer empId, int status, int authTypeId, int currId) {
+    private void getLeaveInfoList(Integer empId, int currId) {
 
-        Log.e("PARAMETERS : ", "        EMP ID : " + empId + "      STATUS : " + status + "         AUTHTYPEID : " + authTypeId + "        CURR ID : " + currId);
+        Log.e("PARAMETERS : ", "        EMP ID : " + empId + "      CURR ID : " + currId);
 
-        ArrayList<Integer> statusList=new ArrayList<>();
+        ArrayList<Integer> statusList = new ArrayList<>();
         statusList.add(1);
 
 
-        String base= Constants.userName +":" +Constants.password;
-        String authHeader= "Basic "+ Base64.encodeToString(base.getBytes(),Base64.NO_WRAP);
+        String base = Constants.userName + ":" + Constants.password;
+        String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
 
         if (Constants.isOnline(getContext())) {
             final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
             commonDialog.show();
 
-            Call<ArrayList<LeaveApp>> listCall = Constants.myInterface.getLeaveApplyListForAuth(authHeader,empId, statusList, authTypeId, currId);
+            Call<ArrayList<LeaveApp>> listCall = Constants.myInterface.getLeaveApplyListForInfo(authHeader, empId, currId);
             listCall.enqueue(new Callback<ArrayList<LeaveApp>>() {
                 @Override
                 public void onResponse(Call<ArrayList<LeaveApp>> call, Response<ArrayList<LeaveApp>> response) {
                     try {
                         if (response.body() != null) {
 
-                            Log.e("LEAVE LIST : ", " - " + response.body());
+                            Log.e("INFO LEAVE LIST : ", " - " + response.body());
 
                             staticInfoLeave.clear();
                             staticInfoLeave = response.body();

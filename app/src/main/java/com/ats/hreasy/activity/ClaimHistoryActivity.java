@@ -54,7 +54,7 @@ public class ClaimHistoryActivity extends AppCompatActivity {
 
         recyclerView=findViewById(R.id.recyclerView);
 
-        LeaveTrailTemp temp1 = new LeaveTrailTemp(1, "Anmol Shirke", "Claim rejected price is not appropriate", "Rejected", "15 APR 2019");
+      /*  LeaveTrailTemp temp1 = new LeaveTrailTemp(1, "Anmol Shirke", "Claim rejected price is not appropriate", "Rejected", "15 APR 2019");
         LeaveTrailTemp temp2 = new LeaveTrailTemp(2, "Amit Patil", "Claim approved", "Approved", "16 APR 2019");
 
         ArrayList<LeaveTrailTemp> leaveTrailTemps=new ArrayList<>();
@@ -66,7 +66,7 @@ public class ClaimHistoryActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
-
+*/
     }
 
     @Override

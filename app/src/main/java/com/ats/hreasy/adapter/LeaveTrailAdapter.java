@@ -9,15 +9,19 @@ import android.widget.TextView;
 
 import com.ats.hreasy.R;
 import com.ats.hreasy.model.LeaveTrailTemp;
+import com.ats.hreasy.model.MyLeaveTrailData;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class LeaveTrailAdapter extends RecyclerView.Adapter<LeaveTrailAdapter.MyViewHolder> {
 
-    private ArrayList<LeaveTrailTemp> msgList;
+    private ArrayList<MyLeaveTrailData> msgList;
     private Context context;
 
-    public LeaveTrailAdapter(ArrayList<LeaveTrailTemp> msgList, Context context) {
+    public LeaveTrailAdapter(ArrayList<MyLeaveTrailData> msgList, Context context) {
         this.msgList = msgList;
         this.context = context;
     }
@@ -44,12 +48,40 @@ public class LeaveTrailAdapter extends RecyclerView.Adapter<LeaveTrailAdapter.My
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        final LeaveTrailTemp model = msgList.get(position);
+        final MyLeaveTrailData model = msgList.get(position);
 
-        holder.tvEmpName.setText(model.getEmpName());
-        holder.tvRemark.setText(model.getRemark());
-        holder.tvDate.setText(model.getDate());
-        holder.tvStatus.setText(model.getStatus());
+        holder.tvEmpName.setText(""+model.getEmpFname()+" "+model.getEmpMname()+" "+model.getEmpSname());
+        holder.tvRemark.setText(model.getEmpRemarks());
+
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat sdf1=new SimpleDateFormat("dd MMM yyyy");
+
+        try {
+            Date date=sdf.parse(model.getMakerEnterDatetime());
+            String dt=sdf1.format(date.getTime());
+            holder.tvDate.setText(dt);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+
+        String leaveStatus="";
+        if (model.getLeaveStatus()==1){
+            leaveStatus="Pending";
+        }else if (model.getLeaveStatus()==2){
+            leaveStatus="FA Pending";
+        }else if (model.getLeaveStatus()==3){
+            leaveStatus="FA Approved";
+        }else if (model.getLeaveStatus()==8){
+            leaveStatus="IA Rejected";
+        }else if (model.getLeaveStatus()==9){
+            leaveStatus="FA Rejected";
+        }else if (model.getLeaveStatus()==7){
+            leaveStatus="Cancelled";
+        }
+
+        holder.tvStatus.setText(leaveStatus);
 
 
     }

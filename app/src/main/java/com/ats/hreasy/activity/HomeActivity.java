@@ -42,6 +42,7 @@ public class HomeActivity extends AppCompatActivity
 
     boolean doubleBackToExitPressedOnce = false;
     Login loginUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,26 +60,29 @@ public class HomeActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        String userStr = CustomSharedPreference.getString(this, CustomSharedPreference.KEY_USER);
+        Gson gson = new Gson();
+        loginUser = gson.fromJson(userStr, Login.class);
+        Log.e("HOME_ACTIVITY : ", "--------USER-------" + loginUser);
+
+
         View header = navigationView.getHeaderView(0);
 
         TextView tvNavHeadName = header.findViewById(R.id.tvNavHeadName);
         TextView tvNavHeadDesg = header.findViewById(R.id.tvNavHeadDesg);
         CircleImageView ivNavHeadPhoto = header.findViewById(R.id.ivNavHeadPhoto);
 
-        tvNavHeadName.setText("Anmol Shirke");
-        tvNavHeadDesg.setText("Developer");
-
-        String userStr = CustomSharedPreference.getString(this, CustomSharedPreference.KEY_USER);
-        Gson gson = new Gson();
-        loginUser = gson.fromJson(userStr, Login.class);
-        Log.e("HOME_ACTIVITY : ", "--------USER-------" + loginUser);
+        if (loginUser != null) {
+            tvNavHeadName.setText("" + loginUser.getEmpFname() + " " + loginUser.getEmpMname() + " " + loginUser.getEmpSname());
+            tvNavHeadDesg.setText("" + loginUser.getEmpDeptName());
+        }
 
         if (loginUser == null) {
             startActivity(new Intent(HomeActivity.this, LoginActivity.class));
             finish();
 
         }
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_frame, new HomeFragment(), "Exit");
         ft.commit();
     }
@@ -161,7 +165,7 @@ public class HomeActivity extends AppCompatActivity
 
         if (id == R.id.action_notification) {
 
-            startActivity(new Intent(HomeActivity.this,NotificationActivity.class));
+            startActivity(new Intent(HomeActivity.this, NotificationActivity.class));
 
             return true;
         }

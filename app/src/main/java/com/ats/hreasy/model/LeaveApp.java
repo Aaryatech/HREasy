@@ -4,53 +4,22 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class LeaveApp {
-    @SerializedName("leaveId")
-    @Expose
     private Integer leaveId;
-    @SerializedName("calYrId")
-    @Expose
     private Integer calYrId;
-    @SerializedName("leaveTitle")
-    @Expose
     private String leaveTitle;
-    @SerializedName("empId")
-    @Expose
     private Integer empId;
-    @SerializedName("empFname")
-    @Expose
-    private String empFname;
-    @SerializedName("empMname")
-    @Expose
-    private String empMname;
-    @SerializedName("empSname")
-    @Expose
-    private String empSname;
-    @SerializedName("empCode")
-    @Expose
+    private String empName;
+    private String iniAuthEmpId;
+    private String finAuthEmpId;
+    private Integer exInt1;
     private String empCode;
-    @SerializedName("lvTypeId")
-    @Expose
     private Integer lvTypeId;
-    @SerializedName("leaveTypeName")
-    @Expose
     private String leaveTypeName;
-    @SerializedName("leaveDuration")
-    @Expose
     private String leaveDuration;
-    @SerializedName("leaveFromdt")
-    @Expose
     private String leaveFromdt;
-    @SerializedName("leaveTodt")
-    @Expose
     private String leaveTodt;
-    @SerializedName("leaveNumDays")
-    @Expose
     private Integer leaveNumDays;
-    @SerializedName("leaveEmpReason")
-    @Expose
     private String leaveEmpReason;
-    @SerializedName("circulatedTo")
-    @Expose
     private String circulatedTo;
 
     public Integer getLeaveId() {
@@ -85,28 +54,36 @@ public class LeaveApp {
         this.empId = empId;
     }
 
-    public String getEmpFname() {
-        return empFname;
+    public String getEmpName() {
+        return empName;
     }
 
-    public void setEmpFname(String empFname) {
-        this.empFname = empFname;
+    public void setEmpName(String empName) {
+        this.empName = empName;
     }
 
-    public String getEmpMname() {
-        return empMname;
+    public String getIniAuthEmpId() {
+        return iniAuthEmpId;
     }
 
-    public void setEmpMname(String empMname) {
-        this.empMname = empMname;
+    public void setIniAuthEmpId(String iniAuthEmpId) {
+        this.iniAuthEmpId = iniAuthEmpId;
     }
 
-    public String getEmpSname() {
-        return empSname;
+    public String getFinAuthEmpId() {
+        return finAuthEmpId;
     }
 
-    public void setEmpSname(String empSname) {
-        this.empSname = empSname;
+    public void setFinAuthEmpId(String finAuthEmpId) {
+        this.finAuthEmpId = finAuthEmpId;
+    }
+
+    public Integer getExInt1() {
+        return exInt1;
+    }
+
+    public void setExInt1(Integer exInt1) {
+        this.exInt1 = exInt1;
     }
 
     public String getEmpCode() {
@@ -179,27 +156,5 @@ public class LeaveApp {
 
     public void setCirculatedTo(String circulatedTo) {
         this.circulatedTo = circulatedTo;
-    }
-
-    @Override
-    public String toString() {
-        return "LeaveApp{" +
-                "leaveId=" + leaveId +
-                ", calYrId=" + calYrId +
-                ", leaveTitle='" + leaveTitle + '\'' +
-                ", empId=" + empId +
-                ", empFname='" + empFname + '\'' +
-                ", empMname='" + empMname + '\'' +
-                ", empSname='" + empSname + '\'' +
-                ", empCode='" + empCode + '\'' +
-                ", lvTypeId=" + lvTypeId +
-                ", leaveTypeName='" + leaveTypeName + '\'' +
-                ", leaveDuration='" + leaveDuration + '\'' +
-                ", leaveFromdt='" + leaveFromdt + '\'' +
-                ", leaveTodt='" + leaveTodt + '\'' +
-                ", leaveNumDays=" + leaveNumDays +
-                ", leaveEmpReason='" + leaveEmpReason + '\'' +
-                ", circulatedTo='" + circulatedTo + '\'' +
-                '}';
     }
 }

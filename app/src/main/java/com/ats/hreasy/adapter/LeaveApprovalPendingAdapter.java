@@ -60,7 +60,7 @@ public class LeaveApprovalPendingAdapter extends RecyclerView.Adapter<LeaveAppro
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final LeaveApp model = leaveList.get(position);
 
-        holder.tvEmpName.setText(model.getEmpFname()+ " "+model.getEmpSname());
+        holder.tvEmpName.setText(model.getEmpName());
         //holder.tvEmpDesg.setText(model.getName());
         holder.tvDate.setText(model.getLeaveFromdt() + " to " + model.getLeaveTodt());
         holder.tvType.setText(model.getLeaveTitle());

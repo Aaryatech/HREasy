@@ -9,15 +9,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ats.hreasy.R;
+import com.ats.hreasy.model.BalanceLeaveModel;
 import com.ats.hreasy.model.BalanceLeaveTemp;
 
 import java.util.ArrayList;
 
 public class BalanceLeaveAdapter extends RecyclerView.Adapter<BalanceLeaveAdapter.MyViewHolder> {
-    private ArrayList<BalanceLeaveTemp> balanceList;
+    private ArrayList<BalanceLeaveModel> balanceList;
     private Context context;
 
-    public BalanceLeaveAdapter(ArrayList<BalanceLeaveTemp> balanceList, Context context) {
+    public BalanceLeaveAdapter(ArrayList<BalanceLeaveModel> balanceList, Context context) {
         this.balanceList = balanceList;
         this.context = context;
     }
@@ -33,9 +34,15 @@ public class BalanceLeaveAdapter extends RecyclerView.Adapter<BalanceLeaveAdapte
 
     @Override
     public void onBindViewHolder(@NonNull BalanceLeaveAdapter.MyViewHolder myViewHolder, int i) {
-        BalanceLeaveTemp model = balanceList.get(i);
-        myViewHolder.tv_leaveType.setText(""+model.getLeaveName());
-        myViewHolder.tv_leaveCount.setText(""+model.getCount());
+        BalanceLeaveModel model = balanceList.get(i);
+        myViewHolder.tv_leaveType.setText("" + model.getLvTitleShort());
+        myViewHolder.tv_leaveCount.setText("" + ((model.getBalLeave() + model.getLvsAllotedLeaves()) - model.getSactionLeave()));
+
+        myViewHolder.tvOB.setText("" + model.getBalLeave());
+        myViewHolder.tvEarned.setText("" + model.getLvsAllotedLeaves());
+        myViewHolder.tvSanction.setText("" + model.getSactionLeave());
+
+
     }
 
     @Override
@@ -44,11 +51,17 @@ public class BalanceLeaveAdapter extends RecyclerView.Adapter<BalanceLeaveAdapte
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView tv_leaveType,tv_leaveCount;
+        public TextView tv_leaveType, tv_leaveCount, tvOB, tvEarned, tvSanction;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            tv_leaveType=itemView.findViewById(R.id.tv_leaveType);
-            tv_leaveCount=itemView.findViewById(R.id.tv_leaveCount);
+            tv_leaveType = itemView.findViewById(R.id.tv_leaveType);
+            tv_leaveCount = itemView.findViewById(R.id.tv_leaveCount);
+
+            tvOB = itemView.findViewById(R.id.tvOB);
+            tvEarned = itemView.findViewById(R.id.tvEarned);
+            tvSanction = itemView.findViewById(R.id.tvSanction);
+
         }
     }
 }

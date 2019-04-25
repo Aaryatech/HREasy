@@ -22,7 +22,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-public class UpdateClaimStatusFragment extends Fragment {
+public class UpdateClaimStatusFragment extends Fragment implements View.OnClickListener {
 
     private TextView tvEmpName, tvEmpDesg, tvProject, tvClaimType, tvDate, tvAmount, tvRemark;
     private ImageView ivPhoto1, ivPhoto2, ivPhoto3;
@@ -45,6 +45,9 @@ public class UpdateClaimStatusFragment extends Fragment {
         tvDate = view.findViewById(R.id.tvDate);
         tvAmount = view.findViewById(R.id.tvAmount);
         tvRemark = view.findViewById(R.id.tvRemark);
+
+        btnApprove.setOnClickListener(this);
+        btnReject.setOnClickListener(this);
 
         recyclerView = view.findViewById(R.id.recyclerView);
 
@@ -79,7 +82,7 @@ public class UpdateClaimStatusFragment extends Fragment {
         }
 
 
-        LeaveTrailTemp temp1 = new LeaveTrailTemp(1, "Anmol Shirke", "Leave rejected because you already taken leave this month", "Rejected", "15 APR 2019");
+      /*  LeaveTrailTemp temp1 = new LeaveTrailTemp(1, "Anmol Shirke", "Leave rejected because you already taken leave this month", "Rejected", "15 APR 2019");
         LeaveTrailTemp temp2 = new LeaveTrailTemp(2, "Amit Patil", "Leave approved", "Approved", "16 APR 2019");
 
         ArrayList<LeaveTrailTemp> leaveTrailTemps=new ArrayList<>();
@@ -90,10 +93,22 @@ public class UpdateClaimStatusFragment extends Fragment {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);*/
 
 
         return view;
     }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.btnApprove) {
+
+        } else if (v.getId() == R.id.btnReject) {
+
+        }
+    }
+
+
+
 
 }
