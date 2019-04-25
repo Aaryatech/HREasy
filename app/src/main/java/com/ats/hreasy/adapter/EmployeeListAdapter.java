@@ -1,8 +1,8 @@
 package com.ats.hreasy.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +17,7 @@ import com.ats.hreasy.fragment.ClaimFragment;
 import com.ats.hreasy.fragment.LeaveFragment;
 import com.ats.hreasy.model.LeaveEmployeeModel;
 import com.ats.hreasy.model.Login;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
 
     @Override
     public void onBindViewHolder(@NonNull EmployeeListAdapter.MyViewHolder myViewHolder, int i) {
-        LeaveEmployeeModel model = empList.get(i);
+        final LeaveEmployeeModel model = empList.get(i);
 
             myViewHolder.tv_empName.setText(model.getEmpFname() + " " +model.getEmpMname() + " " + model.getEmpSname());
             myViewHolder.tv_empMob.setText("" + model.getEmpMobile1());
@@ -66,20 +67,33 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
 
                 if (pageType.equalsIgnoreCase("leave")) {
 
+                    Gson gson = new Gson();
+                    String json = gson.toJson(model);
                     HomeActivity activity = (HomeActivity) context;
 
-                    FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
-                    ft.replace(R.id.content_frame, new LeaveFragment(), "EmployeeListFragment");
-                    ft.commit();
+//                    FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
+//                    ft.replace(R.id.content_frame, new LeaveFragment(), "EmployeeListFragment");
+//                    ft.commit();
+                    LeaveFragment adf = new LeaveFragment();
+                    Bundle args = new Bundle();
+                    args.putString("empModel", json);
+                    adf.setArguments(args);
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "EmployeeListFragment").commit();
 
                 }else if (pageType.equalsIgnoreCase("claim")) {
 
-
+                    Gson gson = new Gson();
+                    String json = gson.toJson(model);
                     HomeActivity activity = (HomeActivity) context;
+//                    FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
+//                    ft.replace(R.id.content_frame, new ClaimFragment(), "EmployeeListFragment");
+//                    ft.commit();
+                    ClaimFragment adf = new ClaimFragment();
+                    Bundle args = new Bundle();
+                    args.putString("empModel", json);
+                    adf.setArguments(args);
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "EmployeeListFragment").commit();
 
-                    FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
-                    ft.replace(R.id.content_frame, new ClaimFragment(), "EmployeeListFragment");
-                    ft.commit();
 
                 }
 

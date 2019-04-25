@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.ats.hreasy.R;
 import com.ats.hreasy.model.BalanceLeaveModel;
-import com.ats.hreasy.model.BalanceLeaveTemp;
 
 import java.util.ArrayList;
 
@@ -35,7 +34,7 @@ public class BalanceLeaveAdapter extends RecyclerView.Adapter<BalanceLeaveAdapte
     @Override
     public void onBindViewHolder(@NonNull BalanceLeaveAdapter.MyViewHolder myViewHolder, int i) {
         BalanceLeaveModel model = balanceList.get(i);
-        myViewHolder.tv_leaveType.setText("" + model.getLvTitleShort());
+        myViewHolder.tv_leaveType.setText("" + model.getLvTitle());
         myViewHolder.tv_leaveCount.setText("" + ((model.getBalLeave() + model.getLvsAllotedLeaves()) - model.getSactionLeave()));
 
         myViewHolder.tvOB.setText("" + model.getBalLeave());

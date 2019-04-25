@@ -79,14 +79,73 @@ public class EmployeeListFragment extends Fragment {
             }
         });
 
-        getEmployeeList(1);
+        if(type.equals("claim")) {
+            getEmployeeListClaim(loginUser.getEmpId());
+        }else{
+            getEmployeeListLeave(loginUser.getEmpId());
+        }
 
 
        // prepareData();
         return view;
     }
 
-    private void getEmployeeList(Integer empId) {
+    private void getEmployeeListLeave(int empId) {
+        Log.e("PARAMETERS : ", "       EMPID : " + empId );
+        if (Constants.isOnline(getActivity())) {
+            final CommonDialog commonDialog = new CommonDialog(getActivity(), "Loading", "Please Wait...");
+            commonDialog.show();
+
+            String base= Constants.userName +":" +Constants.password;
+            String authHeader= "Basic "+ Base64.encodeToString(base.getBytes(),Base64.NO_WRAP);
+
+            Call<ArrayList<LeaveEmployeeModel>> listCall = Constants.myInterface.getEmployeeListByEmpId(authHeader,empId);
+            listCall.enqueue(new Callback<ArrayList<LeaveEmployeeModel>>() {
+                @Override
+                public void onResponse(Call<ArrayList<LeaveEmployeeModel>> call, Response<ArrayList<LeaveEmployeeModel>> response) {
+                    try {
+                        if (response.body() != null) {
+
+                            Log.e("Employee List Leave : ", "------------" + response.body());
+                            empList.clear();
+                            empList = response.body();
+
+                            LeaveEmployeeModel leaveEmployeeModel=new LeaveEmployeeModel(loginUser.getEmpId(),loginUser.getEmpCode(),loginUser.getCompanyId(),loginUser.getEmpCatId(),loginUser.getEmpTypeId(),loginUser.getEmpDeptId(),loginUser.getLocId(),loginUser.getEmpFname(),loginUser.getEmpMname(),loginUser.getEmpSname(),loginUser.getEmpPhoto(),loginUser.getEmpMobile1(),loginUser.getEmpMobile2(),loginUser.getEmpEmail(),loginUser.getEmpAddressTemp(),loginUser.getEmpAddressPerm(),loginUser.getEmpBloodgrp(),loginUser.getEmpEmergencyPerson1(),loginUser.getEmpEmergencyNo1(),loginUser.getEmpEmergencyPerson2(),loginUser.getEmpEmergencyNo2(),loginUser.getEmpRatePerhr(),loginUser.getEmpJoiningDate(),loginUser.getEmpPrevExpYrs(),loginUser.getEmpPrevExpMonths(),loginUser.getEmpLeavingDate(),loginUser.getEmpLeavingReason(),loginUser.getDelStatus(),loginUser.getIsActive(),loginUser.getMakerUserId(),loginUser.getMakerEnterDatetime(),loginUser.getExInt1(),loginUser.getExInt2(),loginUser.getExInt3(),loginUser.getExVar1(),loginUser.getExVar2(),loginUser.getExVar3());
+                            empList.add(0,leaveEmployeeModel);
+                            Log.e("Employee List Model : ", "****************" + response.body());
+                            mAdapter = new EmployeeListAdapter(empList, getActivity(), type);
+                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+                            recyclerView.setLayoutManager(mLayoutManager);
+                            recyclerView.setItemAnimator(new DefaultItemAnimator());
+                            recyclerView.setAdapter(mAdapter);
+
+                            commonDialog.dismiss();
+                        } else {
+                            commonDialog.dismiss();
+                            Log.e("Data Null : ", "-----------");
+                        }
+                    } catch (Exception e) {
+                        commonDialog.dismiss();
+                        Log.e("Exception : ", "-----------" + e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ArrayList<LeaveEmployeeModel>> call, Throwable t) {
+                    commonDialog.dismiss();
+                    Log.e("onFailure : ", "-----------" + t.getMessage());
+                    t.printStackTrace();
+                }
+            });
+        } else {
+            Toast.makeText(getActivity(), "No Internet Connection !", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+    private void getEmployeeListClaim(Integer empId) {
         Log.e("PARAMETERS : ", "       EMPID : " + empId );
         if (Constants.isOnline(getActivity())) {
             final CommonDialog commonDialog = new CommonDialog(getActivity(), "Loading", "Please Wait...");
@@ -102,7 +161,7 @@ public class EmployeeListFragment extends Fragment {
                     try {
                         if (response.body() != null) {
 
-                            Log.e("Employee List : ", "------------" + response.body());
+                            Log.e("Employee List Claim: ", "------------" + response.body());
                            empList.clear();
                            empList = response.body();
 

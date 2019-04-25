@@ -1,12 +1,30 @@
 package com.ats.hreasy.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class BalanceLeaveModel {
 
+    @SerializedName("lvTypeId")
+    @Expose
     private Integer lvTypeId;
+    @SerializedName("lvTitleShort")
+    @Expose
     private String lvTitleShort;
+    @SerializedName("lvTitle")
+    @Expose
+    private String lvTitle;
+    @SerializedName("lvsAllotedLeaves")
+    @Expose
     private Integer lvsAllotedLeaves;
+    @SerializedName("balLeave")
+    @Expose
     private Integer balLeave;
+    @SerializedName("aplliedLeaeve")
+    @Expose
     private Integer aplliedLeaeve;
+    @SerializedName("sactionLeave")
+    @Expose
     private Integer sactionLeave;
 
     public Integer getLvTypeId() {
@@ -23,6 +41,14 @@ public class BalanceLeaveModel {
 
     public void setLvTitleShort(String lvTitleShort) {
         this.lvTitleShort = lvTitleShort;
+    }
+
+    public String getLvTitle() {
+        return lvTitle;
+    }
+
+    public void setLvTitle(String lvTitle) {
+        this.lvTitle = lvTitle;
     }
 
     public Integer getLvsAllotedLeaves() {
@@ -62,6 +88,7 @@ public class BalanceLeaveModel {
         return "BalanceLeaveModel{" +
                 "lvTypeId=" + lvTypeId +
                 ", lvTitleShort='" + lvTitleShort + '\'' +
+                ", lvTitle='" + lvTitle + '\'' +
                 ", lvsAllotedLeaves=" + lvsAllotedLeaves +
                 ", balLeave=" + balLeave +
                 ", aplliedLeaeve=" + aplliedLeaeve +
