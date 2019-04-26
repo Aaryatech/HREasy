@@ -2,6 +2,8 @@ package com.ats.hreasy.interfaces;
 
 import com.ats.hreasy.model.AuthorityIds;
 import com.ats.hreasy.model.BalanceLeaveModel;
+import com.ats.hreasy.model.ClaimApply;
+import com.ats.hreasy.model.ClaimType;
 import com.ats.hreasy.model.CurrentYearModel;
 import com.ats.hreasy.model.DashboardCount;
 import com.ats.hreasy.model.Info;
@@ -11,6 +13,7 @@ import com.ats.hreasy.model.LeaveEmployeeModel;
 import com.ats.hreasy.model.Login;
 import com.ats.hreasy.model.MyLeaveData;
 import com.ats.hreasy.model.MyLeaveTrailData;
+import com.ats.hreasy.model.SaveClaimTrail;
 import com.ats.hreasy.model.SaveLeaveTrail;
 
 import java.util.ArrayList;
@@ -54,11 +57,18 @@ public interface InterfaceApi {
     @GET("getCalculateYearListIsCurrent")
     Call<CurrentYearModel> getCurrentYear(@Header("Authorization") String authHeader);
 
+    @GET("getClaimList")
+    Call<ArrayList<ClaimType>> getClaimList(@Header("Authorization") String authHeader);
+
     @POST("getLeaveTrailList")
     Call<ArrayList<MyLeaveTrailData>> getLeaveTrail(@Header("Authorization") String authHeader, @Query("leaveId") int leaveId);
 
     @POST("getAuthIdByEmpId")
     Call<AuthorityIds> getAuthIdByEmpId(@Header("Authorization") String authHeader, @Query("empId") int empId);
+
+    @POST("getClaimAuthIds")
+    Call<AuthorityIds> getClaimAuthIds(@Header("Authorization") String authHeader, @Query("empId") int empId,@Query("companyId") int companyId);
+
 
 
     @POST("updateLeaveStatus")
@@ -70,8 +80,18 @@ public interface InterfaceApi {
     @POST("updateTrailId")
     Call<Info> updateLeaveTrailId(@Header("Authorization") String authHeader, @Query("leaveId") int leaveId, @Query("trailId") int trailId);
 
+    @POST("updateClaimTrailId")
+    Call<Info> updateClaimTrailId(@Header("Authorization") String authHeader, @Query("claimId") int claimId, @Query("trailId") int trailId);
+
+
     @POST("saveLeaveApply")
     Call<LeaveApply> saveLeaveApply(@Header("Authorization") String authHeader,@Body LeaveApply leaveApply);
+
+    @POST("saveClaimApply")
+    Call<ClaimApply> saveClaimApply(@Header("Authorization") String authHeader, @Body ClaimApply claimApply);
+
+    @POST("saveClaimTrail")
+    Call<SaveClaimTrail> saveClaimTrail(@Header("Authorization") String authHeader, @Body SaveClaimTrail saveClaimTrail);
 
 
 }
