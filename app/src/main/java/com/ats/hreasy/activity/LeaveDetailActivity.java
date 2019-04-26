@@ -18,16 +18,15 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-public class LeaveHistoryDetailActivity extends AppCompatActivity {
+public class LeaveDetailActivity extends AppCompatActivity {
     MyLeaveData leaveHistory;
     public TextView tvLeaveType, tvDayesType, tvDayes, tvDate, tvStatus, tvEmpRemark,tvEmpName,tvEmpDesignation;
     private RecyclerView recyclerView;
     Login loginUser;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_leave_history_detail);
+        setContentView(R.layout.activity_pending_leave_detail);
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
@@ -53,8 +52,7 @@ public class LeaveHistoryDetailActivity extends AppCompatActivity {
         String upcomingStr = getIntent().getStringExtra("model");
         leaveHistory = gson.fromJson(upcomingStr, MyLeaveData.class);
         Log.e("responce", "-----------------------" + leaveHistory);
-
-        tvEmpName.setText(loginUser.getEmpFname()+ " "+loginUser.getEmpMname()+" " +loginUser.getEmpSname());
+        tvEmpName.setText(leaveHistory.getEmpFname()+ " "+leaveHistory.getEmpMname()+" " +leaveHistory.getEmpSname());
 
         if(leaveHistory!=null) {
             tvLeaveType.setText(leaveHistory.getLvTitle());
@@ -69,20 +67,20 @@ public class LeaveHistoryDetailActivity extends AppCompatActivity {
                 tvStatus.setText("Final Pending");
 
             } else if (leaveHistory.getExInt1() == 3) {
-                    tvStatus.setText("Final Approved");
+                tvStatus.setText("Final Approved");
 
             } else if (leaveHistory.getExInt1() == 8) {
-                    tvStatus.setText("Initial Rejected");
+                tvStatus.setText("Initial Rejected");
 
             } else if (leaveHistory.getExInt1() == 9) {
                 tvStatus.setText("Final Rejected");
 
             } else if (leaveHistory.getExInt1() == 7) {
-                    tvStatus.setText("Leave Cancelled");
+                tvStatus.setText("Leave Cancelled");
 
             }
 
-            if(leaveHistory.getLeaveDuration().equals("1"))
+            if(leaveHistory.getLeaveDuration().equals("2"))
             {
                 tvDayesType.setText("Full Day");
             }else {
@@ -104,7 +102,6 @@ public class LeaveHistoryDetailActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
-
     }
 
     @Override

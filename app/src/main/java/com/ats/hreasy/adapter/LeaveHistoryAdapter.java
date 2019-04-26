@@ -12,17 +12,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ats.hreasy.R;
-import com.ats.hreasy.activity.LeaveHistoryDetailActivity;
-import com.ats.hreasy.model.LeaveHistoryTemp;
+import com.ats.hreasy.activity.LeaveDetailActivity;
+import com.ats.hreasy.model.MyLeaveData;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
 public class LeaveHistoryAdapter extends RecyclerView.Adapter<LeaveHistoryAdapter.MyViewHolder> {
-    private ArrayList<LeaveHistoryTemp> historyList;
+    private ArrayList<MyLeaveData> historyList;
     private Context context;
 
-    public LeaveHistoryAdapter(ArrayList<LeaveHistoryTemp> historyList, Context context) {
+    public LeaveHistoryAdapter(ArrayList<MyLeaveData> historyList, Context context) {
         this.historyList = historyList;
         this.context = context;
     }
@@ -38,12 +38,40 @@ public class LeaveHistoryAdapter extends RecyclerView.Adapter<LeaveHistoryAdapte
 
     @Override
     public void onBindViewHolder(@NonNull LeaveHistoryAdapter.MyViewHolder myViewHolder, int i) {
-        final LeaveHistoryTemp model = historyList.get(i);
-        myViewHolder.tvType.setText(model.getLeaveType());
-        myViewHolder.tvDayType.setText(model.getDayType());
-        myViewHolder.tvDay.setText(model.getDayes());
-        myViewHolder.tvDate.setText(model.getDate());
-        myViewHolder.tvStatus.setText(model.getStatus());
+        final MyLeaveData model = historyList.get(i);
+
+        myViewHolder.tvType.setText(model.getLvTitle());
+        myViewHolder.tvDay.setText(""+model.getLeaveNumDays()+ " dayes");
+        myViewHolder.tvDate.setText(""+model.getLeaveFromdt() + " to " + model.getLeaveTodt());
+
+        if (model.getExInt1() == 1) {
+            myViewHolder.tvStatus.setText("Initial Pending");
+           myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+        } else if (model.getExInt1() == 2) {
+            myViewHolder.tvStatus.setText("Final Pending");
+           myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+        } else if (model.getExInt1() == 3) {
+            myViewHolder.tvStatus.setText("Final Approved");
+           myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorApproved));
+        } else if (model.getExInt1() == 8) {
+            myViewHolder.tvStatus.setText("Initial Rejected");
+           myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorRejected));
+        } else if (model.getExInt1() == 9) {
+            myViewHolder.tvStatus.setText("Final Rejected");
+           myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorRejected));
+        } else if (model.getExInt1() == 7) {
+            myViewHolder.tvStatus.setText("Leave Cancelled");
+           myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+        }
+
+
+        if(model.getLeaveDuration().equals("2"))
+        {
+            myViewHolder.tvDayType.setText("Full Day");
+        }else {
+            myViewHolder.tvDayType.setText("Half Day");
+        }
+
 
         myViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +79,7 @@ public class LeaveHistoryAdapter extends RecyclerView.Adapter<LeaveHistoryAdapte
                 Gson gson = new Gson();
                 String json = gson.toJson(model);
 
-                Intent intent=new Intent(context, LeaveHistoryDetailActivity.class);
+                Intent intent=new Intent(context, LeaveDetailActivity.class);
                 Bundle args = new Bundle();
                 args.putString("model", json);
                 intent.putExtra("model", json);
