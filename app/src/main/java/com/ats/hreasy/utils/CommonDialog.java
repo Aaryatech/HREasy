@@ -19,6 +19,7 @@ public class CommonDialog {
 
         hud = KProgressHUD.create(context)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setCancellable(false)
                 .setDimAmount(0.5f);
 
     }

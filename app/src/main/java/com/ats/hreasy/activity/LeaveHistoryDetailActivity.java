@@ -13,6 +13,7 @@ import com.ats.hreasy.adapter.LeaveTrailListAdapter;
 import com.ats.hreasy.model.LeaveTrailTemp;
 import com.ats.hreasy.model.Login;
 import com.ats.hreasy.model.MyLeaveData;
+import com.ats.hreasy.model.MyLeaveTrailData;
 import com.ats.hreasy.utils.CustomSharedPreference;
 import com.google.gson.Gson;
 
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 
 public class LeaveHistoryDetailActivity extends AppCompatActivity {
     MyLeaveData leaveHistory;
-    public TextView tvLeaveType, tvDayesType, tvDayes, tvDate, tvStatus, tvEmpRemark,tvEmpName,tvEmpDesignation;
+    public TextView tvLeaveType, tvDayesType, tvDayes, tvDate, tvStatus, tvEmpRemark, tvEmpName, tvEmpDesignation;
     private RecyclerView recyclerView;
     Login loginUser;
 
@@ -49,61 +50,67 @@ public class LeaveHistoryDetailActivity extends AppCompatActivity {
         loginUser = gson.fromJson(userStr, Login.class);
         Log.e("HOME_ACTIVITY : ", "--------USER-------" + loginUser);
 
+        tvEmpName.setText(loginUser.getEmpFname() + " " + loginUser.getEmpSname());
 
         String upcomingStr = getIntent().getStringExtra("model");
         leaveHistory = gson.fromJson(upcomingStr, MyLeaveData.class);
         Log.e("responce", "-----------------------" + leaveHistory);
 
-        tvEmpName.setText(loginUser.getEmpFname()+ " "+loginUser.getEmpMname()+" " +loginUser.getEmpSname());
 
-        if(leaveHistory!=null) {
+        if (leaveHistory != null) {
             tvLeaveType.setText(leaveHistory.getLvTitle());
-            tvDayes.setText(leaveHistory.getLeaveNumDays()+ " days");
+            tvDayes.setText(leaveHistory.getLeaveNumDays() + " days");
             tvDate.setText(leaveHistory.getLeaveFromdt() + " to " + leaveHistory.getLeaveTodt());
             tvEmpRemark.setText(leaveHistory.getLeaveEmpReason());
 
+
             if (leaveHistory.getExInt1() == 1) {
                 tvStatus.setText("Initial Pending");
-
+                tvStatus.setTextColor(this.getResources().getColor(R.color.colorPrimaryDark));
             } else if (leaveHistory.getExInt1() == 2) {
                 tvStatus.setText("Final Pending");
-
+                tvStatus.setTextColor(this.getResources().getColor(R.color.colorPrimaryDark));
             } else if (leaveHistory.getExInt1() == 3) {
-                    tvStatus.setText("Final Approved");
-
+                tvStatus.setText("Final Approved");
+                tvStatus.setTextColor(this.getResources().getColor(R.color.colorApproved));
             } else if (leaveHistory.getExInt1() == 8) {
-                    tvStatus.setText("Initial Rejected");
-
+                tvStatus.setText("Initial Rejected");
+                tvStatus.setTextColor(this.getResources().getColor(R.color.colorRejected));
             } else if (leaveHistory.getExInt1() == 9) {
                 tvStatus.setText("Final Rejected");
-
+                tvStatus.setTextColor(this.getResources().getColor(R.color.colorRejected));
             } else if (leaveHistory.getExInt1() == 7) {
-                    tvStatus.setText("Leave Cancelled");
-
+                tvStatus.setText("Leave Cancelled");
+                tvStatus.setTextColor(this.getResources().getColor(R.color.colorPrimaryDark));
             }
 
-            if(leaveHistory.getLeaveDuration().equals("1"))
-            {
+            if (leaveHistory.getLeaveDuration().equals("2")) {
                 tvDayesType.setText("Full Day");
-            }else {
+            } else {
                 tvDayesType.setText("Half Day");
             }
 
+            if (leaveHistory.getGetLeaveStatusList() != null) {
+                if (leaveHistory.getGetLeaveStatusList().size() > 0) {
+
+                    ArrayList<MyLeaveTrailData> leaveTrailTemps = new ArrayList<>();
+
+                    for (int i = 0; i < leaveHistory.getGetLeaveStatusList().size(); i++) {
+                        leaveTrailTemps.add(leaveHistory.getGetLeaveStatusList().get(i));
+                    }
+
+                    LeaveTrailListAdapter adapter = new LeaveTrailListAdapter(leaveTrailTemps, this);
+                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+                    recyclerView.setLayoutManager(mLayoutManager);
+                    recyclerView.setItemAnimator(new DefaultItemAnimator());
+                    recyclerView.setAdapter(adapter);
+
+                }
+            }
+
+
         }
 
-
-        LeaveTrailTemp temp1 = new LeaveTrailTemp(1, "Anmol Shirke", "Leave rejected because you already taken leave this month", "Rejected", "15 APR 2019");
-        LeaveTrailTemp temp2 = new LeaveTrailTemp(2, "Amit Patil", "Leave approved", "Approved", "16 APR 2019");
-
-        ArrayList<MyLeaveData> leaveTrailTemps=new ArrayList<>();
-        leaveTrailTemps.add(leaveHistory);
-        //leaveTrailTemps.add(temp2);
-
-        LeaveTrailListAdapter adapter = new LeaveTrailListAdapter(leaveTrailTemps, this);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
 
     }
 

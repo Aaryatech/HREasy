@@ -71,10 +71,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
+                android:gravity="center_vertical"
                 android:drawableLeft="@drawable/ic_leave_blue"
                 android:drawablePadding="10dp"
-                android:textColor="@color/colorAccent"
-                android:fontFamily="@font/sofiapro_bold"
+                android:fontFamily="@font/sofiapro_light"
                 android:text="Medical Leave" />
 
             <TextView
@@ -84,8 +84,7 @@
                 android:layout_margin="3dp"
                 android:drawablePadding="10dp"
                 android:fontFamily="@font/sofiapro_light"
-                android:text="Half day"
-                android:textColor="@color/colorAccent" />
+                android:text="Half day" />
 
         </LinearLayout>
 
@@ -97,6 +96,7 @@
             android:padding="3dp">
 
             <TextView
+                android:gravity="center_vertical"
                 android:id="@+id/tvDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -112,11 +112,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
-                android:fontFamily="@font/sofiapro_bold"
+                android:fontFamily="@font/sofiapro_light"
                 android:gravity="end"
                 android:text="5 days"
                 android:textAlignment="textEnd" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:fontFamily="@font/sofiapro_bold"
+            android:gravity="end"
+            android:textSize="15sp"
+            android:textAlignment="textEnd" />
 
     </LinearLayout>
 

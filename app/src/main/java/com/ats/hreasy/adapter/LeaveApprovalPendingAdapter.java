@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.ats.hreasy.R;
 import com.ats.hreasy.activity.HomeActivity;
+import com.ats.hreasy.fragment.UpdateLeaveInfoFragment;
 import com.ats.hreasy.fragment.UpdateLeaveStatusFragment;
 import com.ats.hreasy.model.LeaveApp;
 import com.google.gson.Gson;
@@ -24,15 +25,18 @@ public class LeaveApprovalPendingAdapter extends RecyclerView.Adapter<LeaveAppro
 
     private ArrayList<LeaveApp> leaveList;
     private Context context;
+    private String type;
 
-    public LeaveApprovalPendingAdapter(ArrayList<LeaveApp> leaveList, Context context) {
+
+    public LeaveApprovalPendingAdapter(ArrayList<LeaveApp> leaveList, Context context, String type) {
         this.leaveList = leaveList;
         this.context = context;
+        this.type = type;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public CircleImageView ivPhoto;
-        public TextView tvEmpName, tvEmpDesg, tvDate, tvType, tvDayType, tvDay;
+        public TextView tvEmpName, tvEmpDesg, tvDate, tvType, tvDayType, tvDay, tvStatus;
         public LinearLayout linearLayout;
 
         public MyViewHolder(View view) {
@@ -44,6 +48,7 @@ public class LeaveApprovalPendingAdapter extends RecyclerView.Adapter<LeaveAppro
             tvType = view.findViewById(R.id.tvLeaveType);
             tvDayType = view.findViewById(R.id.tvDayType);
             tvDay = view.findViewById(R.id.tvDays);
+            tvStatus = view.findViewById(R.id.tvStatus);
             linearLayout = view.findViewById(R.id.linearLayout);
         }
     }
@@ -66,11 +71,57 @@ public class LeaveApprovalPendingAdapter extends RecyclerView.Adapter<LeaveAppro
         holder.tvType.setText(model.getLeaveTitle());
         holder.tvDay.setText(model.getLeaveNumDays() + " days");
 
-        if(model.getLeaveDuration().equals("1"))
-        {
-            holder.tvDayType.setText("Full Day");
-        }else {
+        if (model.getLeaveDuration().equals("1")) {
             holder.tvDayType.setText("Half Day");
+        } else {
+            holder.tvDayType.setText("Full Day");
+        }
+
+
+        if (type.equalsIgnoreCase("pending")) {
+
+            if (model.getExInt1() == 1) {
+                holder.tvStatus.setText("Initial Pending");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+            } else if (model.getExInt1() == 2) {
+                holder.tvStatus.setText("Final Pending");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+            } else if (model.getExInt1() == 3) {
+                holder.tvStatus.setText("Final Approved");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorApproved));
+            } else if (model.getExInt1() == 8) {
+                holder.tvStatus.setText("Initial Rejected");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorRejected));
+            } else if (model.getExInt1() == 9) {
+                holder.tvStatus.setText("Final Rejected");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorRejected));
+            } else if (model.getExInt1() == 7) {
+                holder.tvStatus.setText("Leave Cancelled");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+            }
+
+        } else if (type.equalsIgnoreCase("info")) {
+
+            if (model.getExInt1() == 1) {
+                holder.tvStatus.setText("Initial Pending & Final Pending");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+            } else if (model.getExInt1() == 2) {
+                holder.tvStatus.setText("Final Pending");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+            } else if (model.getExInt1() == 3) {
+                holder.tvStatus.setText("Final Approved");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorApproved));
+            } else if (model.getExInt1() == 8) {
+                holder.tvStatus.setText("Initial Rejected");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorRejected));
+            } else if (model.getExInt1() == 9) {
+                holder.tvStatus.setText("Final Rejected");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorRejected));
+            } else if (model.getExInt1() == 7) {
+                holder.tvStatus.setText("Leave Cancelled");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+            }
+
         }
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
@@ -80,13 +131,28 @@ public class LeaveApprovalPendingAdapter extends RecyclerView.Adapter<LeaveAppro
                 Gson gson = new Gson();
                 String json = gson.toJson(model);
 
+                Gson gson1 = new Gson();
+                String json1 = gson.toJson(leaveList);
+
                 HomeActivity activity = (HomeActivity) context;
 
-                Fragment adf = new UpdateLeaveStatusFragment();
-                Bundle args = new Bundle();
-                args.putString("model", json);
-                adf.setArguments(args);
-                activity.getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "LeaveApprovalPendingFragment").commit();
+                if (type.equalsIgnoreCase("pending")) {
+                    Fragment adf = new UpdateLeaveStatusFragment();
+                    Bundle args = new Bundle();
+                    args.putString("model", json);
+                    args.putString("modelList", json1);
+                    adf.setArguments(args);
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "LeaveApprovalPendingFragment").commit();
+
+                } else if (type.equalsIgnoreCase("info")) {
+                    Fragment adf = new UpdateLeaveInfoFragment();
+                    Bundle args = new Bundle();
+                    args.putString("model", json);
+                    adf.setArguments(args);
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "LeaveApprovalPendingFragment").commit();
+
+                }
+
 
             }
         });

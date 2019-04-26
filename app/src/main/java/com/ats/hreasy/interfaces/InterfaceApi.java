@@ -8,7 +8,6 @@ import com.ats.hreasy.model.Info;
 import com.ats.hreasy.model.LeaveApp;
 import com.ats.hreasy.model.LeaveApply;
 import com.ats.hreasy.model.LeaveEmployeeModel;
-import com.ats.hreasy.model.LeaveTrail;
 import com.ats.hreasy.model.Login;
 import com.ats.hreasy.model.MyLeaveData;
 import com.ats.hreasy.model.MyLeaveTrailData;
@@ -40,7 +39,7 @@ public interface InterfaceApi {
     Call<ArrayList<LeaveApp>> getLeaveApplyListForInfo(@Header("Authorization") String authHeader, @Query("empId") int empId, @Query("currYrId") int currYrId);
 
     @POST("getLeaveStatusList")
-    Call<ArrayList<MyLeaveData>> getLeaveStatusList(@Header("Authorization") String authHeader, @Query("empId") int empId, @Query("status") ArrayList<Integer> statusList);
+    Call<ArrayList<MyLeaveData>> getLeaveStatusList(@Header("Authorization") String authHeader, @Query("empId") int empId, @Query("status") ArrayList<Integer> status);
 
     @POST("getEmpListForClaimAuthByEmpId")
     Call<ArrayList<LeaveEmployeeModel>> getEmpListForClaimAuthByEmpId(@Header("Authorization") String authHeader, @Query("empId") int empId);
@@ -74,7 +73,5 @@ public interface InterfaceApi {
     @POST("saveLeaveApply")
     Call<LeaveApply> saveLeaveApply(@Header("Authorization") String authHeader,@Body LeaveApply leaveApply);
 
-    @POST("saveLeaveTrail")
-    Call<LeaveTrail> saveLeaveTrail(@Header("Authorization") String authHeader, @Body LeaveTrail leaveTrail);
 
 }

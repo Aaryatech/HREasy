@@ -157,4 +157,27 @@ public class LeaveApp {
     public void setCirculatedTo(String circulatedTo) {
         this.circulatedTo = circulatedTo;
     }
+
+    @Override
+    public String toString() {
+        return "LeaveApp{" +
+                "leaveId=" + leaveId +
+                ", calYrId=" + calYrId +
+                ", leaveTitle='" + leaveTitle + '\'' +
+                ", empId=" + empId +
+                ", empName='" + empName + '\'' +
+                ", iniAuthEmpId='" + iniAuthEmpId + '\'' +
+                ", finAuthEmpId='" + finAuthEmpId + '\'' +
+                ", exInt1=" + exInt1 +
+                ", empCode='" + empCode + '\'' +
+                ", lvTypeId=" + lvTypeId +
+                ", leaveTypeName='" + leaveTypeName + '\'' +
+                ", leaveDuration='" + leaveDuration + '\'' +
+                ", leaveFromdt='" + leaveFromdt + '\'' +
+                ", leaveTodt='" + leaveTodt + '\'' +
+                ", leaveNumDays=" + leaveNumDays +
+                ", leaveEmpReason='" + leaveEmpReason + '\'' +
+                ", circulatedTo='" + circulatedTo + '\'' +
+                '}';
+    }
 }

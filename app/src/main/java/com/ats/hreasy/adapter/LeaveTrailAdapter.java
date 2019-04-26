@@ -66,22 +66,25 @@ public class LeaveTrailAdapter extends RecyclerView.Adapter<LeaveTrailAdapter.My
 
 
 
-        String leaveStatus="";
-        if (model.getLeaveStatus()==1){
-            leaveStatus="Pending";
-        }else if (model.getLeaveStatus()==2){
-            leaveStatus="FA Pending";
-        }else if (model.getLeaveStatus()==3){
-            leaveStatus="FA Approved";
-        }else if (model.getLeaveStatus()==8){
-            leaveStatus="IA Rejected";
-        }else if (model.getLeaveStatus()==9){
-            leaveStatus="FA Rejected";
-        }else if (model.getLeaveStatus()==7){
-            leaveStatus="Cancelled";
+        if (model.getLeaveStatus() == 1) {
+            holder.tvStatus.setText("Initial Pending");
+            holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+        } else if (model.getLeaveStatus() == 2) {
+            holder.tvStatus.setText("Final Pending");
+            holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+        } else if (model.getLeaveStatus() == 3) {
+            holder.tvStatus.setText("Final Approved");
+            holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorApproved));
+        } else if (model.getLeaveStatus() == 8) {
+            holder.tvStatus.setText("Initial Rejected");
+            holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorRejected));
+        } else if (model.getLeaveStatus() == 9) {
+            holder.tvStatus.setText("Final Rejected");
+            holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorRejected));
+        } else if (model.getLeaveStatus() == 7) {
+            holder.tvStatus.setText("Leave Cancelled");
+            holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
         }
-
-        holder.tvStatus.setText(leaveStatus);
 
 
     }

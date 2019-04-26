@@ -27,6 +27,7 @@
                 android:layout_marginBottom="5dp"
                 android:background="@color/colorWhite"
                 android:elevation="2dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="@android:color/white"
                 app:cardElevation="2dp">
 
@@ -64,7 +65,6 @@
                                 android:gravity="end"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:text="0/0"
                                 android:textAlignment="textEnd"
                                 android:textColor="@android:color/black"
                                 android:textSize="40sp" />
@@ -97,6 +97,7 @@
                 android:layout_marginBottom="5dp"
                 android:background="@color/colorWhite"
                 android:elevation="2dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="@android:color/white"
                 app:cardElevation="2dp">
 
@@ -134,7 +135,6 @@
                                 android:gravity="end"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:text="4/4"
                                 android:textAlignment="textEnd"
                                 android:textColor="@android:color/black"
                                 android:textSize="40sp" />
@@ -202,7 +202,6 @@
                                 android:gravity="end"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:text="0"
                                 android:textAlignment="textEnd"
                                 android:textColor="@android:color/black"
                                 android:textSize="40sp" />
@@ -270,7 +269,6 @@
                                 android:gravity="end"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:text="4"
                                 android:textAlignment="textEnd"
                                 android:textColor="@android:color/black"
                                 android:textSize="40sp" />

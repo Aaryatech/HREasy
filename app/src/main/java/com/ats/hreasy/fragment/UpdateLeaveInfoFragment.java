@@ -2,10 +2,8 @@ package com.ats.hreasy.fragment;
 
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,23 +21,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ats.hreasy.R;
-import com.ats.hreasy.activity.HomeActivity;
-import com.ats.hreasy.activity.LoginActivity;
 import com.ats.hreasy.adapter.LeaveTrailAdapter;
 import com.ats.hreasy.constant.Constants;
-import com.ats.hreasy.model.CurrentYearModel;
 import com.ats.hreasy.model.Info;
 import com.ats.hreasy.model.LeaveApp;
-import com.ats.hreasy.model.LeaveTrailTemp;
 import com.ats.hreasy.model.Login;
 import com.ats.hreasy.model.MyLeaveTrailData;
 import com.ats.hreasy.model.SaveLeaveTrail;
 import com.ats.hreasy.utils.CommonDialog;
 import com.ats.hreasy.utils.CustomSharedPreference;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -47,7 +39,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickListener {
+public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickListener {
 
     LeaveApp leaveModel;
 
@@ -55,18 +47,16 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
     private EditText edRemark;
     private Button btnApprove, btnReject;
     private ImageView ivPhoto;
-    private LinearLayout llButton;
+    private LinearLayout llButton, llAction;
 
     private RecyclerView recyclerView;
-
-    ArrayList<LeaveApp> leaveModelList = new ArrayList<>();
 
     Login loginUser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_update_leave_status, container, false);
+        View view = inflater.inflate(R.layout.fragment_update_leave_info, container, false);
 
         tvEmpName = view.findViewById(R.id.tvEmpName);
         tvEmpDesg = view.findViewById(R.id.tvEmpDesg);
@@ -84,36 +74,16 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
         tvStatus = view.findViewById(R.id.tvStatus);
 
         llButton = view.findViewById(R.id.llButton);
+        llAction = view.findViewById(R.id.llAction);
 
         btnApprove.setOnClickListener(this);
         btnReject.setOnClickListener(this);
 
-      /*  try {
+        try {
             String json = getArguments().getString("model");
             Gson gsonPlant = new Gson();
             leaveModel = gsonPlant.fromJson(json, LeaveApp.class);
         } catch (Exception e) {
-        }*/
-
-        try {
-            String str = getArguments().getString("modelList");
-            Gson gson = new Gson();
-            Type type = new TypeToken<ArrayList<LeaveApp>>() {
-            }.getType();
-            leaveModelList = gson.fromJson(str, type);
-
-          /*  if (leaveModelList != null) {
-                if (leaveModelList.size() > 0) {
-                    leaveModel = leaveModelList.get(0);
-                }
-            }*/
-
-            Log.e("MODEL LIST --------- ", "-------------------" + leaveModelList);
-
-            setData();
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
         try {
@@ -127,59 +97,54 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
         }
 
 
+        if (leaveModel != null) {
+            tvEmpName.setText("" + leaveModel.getEmpName());
+            tvLeaveType.setText("" + leaveModel.getLeaveTitle());
+            tvDate.setText("" + leaveModel.getLeaveFromdt() + " to " + leaveModel.getLeaveTodt());
+            tvDays.setText("" + leaveModel.getLeaveNumDays() + " days");
+            tvRemark.setText("" + leaveModel.getLeaveEmpReason());
+            if (leaveModel.getLeaveDuration().equals("1")) {
+                tvDayType.setText("Full Day");
+            } else {
+                tvDayType.setText("Half Day");
+            }
+
+            getLeaveTrail(leaveModel.getLeaveId());
+
+            if (leaveModel.getFinAuthEmpId().equalsIgnoreCase(String.valueOf(loginUser.getEmpId()))) {
+
+                llAction.setVisibility(View.VISIBLE);
+
+            } else {
+                llAction.setVisibility(View.GONE);
+
+            }
+
+            if (leaveModel.getExInt1() == 1) {
+                tvStatus.setText("Initial Pending & Final Pending");
+                tvStatus.setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
+            } else if (leaveModel.getExInt1() == 2) {
+                tvStatus.setText("Final Pending");
+                tvStatus.setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
+            } else if (leaveModel.getExInt1() == 3) {
+                tvStatus.setText("Final Approved");
+                tvStatus.setTextColor(getContext().getResources().getColor(R.color.colorApproved));
+            } else if (leaveModel.getExInt1() == 8) {
+                tvStatus.setText("Initial Rejected");
+                tvStatus.setTextColor(getContext().getResources().getColor(R.color.colorRejected));
+            } else if (leaveModel.getExInt1() == 9) {
+                tvStatus.setText("Final Rejected");
+                tvStatus.setTextColor(getContext().getResources().getColor(R.color.colorRejected));
+            } else if (leaveModel.getExInt1() == 7) {
+                tvStatus.setText("Leave Cancelled");
+                tvStatus.setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
+            }
+
+        }
+
         return view;
     }
 
-    public void setData() {
-
-        if (leaveModelList != null) {
-
-            if (leaveModelList.size() > 0) {
-
-                leaveModel = leaveModelList.get(0);
-
-                tvEmpName.setText("" + leaveModel.getEmpName());
-                tvLeaveType.setText("" + leaveModel.getLeaveTitle());
-                tvDate.setText("" + leaveModel.getLeaveFromdt() + " to " + leaveModel.getLeaveTodt());
-                tvDays.setText("" + leaveModel.getLeaveNumDays() + " days");
-                tvRemark.setText("" + leaveModel.getLeaveEmpReason());
-                if (leaveModel.getLeaveDuration().equals("1")) {
-                    tvDayType.setText("Half Day");
-                } else {
-                    tvDayType.setText("Full Day");
-                }
-
-                getLeaveTrail(leaveModel.getLeaveId());
-
-                if (leaveModel.getExInt1() == 1) {
-                    tvStatus.setText("Initial Pending");
-                    tvStatus.setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
-                } else if (leaveModel.getExInt1() == 2) {
-                    tvStatus.setText("Final Pending");
-                    tvStatus.setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
-                } else if (leaveModel.getExInt1() == 3) {
-                    tvStatus.setText("Final Approved");
-                    tvStatus.setTextColor(getContext().getResources().getColor(R.color.colorApproved));
-                } else if (leaveModel.getExInt1() == 8) {
-                    tvStatus.setText("Initial Rejected");
-                    tvStatus.setTextColor(getContext().getResources().getColor(R.color.colorRejected));
-                } else if (leaveModel.getExInt1() == 9) {
-                    tvStatus.setText("Final Rejected");
-                    tvStatus.setTextColor(getContext().getResources().getColor(R.color.colorRejected));
-                } else if (leaveModel.getExInt1() == 7) {
-                    tvStatus.setText("Leave Cancelled");
-                    tvStatus.setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
-                }
-
-            } else {
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.content_frame, new LeaveApprovalPendingFragment(), "HomeFragment");
-                ft.commit();
-
-            }
-        }
-
-    }
 
     @Override
     public void onClick(View v) {
@@ -189,14 +154,6 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             final String currDate = sdf.format(System.currentTimeMillis());
-
-            String dayType;
-            if (leaveModel.getLeaveDuration().equalsIgnoreCase("1")) {
-                dayType = "Half day";
-            } else if (leaveModel.getLeaveDuration().equalsIgnoreCase("2")) {
-                dayType = "Full day";
-            }
-
 
             if (leaveModel != null && loginUser != null) {
 
@@ -304,6 +261,7 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
                 dialog.show();
 
             }
+
         }
     }
 
@@ -559,13 +517,6 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
                             if (!response.body().getError()) {
 
                                 Toast.makeText(getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
-
-                                
-                                if (leaveModelList.size() > 0) {
-                                    leaveModelList.remove(0);
-                                    setData();
-                                }
-
 
                             } else {
 

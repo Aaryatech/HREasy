@@ -39,7 +39,7 @@ public class MyTaskLeaveFragment extends Fragment implements MyTaskLeaveInterfac
 //        leaveList.add(leave3);
 //        leaveList.add(leave4);
 
-        adapter = new LeaveApprovalPendingAdapter(staticPendingLeave, getContext());
+        adapter = new LeaveApprovalPendingAdapter(staticPendingLeave, getContext(),"pending");
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -53,7 +53,7 @@ public class MyTaskLeaveFragment extends Fragment implements MyTaskLeaveInterfac
 
     @Override
     public void fragmentBecameVisible() {
-        adapter = new LeaveApprovalPendingAdapter(staticPendingLeave, getContext());
+        adapter = new LeaveApprovalPendingAdapter(staticPendingLeave, getContext(),"pending");
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

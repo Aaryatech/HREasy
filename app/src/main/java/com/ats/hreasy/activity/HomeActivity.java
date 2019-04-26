@@ -30,6 +30,7 @@ import com.ats.hreasy.fragment.LeaveFragment;
 import com.ats.hreasy.fragment.PendingClaimListFragment;
 import com.ats.hreasy.fragment.PendingLeaveListFragment;
 import com.ats.hreasy.fragment.UpdateClaimStatusFragment;
+import com.ats.hreasy.fragment.UpdateLeaveInfoFragment;
 import com.ats.hreasy.fragment.UpdateLeaveStatusFragment;
 import com.ats.hreasy.model.Login;
 import com.ats.hreasy.utils.CustomSharedPreference;
@@ -128,7 +129,8 @@ public class HomeActivity extends AppCompatActivity
             ft.replace(R.id.content_frame, new HomeFragment(), "Exit");
             ft.commit();
 
-        } else if (leaveApprovalPendingFragment instanceof UpdateLeaveStatusFragment && leaveApprovalPendingFragment.isVisible()) {
+        } else if (leaveApprovalPendingFragment instanceof UpdateLeaveStatusFragment && leaveApprovalPendingFragment.isVisible() ||
+                leaveApprovalPendingFragment instanceof UpdateLeaveInfoFragment && leaveApprovalPendingFragment.isVisible()) {
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, new LeaveApprovalPendingFragment(), "HomeFragment");

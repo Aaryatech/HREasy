@@ -13,6 +13,7 @@ import com.ats.hreasy.adapter.LeaveTrailListAdapter;
 import com.ats.hreasy.model.LeaveTrailTemp;
 import com.ats.hreasy.model.Login;
 import com.ats.hreasy.model.MyLeaveData;
+import com.ats.hreasy.model.MyLeaveTrailData;
 import com.ats.hreasy.utils.CustomSharedPreference;
 import com.google.gson.Gson;
 
@@ -90,18 +91,25 @@ public class LeaveDetailActivity extends AppCompatActivity {
         }
 
 
-        LeaveTrailTemp temp1 = new LeaveTrailTemp(1, "Anmol Shirke", "Leave rejected because you already taken leave this month", "Rejected", "15 APR 2019");
-        LeaveTrailTemp temp2 = new LeaveTrailTemp(2, "Amit Patil", "Leave approved", "Approved", "16 APR 2019");
 
-        ArrayList<MyLeaveData> leaveTrailTemps=new ArrayList<>();
-        leaveTrailTemps.add(leaveHistory);
-        //leaveTrailTemps.add(temp2);
+        if (leaveHistory.getGetLeaveStatusList() != null) {
+            if (leaveHistory.getGetLeaveStatusList().size() > 0) {
 
-        LeaveTrailListAdapter adapter = new LeaveTrailListAdapter(leaveTrailTemps, this);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
+                ArrayList<MyLeaveTrailData> leaveTrailTemps = new ArrayList<>();
+
+                for (int i = 0; i < leaveHistory.getGetLeaveStatusList().size(); i++) {
+                    leaveTrailTemps.add(leaveHistory.getGetLeaveStatusList().get(i));
+                }
+
+                LeaveTrailListAdapter adapter = new LeaveTrailListAdapter(leaveTrailTemps, this);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+                recyclerView.setLayoutManager(mLayoutManager);
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
+                recyclerView.setAdapter(adapter);
+
+            }
+        }
+
     }
 
     @Override

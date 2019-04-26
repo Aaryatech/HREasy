@@ -34,7 +34,7 @@ public class AllTaskLeaveFragment extends Fragment implements AllTaskLeaveInterf
 
     @Override
     public void fragmentBecameVisible() {
-        adapter = new LeaveApprovalPendingAdapter(staticInfoLeave, getContext());
+        adapter = new LeaveApprovalPendingAdapter(staticInfoLeave, getContext(),"info");
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

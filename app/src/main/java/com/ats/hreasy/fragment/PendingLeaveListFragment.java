@@ -99,7 +99,7 @@ public class PendingLeaveListFragment extends Fragment {
                             LeaveList.clear();
                             LeaveList = response.body();
 
-                            mAdapter = new PendingLeaveAdapter(LeaveList, getActivity());
+                            mAdapter = new PendingLeaveAdapter(LeaveList, getActivity(),getActivity(),loginUser.getEmpId());
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                             recyclerView.setLayoutManager(mLayoutManager);
                             recyclerView.setItemAnimator(new DefaultItemAnimator());

@@ -4,9 +4,12 @@ package com.ats.hreasy.fragment;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -62,7 +65,7 @@ import static com.ats.hreasy.fragment.LeaveFragment.staticEmpModel;
 public class AddLeaveFragment extends Fragment implements View.OnClickListener, AddLeaveInterface {
 
     public Spinner spType;
-    private EditText edFromDate, edToDate, edDays,edRemark;
+    private EditText edFromDate, edToDate, edDays, edRemark;
     private TextView tvFromDate, tvToDate, tvViewBalnceLeave, tvEmpName, tvEmpDesg;
     private CircleImageView ivPhoto;
     private Button btn_apply;
@@ -83,6 +86,8 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
 
     ArrayList<String> typeNameArray = new ArrayList<>();
 
+    CommonDialog commonDialog;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -96,7 +101,7 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
         edDays = view.findViewById(R.id.edTotalDays);
         edRemark = view.findViewById(R.id.edRemark);
 
-        btn_apply=view.findViewById(R.id.btn_apply);
+        btn_apply = view.findViewById(R.id.btn_apply);
 
         tvEmpName = view.findViewById(R.id.tvEmpName);
         tvEmpDesg = view.findViewById(R.id.tvEmpDesg);
@@ -152,28 +157,6 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
         }
 
 
-//        rgDayes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(RadioGroup group, int checkedId) {
-//                int radioButtonID = group.getCheckedRadioButtonId();
-//                View radioButton = group.findViewById(radioButtonID);
-//                int idx = group.indexOfChild(radioButton);
-//                RadioButton r = (RadioButton) group.getChildAt(idx);
-//                selectedtext = r.getText().toString();
-//
-//                Log.e("Radio1", "----------" + selectedtext);
-//                Log.e("Radio", "----------" + idx);
-//
-//            }
-//        });
-//
-//        if(rgDayes.getCheckedRadioButtonId()==-1){
-//
-//            //     boolean checked = ((RadioButton) view).isChecked();
-//            selectedtext= "Full day";
-//
-//        }
-
         return view;
     }
 
@@ -224,29 +207,124 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
 
         } else if (v.getId() == R.id.tv_balanceLeave) {
             new LeaveTypeDialog(getContext()).show();
-        }else if(v.getId()==R.id.btn_apply)
-        {
+
+        } else if (v.getId() == R.id.btn_apply) {
+
+            String strFromDate, strTodate, strTotalDayes, strRemark;
+
+            strFromDate = edFromDate.getText().toString();
+            strTodate = edToDate.getText().toString();
+            strTotalDayes = edDays.getText().toString();
+            strRemark = edRemark.getText().toString().trim();
+
+            float days = Float.parseFloat(strTotalDayes);
+
+            SimpleDateFormat formatter3 = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat formatter1 = new SimpleDateFormat("dd-MM-yyyy");
+
+            Date ToDate = null;
+            try {
+                ToDate = formatter1.parse(strTodate);//catch exception
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            final String DateTo = formatter3.format(ToDate);
+
+            Date FromDate = null;
+            try {
+                FromDate = formatter1.parse(strFromDate);//catch exception
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            final String DateFrom = formatter3.format(FromDate);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            final String currDate = sdf.format(System.currentTimeMillis());
+
+            Log.e("fromDate", "-------------" + strFromDate);
+            Log.e("fromTo", "-------------" + strTodate);
+            Log.e("Dayes", "-------------" + strTotalDayes);
+            Log.e("Remark", "-------------" + strRemark);
+            //Log.e("Model","-------------"+staticEmpModel);
+
+            String dayType = "2";
+            if (rbFullDay.isChecked()) {
+                dayType = "2";
+            } else if (rbHalfDay.isChecked()) {
+                dayType = "1";
+            }
+
+//            Toast.makeText(getContext(), "BAL LEAVE : -------------- " + leaveTypeBalArray.get(spType.getSelectedItemPosition()), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), "DAYS : -------------- " + days, Toast.LENGTH_SHORT).show();
+
+            int leaveType = leaveTypeIdArray.get(spType.getSelectedItemPosition());
+            if (leaveType == 0) {
+                TextView viewType = (TextView) spType.getSelectedView();
+                viewType.setError("required");
+
+            } else if (leaveTypeBalArray.get(spType.getSelectedItemPosition()) < (int)days) {
+                TextView viewType = (TextView) spType.getSelectedView();
+                viewType.setError(null);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                builder.setTitle("Caution");
+                builder.setMessage("Your balance leaves are insufficient. Available balance leaves for " + leaveTypeNameArray.get(spType.getSelectedItemPosition()) + " is " + leaveTypeBalArray.get(spType.getSelectedItemPosition()));
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+            } else {
+
+                final LeaveApply leaveApply = new LeaveApply(0, currentYearModel.getCalYrId(), staticEmpModel.getEmpId(), leaveType, dayType, DateFrom, DateTo, days, strRemark, 1, "", 1, 1, 1, currDate, 1, 0, 0, "", "", "");
 
 
-            getAuthIdByEmpId(staticEmpModel.getEmpId());
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                builder.setTitle("Confirmation");
+                builder.setMessage("Applied for Leave from  " + strFromDate + " to " + strTodate + " for " + days + " days.");
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-//            LeaveApply leaveApply=new LeaveApply(0,currentYearModel.getCalYrId(),staticEmpModel.getEmpId(),1,"",strFromDate,strTodate,dayes,strRemark,1,"",1,1,1,"",0,0,0,"","","");
+                        getAuthIdByEmpId(staticEmpModel.getEmpId(), leaveApply);
 
+                    }
+                });
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+
+            }
 
 
         }
     }
 
-    private void getAuthIdByEmpId(Integer empId) {
+    private void getAuthIdByEmpId(Integer empId, final LeaveApply leaveApply) {
 
         String base = Constants.userName + ":" + Constants.password;
         String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
 
         if (Constants.isOnline(getContext())) {
-            final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
+            commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
             commonDialog.show();
 
-            Call<AuthorityIds> listCall = Constants.myInterface.getAuthIdByEmpId(authHeader,empId);
+            Call<AuthorityIds> listCall = Constants.myInterface.getAuthIdByEmpId(authHeader, empId);
             listCall.enqueue(new Callback<AuthorityIds>() {
                 @Override
                 public void onResponse(Call<AuthorityIds> call, Response<AuthorityIds> response) {
@@ -254,92 +332,60 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
                         if (response.body() != null) {
 
                             Log.e("AUTHORITY MODEL : ", " - " + response.body());
-                            AuthorityIds authorityIds=response.body();
+                            AuthorityIds authorityIds = response.body();
 
-                            int spinnerPosition = 0;
 
-                            try {
-                                spinnerPosition= leaveTypeIdArray.get(spType.getSelectedItemPosition());
-                            }catch(Exception e){
+                            if (loginUser.getEmpId() == authorityIds.getFinAuthEmpId()) {
+                                leaveApply.setFinalStatus(3);
+                                leaveApply.setExInt1(3);
+                                getApplyLeave(leaveApply);
 
+                            } else if (loginUser.getEmpId() == authorityIds.getIniAuthEmpId()) {
+                                leaveApply.setFinalStatus(2);
+                                leaveApply.setExInt1(2);
+                                getApplyLeave(leaveApply);
+
+                            } else {
+                                getApplyLeave(leaveApply);
                             }
 
-                            if (spinnerPosition == 0) {
-
-                                Toast.makeText(getActivity(), "Please select Leave Type", Toast.LENGTH_SHORT).show();
-                            }else {
-                                Log.e("Spinner", "--------------" + spinnerPosition);
-
-                                String strFromDate, strTodate, strTotalDayes, strRemark;
-                                strFromDate = edFromDate.getText().toString();
-                                strTodate = edToDate.getText().toString();
-                                strTotalDayes = edDays.getText().toString();
-                                strRemark = edRemark.getText().toString();
-
-                                float dayes = Float.parseFloat(strTotalDayes);
-
-                                SimpleDateFormat formatter3 = new SimpleDateFormat("yyyy-MM-dd");
-                                SimpleDateFormat formatter1 = new SimpleDateFormat("dd-MM-yyyy");
-
-                                Date ToDate = null;
-                                try {
-                                    ToDate = formatter1.parse(strTodate);//catch exception
-                                } catch (ParseException e) {
-                                    // TODO Auto-generated catch block
-                                    e.printStackTrace();
-                                }
-                                final String DateTo = formatter3.format(ToDate);
-
-                                Date FromDate = null;
-                                try {
-                                    FromDate = formatter1.parse(strFromDate);//catch exception
-                                } catch (ParseException e) {
-                                    // TODO Auto-generated catch block
-                                    e.printStackTrace();
-                                }
-                                final String DateFrom = formatter3.format(FromDate);
-
-                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                                String currDate = sdf.format(System.currentTimeMillis());
-
-                                Log.e("fromDate", "-------------" + strFromDate);
-                                Log.e("fromTo", "-------------" + strTodate);
-                                Log.e("Dayes", "-------------" + strTotalDayes);
-                                Log.e("Remark", "-------------" + strRemark);
-                                //Log.e("Model","-------------"+staticEmpModel);
-
-                                String dayType = "2";
-                                if (rbFullDay.isChecked()) {
-                                    dayType = "2";
-                                } else if (rbHalfDay.isChecked()) {
-                                    dayType = "1";
-                                }
-
-                                if (loginUser.getEmpId() == authorityIds.getIniAuthEmpId()) {
-                                    LeaveApply leaveApply = new LeaveApply(0, currentYearModel.getCalYrId(), staticEmpModel.getEmpId(), spinnerPosition, dayType, DateFrom, DateTo, dayes, strRemark, 1, "", 1, 1, 1, currDate, 2, 0, 0, "", "", "");
-                                    getApplyLeave(leaveApply);
-
-                                } else if (loginUser.getEmpId() == authorityIds.getFinAuthEmpId()) {
-                                    LeaveApply leaveApply = new LeaveApply(0, currentYearModel.getCalYrId(), staticEmpModel.getEmpId(), spinnerPosition, dayType, DateFrom, DateTo, dayes, strRemark, 1, "", 1, 1, 1, currDate, 3, 0, 0, "", "", "");
-                                    getApplyLeave(leaveApply);
-
-                                } else {
-                                    LeaveApply leaveApply = new LeaveApply(0, currentYearModel.getCalYrId(), staticEmpModel.getEmpId(), spinnerPosition, dayType, DateFrom, DateTo, dayes, strRemark, 1, "", 1, 1, 1, currDate, 1, 0, 0, "", "", "");
-                                    getApplyLeave(leaveApply);
-                                }
-                            }
-
-                            commonDialog.dismiss();
+                            //commonDialog.dismiss();
 
                         } else {
                             commonDialog.dismiss();
                             Log.e("Data Null : ", "-----------");
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                            builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                            builder.setMessage("Unable to process! please try again.");
+
+                            builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
 
                         }
                     } catch (Exception e) {
                         commonDialog.dismiss();
                         Log.e("Exception : ", "-----------" + e.getMessage());
                         e.printStackTrace();
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                        builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                        builder.setMessage("Unable to process! please try again.");
+
+                        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
 
                     }
                 }
@@ -350,6 +396,19 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
                     Log.e("onFailure : ", "-----------" + t.getMessage());
                     t.printStackTrace();
 
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                    builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                    builder.setMessage("Unable to process! please try again.");
+
+                    builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
                 }
             });
         } else {
@@ -359,15 +418,15 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
     }
 
     private void getApplyLeave(LeaveApply leaveApply) {
-        Log.e("PARAMETERS : ", "      ------------------------------------- LEAVE MODEL :------------------- " + leaveApply );
+        Log.e("PARAMETERS : ", "      ------------------------------------- LEAVE MODEL :------------------- " + leaveApply);
         String base = Constants.userName + ":" + Constants.password;
         String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
 
         if (Constants.isOnline(getContext())) {
-            final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
-            commonDialog.show();
+            //final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
+            //commonDialog.show();
 
-            Call<LeaveApply> listCall = Constants.myInterface.saveLeaveApply(authHeader,leaveApply);
+            Call<LeaveApply> listCall = Constants.myInterface.saveLeaveApply(authHeader, leaveApply);
             listCall.enqueue(new Callback<LeaveApply>() {
                 @Override
                 public void onResponse(Call<LeaveApply> call, Response<LeaveApply> response) {
@@ -375,25 +434,51 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
                         if (response.body() != null) {
 
                             Log.e("APPLY LEAVE : ", " ---------------------APPLY LEAVE---------------------- " + response.body());
-                            LeaveApply model=response.body();
+                            LeaveApply model = response.body();
 
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                             String currDate = sdf.format(System.currentTimeMillis());
 
-                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, model.getLeaveId(), staticEmpModel.getEmpId(), "",model.getExInt1(), model.getMakerUserId(), "" + currDate);
-                            saveLeaveTrail(model.getLeaveId(),saveLeaveTrail);
+                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, model.getLeaveId(), staticEmpModel.getEmpId(), "", model.getExInt1(), model.getMakerUserId(), "" + currDate);
+                            saveLeaveTrail(model.getLeaveId(), saveLeaveTrail);
 
-                            commonDialog.dismiss();
+                            //commonDialog.dismiss();
 
                         } else {
                             commonDialog.dismiss();
                             Log.e("Data Null : ", "-----------");
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                            builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                            builder.setMessage("Unable to process! please try again.");
+
+                            builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
 
                         }
                     } catch (Exception e) {
                         commonDialog.dismiss();
                         Log.e("Exception : ", "-----------" + e.getMessage());
                         e.printStackTrace();
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                        builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                        builder.setMessage("Unable to process! please try again.");
+
+                        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
 
                     }
                 }
@@ -404,6 +489,19 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
                     Log.e("onFailure : ", "-----------" + t.getMessage());
                     t.printStackTrace();
 
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                    builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                    builder.setMessage("Unable to process! please try again.");
+
+                    builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
                 }
             });
         } else {
@@ -413,15 +511,14 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
     }
 
 
-
     private void saveLeaveTrail(final Integer leaveId, SaveLeaveTrail saveLeaveTrail) {
 
         String base = Constants.userName + ":" + Constants.password;
         String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
 
         if (Constants.isOnline(getContext())) {
-            final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
-            commonDialog.show();
+            //final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
+            // commonDialog.show();
 
             Call<SaveLeaveTrail> listCall = Constants.myInterface.saveLeaveTrail(authHeader, saveLeaveTrail);
             listCall.enqueue(new Callback<SaveLeaveTrail>() {
@@ -436,17 +533,43 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
                                 updateLeaveTrailId(leaveId, response.body().getTrailPkey());
                             }
 
-                            commonDialog.dismiss();
+                            //commonDialog.dismiss();
 
                         } else {
                             commonDialog.dismiss();
                             Log.e("Data Null : ", "-----------");
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                            builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                            builder.setMessage("Unable to process! please try again.");
+
+                            builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
 
                         }
                     } catch (Exception e) {
                         commonDialog.dismiss();
                         Log.e("Exception : ", "-----------" + e.getMessage());
                         e.printStackTrace();
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                        builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                        builder.setMessage("Unable to process! please try again.");
+
+                        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
 
                     }
                 }
@@ -456,6 +579,19 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
                     commonDialog.dismiss();
                     Log.e("onFailure : ", "-----------" + t.getMessage());
                     t.printStackTrace();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                    builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                    builder.setMessage("Unable to process! please try again.");
+
+                    builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
 
                 }
             });
@@ -470,8 +606,8 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
         String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
 
         if (Constants.isOnline(getContext())) {
-            final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
-            commonDialog.show();
+            // final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
+            // commonDialog.show();
 
             Call<Info> listCall = Constants.myInterface.updateLeaveTrailId(authHeader, leaveId, trailId);
             listCall.enqueue(new Callback<Info>() {
@@ -484,10 +620,39 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
 
                             if (!response.body().getError()) {
 
-                                Toast.makeText(getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                                builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                                builder.setMessage("Leave applied successfully");
+
+                                builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+
+                                        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                                        ft.replace(R.id.content_frame, new HomeFragment(), "Exit");
+                                        ft.commit();
+                                    }
+                                });
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
 
                             } else {
-                                Toast.makeText(getContext(), "FAILED", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getContext(), "FAILED", Toast.LENGTH_SHORT).show();
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                                builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                                builder.setMessage("Unable to process! please try again.");
+
+                                builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
 
                             }
 
@@ -496,15 +661,39 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
                         } else {
                             commonDialog.dismiss();
                             Log.e("Data Null : ", "-----------");
-                            Toast.makeText(getContext(), "FAILED", Toast.LENGTH_SHORT).show();
+                            // Toast.makeText(getContext(), "FAILED", Toast.LENGTH_SHORT).show();
 
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                            builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                            builder.setMessage("Unable to process! please try again.");
+
+                            builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
                         }
                     } catch (Exception e) {
                         commonDialog.dismiss();
                         Log.e("Exception : ", "-----------" + e.getMessage());
                         e.printStackTrace();
-                        Toast.makeText(getContext(), "FAILED", Toast.LENGTH_SHORT).show();
+                        //   Toast.makeText(getContext(), "FAILED", Toast.LENGTH_SHORT).show();
 
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                        builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                        builder.setMessage("Unable to process! please try again.");
+
+                        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
                     }
                 }
 
@@ -513,14 +702,27 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
                     commonDialog.dismiss();
                     Log.e("onFailure : ", "-----------" + t.getMessage());
                     t.printStackTrace();
-                    Toast.makeText(getContext(), "FAILED", Toast.LENGTH_SHORT).show();
+                    //  Toast.makeText(getContext(), "FAILED", Toast.LENGTH_SHORT).show();
 
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                    builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                    builder.setMessage("Unable to process! please try again.");
+
+                    builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                 }
             });
         } else {
             Toast.makeText(getContext(), "No Internet Connection !", Toast.LENGTH_SHORT).show();
         }
     }
+
     DatePickerDialog.OnDateSetListener fromDateListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -615,34 +817,8 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setAdapter(mAdapter);
 
-            //prepareMovieData();
         }
 
-        private void prepareMovieData() {
-
-            BalanceLeaveTemp balanceLeaveTemp = new BalanceLeaveTemp("Medical Leave", 8);
-            balanceList.add(balanceLeaveTemp);
-
-            balanceLeaveTemp = new BalanceLeaveTemp("Sick Leave", 8);
-            balanceList.add(balanceLeaveTemp);
-
-            balanceLeaveTemp = new BalanceLeaveTemp("Casual Leave", 8);
-            balanceList.add(balanceLeaveTemp);
-
-            balanceLeaveTemp = new BalanceLeaveTemp("Maternity Leave", 8);
-            balanceList.add(balanceLeaveTemp);
-
-           /*  balanceLeaveTemp = new BalanceLeaveTemp("Maternity Leave", 10);
-            balanceList.add(balanceLeaveTemp);
-
-            balanceLeaveTemp = new BalanceLeaveTemp("Action & Adventure Leave", 10);
-            balanceList.add(balanceLeaveTemp);
-
-            balanceLeaveTemp = new BalanceLeaveTemp("Action & Adventure Leave", 10);
-            balanceList.add(balanceLeaveTemp);*/
-
-
-        }
     }
 
 
@@ -685,7 +861,7 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
                         if (response.body() != null) {
 
                             Log.e("CURRENT YEAR : ", " - " + response.body());
-                             currentYearModel=response.body();
+                            currentYearModel = response.body();
 
                             getBalanceLeave(empId, response.body().getCalYrId());
 
@@ -748,7 +924,10 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
                             balanceLeaveList = response.body();
                             for (int i = 0; i < balanceLeaveList.size(); i++) {
                                 leaveTypeNameArray.add(balanceLeaveList.get(i).getLvTitle());
-                                leaveTypeBalArray.add(balanceLeaveList.get(i).getBalLeave());
+
+                                int balLeave = ((balanceLeaveList.get(i).getBalLeave() + balanceLeaveList.get(i).getLvsAllotedLeaves()) - balanceLeaveList.get(i).getSactionLeave());
+
+                                leaveTypeBalArray.add(balLeave);
                                 leaveTypeIdArray.add(balanceLeaveList.get(i).getLvTypeId());
                             }
 
