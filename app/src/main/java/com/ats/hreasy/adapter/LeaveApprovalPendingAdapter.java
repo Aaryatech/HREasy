@@ -148,6 +148,7 @@ public class LeaveApprovalPendingAdapter extends RecyclerView.Adapter<LeaveAppro
                     Fragment adf = new UpdateLeaveInfoFragment();
                     Bundle args = new Bundle();
                     args.putString("model", json);
+                    args.putString("modelList", json1);
                     adf.setArguments(args);
                     activity.getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "LeaveApprovalPendingFragment").commit();
 

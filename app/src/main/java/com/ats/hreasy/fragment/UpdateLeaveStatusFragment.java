@@ -88,12 +88,6 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
         btnApprove.setOnClickListener(this);
         btnReject.setOnClickListener(this);
 
-      /*  try {
-            String json = getArguments().getString("model");
-            Gson gsonPlant = new Gson();
-            leaveModel = gsonPlant.fromJson(json, LeaveApp.class);
-        } catch (Exception e) {
-        }*/
 
         try {
             String str = getArguments().getString("modelList");
@@ -102,11 +96,6 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
             }.getType();
             leaveModelList = gson.fromJson(str, type);
 
-          /*  if (leaveModelList != null) {
-                if (leaveModelList.size() > 0) {
-                    leaveModel = leaveModelList.get(0);
-                }
-            }*/
 
             Log.e("MODEL LIST --------- ", "-------------------" + leaveModelList);
 
@@ -560,10 +549,11 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
 
                                 Toast.makeText(getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
 
-                                
+
                                 if (leaveModelList.size() > 0) {
                                     leaveModelList.remove(0);
                                     setData();
+                                    edRemark.setText("");
                                 }
 
 

@@ -30,30 +30,72 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tvEmpName"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/sofiapro_light"
-                    android:paddingLeft="5dp"
-                    android:paddingTop="5dp"
-                    android:paddingRight="5dp"
-                    android:text="Anmol Shirke"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="15sp" />
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tvEmpDesg"
+                    <TextView
+                        android:id="@+id/tvEmpName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sofiapro_light"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="5dp"
+                        android:paddingRight="5dp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tvEmpDesg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sofiapro_light"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="Developer"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/sofiapro_light"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:paddingBottom="5dp"
-                    android:text="Developer" />
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1.5"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sofiapro_bold"
+                        android:gravity="center"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="5dp"
+                        android:paddingRight="5dp"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tvStatusBy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sofiapro_bold"
+                        android:gravity="center"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:text=""
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="15sp"
+                        android:visibility="gone" />
+
+                </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>
@@ -172,9 +214,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp" />
 
 
         <EditText

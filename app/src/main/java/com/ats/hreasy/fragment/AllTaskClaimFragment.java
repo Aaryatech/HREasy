@@ -17,6 +17,8 @@ import com.ats.hreasy.model.ClaimAppTemp;
 
 import java.util.ArrayList;
 
+import static com.ats.hreasy.fragment.ClaimApprovalPendingFragment.staticInfoClaim;
+
 public class AllTaskClaimFragment extends Fragment implements AllTaskLeaveInterface {
 
     private RecyclerView recyclerView;
@@ -29,29 +31,18 @@ public class AllTaskClaimFragment extends Fragment implements AllTaskLeaveInterf
 
         recyclerView = view.findViewById(R.id.recyclerView);
 
-        ClaimAppTemp claim1=new ClaimAppTemp(1,"Anmol Shirke","HR Management System","Claim Type","15/4/2019",2500f,"Remark");
-        ClaimAppTemp claim2=new ClaimAppTemp(1,"Aditya Joshi","HR Management System","Claim Type","15/4/2019",1500f,"Remark");
-        ClaimAppTemp claim3=new ClaimAppTemp(1,"Gaurav Patil","HR Management System","Claim Type","15/4/2019",1750f,"Remark");
-        ClaimAppTemp claim4=new ClaimAppTemp(1,"Rishi Balani","HR Management System","Claim Type","15/4/2019",350f,"Remark");
-
-        ArrayList<ClaimAppTemp> claimList = new ArrayList<>();
-        claimList.add(claim1);
-        claimList.add(claim2);
-        claimList.add(claim3);
-        claimList.add(claim4);
-
-        adapter = new ClaimApprovalPendingAdapter(claimList, getContext());
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
-
 
         return view;
     }
 
     @Override
     public void fragmentBecameVisible() {
+
+        adapter = new ClaimApprovalPendingAdapter(staticInfoClaim, getContext(),"info");
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
 
     }
 }

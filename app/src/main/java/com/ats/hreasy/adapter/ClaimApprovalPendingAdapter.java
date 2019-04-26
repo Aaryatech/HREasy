@@ -14,27 +14,34 @@ import com.ats.hreasy.R;
 import com.ats.hreasy.activity.HomeActivity;
 import com.ats.hreasy.fragment.UpdateClaimStatusFragment;
 import com.ats.hreasy.fragment.UpdateLeaveStatusFragment;
+import com.ats.hreasy.model.ClaimApp;
 import com.ats.hreasy.model.ClaimAppTemp;
 import com.ats.hreasy.model.LeaveAppTemp;
 import com.google.gson.Gson;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ClaimApprovalPendingAdapter extends RecyclerView.Adapter<ClaimApprovalPendingAdapter.MyViewHolder> {
 
-    private ArrayList<ClaimAppTemp> claimList;
+    private ArrayList<ClaimApp> claimList;
     private Context context;
+    private String type;
 
-    public ClaimApprovalPendingAdapter(ArrayList<ClaimAppTemp> claimList, Context context) {
+    public ClaimApprovalPendingAdapter(ArrayList<ClaimApp> claimList, Context context, String type) {
         this.claimList = claimList;
         this.context = context;
+        this.type = type;
     }
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public CircleImageView ivPhoto;
-        public TextView tvEmpName, tvEmpDesg, tvDate, tvClaimType, tvProject, tvAmount;
+        public TextView tvEmpName, tvEmpDesg, tvDate, tvClaimType, tvProject, tvAmount, tvStatus;
         public LinearLayout linearLayout;
 
         public MyViewHolder(View view) {
@@ -46,6 +53,7 @@ public class ClaimApprovalPendingAdapter extends RecyclerView.Adapter<ClaimAppro
             tvClaimType = view.findViewById(R.id.tvClaimType);
             tvProject = view.findViewById(R.id.tvProject);
             tvAmount = view.findViewById(R.id.tvAmount);
+            tvStatus = view.findViewById(R.id.tvStatus);
             linearLayout = view.findViewById(R.id.linearLayout);
         }
     }
@@ -60,14 +68,73 @@ public class ClaimApprovalPendingAdapter extends RecyclerView.Adapter<ClaimAppro
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        final ClaimAppTemp model = claimList.get(position);
+        final ClaimApp model = claimList.get(position);
 
         holder.tvEmpName.setText(model.getEmpName());
         //holder.tvEmpDesg.setText(model.getName());
-        holder.tvDate.setText(model.getDate());
-        holder.tvClaimType.setText(model.getClaimType());
-        holder.tvProject.setText(model.getProject());
-        holder.tvAmount.setText("" + model.getAmount() + "/-");
+        holder.tvClaimType.setText(model.getClaimTypeName());
+        holder.tvProject.setText(model.getProjectTitle());
+        holder.tvAmount.setText("" + model.getClaimAmount() + "/-");
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+
+        try {
+            Date dt = sdf.parse(model.getClaimDate());
+            String date = sdf1.format(dt.getTime());
+            holder.tvDate.setText("" + date);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (type.equalsIgnoreCase("pending")) {
+
+            if (model.getExInt1() == 1) {
+                holder.tvStatus.setText("Initial Pending");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+            } else if (model.getExInt1() == 2) {
+                holder.tvStatus.setText("Final Pending");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+            } else if (model.getExInt1() == 3) {
+                holder.tvStatus.setText("Final Approved");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorApproved));
+            } else if (model.getExInt1() == 8) {
+                holder.tvStatus.setText("Initial Rejected");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorRejected));
+            } else if (model.getExInt1() == 9) {
+                holder.tvStatus.setText("Final Rejected");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorRejected));
+            } else if (model.getExInt1() == 7) {
+                holder.tvStatus.setText("Leave Cancelled");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+            }
+
+        } else if (type.equalsIgnoreCase("info")) {
+
+            if (model.getExInt1() == 1) {
+                holder.tvStatus.setText("Initial Pending & Final Pending");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+            } else if (model.getExInt1() == 2) {
+                holder.tvStatus.setText("Final Pending");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+            } else if (model.getExInt1() == 3) {
+                holder.tvStatus.setText("Final Approved");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorApproved));
+            } else if (model.getExInt1() == 8) {
+                holder.tvStatus.setText("Initial Rejected");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorRejected));
+            } else if (model.getExInt1() == 9) {
+                holder.tvStatus.setText("Final Rejected");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorRejected));
+            } else if (model.getExInt1() == 7) {
+                holder.tvStatus.setText("Leave Cancelled");
+                holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+            }
+
+        }
+
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
