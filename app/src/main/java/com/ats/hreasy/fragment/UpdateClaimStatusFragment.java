@@ -3,8 +3,6 @@ package com.ats.hreasy.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ats.hreasy.R;
-import com.ats.hreasy.adapter.LeaveTrailAdapter;
 import com.ats.hreasy.model.ClaimAppTemp;
-import com.ats.hreasy.model.LeaveTrailTemp;
 import com.google.gson.Gson;
-
-import java.util.ArrayList;
 
 public class UpdateClaimStatusFragment extends Fragment implements View.OnClickListener {
 
@@ -50,7 +44,6 @@ public class UpdateClaimStatusFragment extends Fragment implements View.OnClickL
         btnReject.setOnClickListener(this);
 
         recyclerView = view.findViewById(R.id.recyclerView);
-
 
         ivPhoto1 = view.findViewById(R.id.ivPhoto1);
         ivPhoto2 = view.findViewById(R.id.ivPhoto2);
@@ -82,18 +75,18 @@ public class UpdateClaimStatusFragment extends Fragment implements View.OnClickL
         }
 
 
-      /*  LeaveTrailTemp temp1 = new LeaveTrailTemp(1, "Anmol Shirke", "Leave rejected because you already taken leave this month", "Rejected", "15 APR 2019");
-        LeaveTrailTemp temp2 = new LeaveTrailTemp(2, "Amit Patil", "Leave approved", "Approved", "16 APR 2019");
-
-        ArrayList<LeaveTrailTemp> leaveTrailTemps=new ArrayList<>();
-        leaveTrailTemps.add(temp1);
-        leaveTrailTemps.add(temp2);
-
-        LeaveTrailAdapter adapter = new LeaveTrailAdapter(leaveTrailTemps, getContext());
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);*/
+//        LeaveTrailTemp temp1 = new LeaveTrailTemp(1, "Anmol Shirke", "Leave rejected because you already taken leave this month", "Rejected", "15 APR 2019");
+//        LeaveTrailTemp temp2 = new LeaveTrailTemp(2, "Amit Patil", "Leave approved", "Approved", "16 APR 2019");
+//
+//        ArrayList<LeaveTrailTemp> leaveTrailTemps=new ArrayList<>();
+//        leaveTrailTemps.add(temp1);
+//        leaveTrailTemps.add(temp2);
+//
+//        LeaveTrailAdapter adapter = new LeaveTrailAdapter(leaveTrailTemps, getContext());
+//        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+//        recyclerView.setLayoutManager(mLayoutManager);
+//        recyclerView.setItemAnimator(new DefaultItemAnimator());
+//        recyclerView.setAdapter(adapter);
 
 
         return view;

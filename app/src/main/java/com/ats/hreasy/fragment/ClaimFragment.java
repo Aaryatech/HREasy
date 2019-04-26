@@ -15,11 +15,14 @@ import android.view.ViewGroup;
 import com.ats.hreasy.R;
 import com.ats.hreasy.interfaces.AddClaimInterface;
 import com.ats.hreasy.interfaces.ClaimHistoryInterface;
+import com.ats.hreasy.model.LeaveEmployeeModel;
+import com.google.gson.Gson;
 
 public class ClaimFragment extends Fragment {
     private ViewPager viewPager;
     private TabLayout tab;
     FragmentPagerAdapter adapterViewPager;
+    public static LeaveEmployeeModel staticEmpClaimModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,6 +74,15 @@ public class ClaimFragment extends Fragment {
 
             }
         });
+
+        try {
+            String json = getArguments().getString("empModel");
+            Gson gsonPlant = new Gson();
+            staticEmpClaimModel = gsonPlant.fromJson(json, LeaveEmployeeModel.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         return view;
     }
