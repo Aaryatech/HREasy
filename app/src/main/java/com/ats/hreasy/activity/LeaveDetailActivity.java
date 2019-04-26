@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.ats.hreasy.R;
 import com.ats.hreasy.adapter.LeaveTrailListAdapter;
-import com.ats.hreasy.model.LeaveTrailTemp;
 import com.ats.hreasy.model.Login;
 import com.ats.hreasy.model.MyLeaveData;
 import com.ats.hreasy.model.MyLeaveTrailData;
@@ -48,7 +47,6 @@ public class LeaveDetailActivity extends AppCompatActivity {
         Gson gson = new Gson();
         loginUser = gson.fromJson(userStr, Login.class);
         Log.e("HOME_ACTIVITY : ", "--------USER-------" + loginUser);
-
 
         String upcomingStr = getIntent().getStringExtra("model");
         leaveHistory = gson.fromJson(upcomingStr, MyLeaveData.class);

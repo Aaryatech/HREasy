@@ -3,6 +3,7 @@ package com.ats.hreasy.interfaces;
 import com.ats.hreasy.model.AuthorityIds;
 import com.ats.hreasy.model.BalanceLeaveModel;
 import com.ats.hreasy.model.ClaimApply;
+import com.ats.hreasy.model.ClaimHistoryModel;
 import com.ats.hreasy.model.ClaimType;
 import com.ats.hreasy.model.CurrentYearModel;
 import com.ats.hreasy.model.DashboardCount;
@@ -13,6 +14,7 @@ import com.ats.hreasy.model.LeaveEmployeeModel;
 import com.ats.hreasy.model.Login;
 import com.ats.hreasy.model.MyLeaveData;
 import com.ats.hreasy.model.MyLeaveTrailData;
+import com.ats.hreasy.model.ProjectList;
 import com.ats.hreasy.model.SaveClaimTrail;
 import com.ats.hreasy.model.SaveLeaveTrail;
 
@@ -44,6 +46,9 @@ public interface InterfaceApi {
     @POST("getLeaveStatusList")
     Call<ArrayList<MyLeaveData>> getLeaveStatusList(@Header("Authorization") String authHeader, @Query("empId") int empId, @Query("status") ArrayList<Integer> status);
 
+    @POST("getClaimStatusList")
+    Call<ArrayList<ClaimHistoryModel>> getClaimStatusList(@Header("Authorization") String authHeader, @Query("empId") int empId, @Query("status") ArrayList<Integer> status);
+
     @POST("getEmpListForClaimAuthByEmpId")
     Call<ArrayList<LeaveEmployeeModel>> getEmpListForClaimAuthByEmpId(@Header("Authorization") String authHeader, @Query("empId") int empId);
 
@@ -60,6 +65,9 @@ public interface InterfaceApi {
     @GET("getClaimList")
     Call<ArrayList<ClaimType>> getClaimList(@Header("Authorization") String authHeader);
 
+    @POST("getProjectsListByCompanyId")
+    Call<ArrayList<ProjectList>> getProjectsListByCompanyId(@Header("Authorization") String authHeader, @Query("companyId") int companyId);
+
     @POST("getLeaveTrailList")
     Call<ArrayList<MyLeaveTrailData>> getLeaveTrail(@Header("Authorization") String authHeader, @Query("leaveId") int leaveId);
 
@@ -68,8 +76,6 @@ public interface InterfaceApi {
 
     @POST("getClaimAuthIds")
     Call<AuthorityIds> getClaimAuthIds(@Header("Authorization") String authHeader, @Query("empId") int empId,@Query("companyId") int companyId);
-
-
 
     @POST("updateLeaveStatus")
     Call<Info> updateLeaveStatus(@Header("Authorization") String authHeader, @Query("leaveId") int leaveId, @Query("status") int status);
@@ -82,7 +88,6 @@ public interface InterfaceApi {
 
     @POST("updateClaimTrailId")
     Call<Info> updateClaimTrailId(@Header("Authorization") String authHeader, @Query("claimId") int claimId, @Query("trailId") int trailId);
-
 
     @POST("saveLeaveApply")
     Call<LeaveApply> saveLeaveApply(@Header("Authorization") String authHeader,@Body LeaveApply leaveApply);
