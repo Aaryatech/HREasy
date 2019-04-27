@@ -7,6 +7,9 @@ public class NotificationTemp {
     private String message;
     private String date;
 
+    public NotificationTemp() {
+    }
+
     public NotificationTemp(int id, String title, String message, String date) {
         this.id = id;
         this.title = title;
