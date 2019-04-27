@@ -132,7 +132,7 @@ public class LeaveApprovalPendingAdapter extends RecyclerView.Adapter<LeaveAppro
                 String json = gson.toJson(model);
 
                 Gson gson1 = new Gson();
-                String json1 = gson.toJson(leaveList);
+                String json1 = gson1.toJson(leaveList);
 
                 HomeActivity activity = (HomeActivity) context;
 

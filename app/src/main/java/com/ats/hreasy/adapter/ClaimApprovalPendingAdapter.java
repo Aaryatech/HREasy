@@ -12,7 +12,9 @@ import android.widget.TextView;
 
 import com.ats.hreasy.R;
 import com.ats.hreasy.activity.HomeActivity;
+import com.ats.hreasy.fragment.UpdateClaimInfoFragment;
 import com.ats.hreasy.fragment.UpdateClaimStatusFragment;
+import com.ats.hreasy.fragment.UpdateLeaveInfoFragment;
 import com.ats.hreasy.fragment.UpdateLeaveStatusFragment;
 import com.ats.hreasy.model.ClaimApp;
 import com.ats.hreasy.model.ClaimAppTemp;
@@ -143,14 +145,28 @@ public class ClaimApprovalPendingAdapter extends RecyclerView.Adapter<ClaimAppro
                 Gson gson = new Gson();
                 String json = gson.toJson(model);
 
+                Gson gson1 = new Gson();
+                String json1 = gson1.toJson(claimList);
+
                 HomeActivity activity = (HomeActivity) context;
 
-                Fragment adf = new UpdateClaimStatusFragment();
-                Bundle args = new Bundle();
-                args.putString("model", json);
-                adf.setArguments(args);
-                activity.getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "ClaimApprovalPendingFragment").commit();
+                if (type.equalsIgnoreCase("pending")) {
+                    Fragment adf = new UpdateClaimStatusFragment();
+                    Bundle args = new Bundle();
+                    args.putString("model", json);
+                    args.putString("modelList", json1);
+                    adf.setArguments(args);
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "ClaimApprovalPendingFragment").commit();
 
+                } else if (type.equalsIgnoreCase("info")) {
+                    Fragment adf = new UpdateClaimInfoFragment();
+                    Bundle args = new Bundle();
+                    args.putString("model", json);
+                    args.putString("modelList", json1);
+                    adf.setArguments(args);
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "ClaimApprovalPendingFragment").commit();
+
+                }
             }
         });
 

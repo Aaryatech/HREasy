@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
@@ -22,13 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ats.hreasy.R;
-import com.ats.hreasy.adapter.LeaveTrailAdapter;
 import com.ats.hreasy.constant.Constants;
+import com.ats.hreasy.model.ClaimApp;
 import com.ats.hreasy.model.Info;
 import com.ats.hreasy.model.LeaveApp;
 import com.ats.hreasy.model.Login;
-import com.ats.hreasy.model.MyLeaveTrailData;
-import com.ats.hreasy.model.SaveLeaveTrail;
+import com.ats.hreasy.model.SaveClaimTrail;
 import com.ats.hreasy.utils.CommonDialog;
 import com.ats.hreasy.utils.CustomSharedPreference;
 import com.google.gson.Gson;
@@ -42,57 +39,64 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickListener {
+public class UpdateClaimInfoFragment extends Fragment implements View.OnClickListener {
 
-    LeaveApp leaveModel;
-
-    private TextView tvEmpName, tvEmpDesg, tvLeaveType, tvDayType, tvDays, tvRemark, tvDate, tvStatus;
-    private EditText edRemark;
+    private TextView tvEmpName, tvEmpDesg, tvProject, tvClaimType, tvDate, tvAmount, tvRemark, tvStatus;
+    private ImageView ivPhoto1, ivPhoto2, ivPhoto3;
     private Button btnApprove, btnReject;
-    private ImageView ivPhoto;
-    private LinearLayout llButton, llAction;
+    private EditText edRemark;
+    private LinearLayout llAction;
 
     private RecyclerView recyclerView;
 
-    ArrayList<LeaveApp> leaveModelList = new ArrayList<>();
+    ClaimApp claimModel;
+
+    ArrayList<ClaimApp> claimModelList = new ArrayList<>();
 
     Login loginUser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_update_leave_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_update_claim_info, container, false);
 
         tvEmpName = view.findViewById(R.id.tvEmpName);
         tvEmpDesg = view.findViewById(R.id.tvEmpDesg);
-        ivPhoto = view.findViewById(R.id.ivPhoto);
-        tvLeaveType = view.findViewById(R.id.tvLeaveType);
-        tvDayType = view.findViewById(R.id.tvDayType);
-        tvDays = view.findViewById(R.id.tvDays);
+        tvProject = view.findViewById(R.id.tvProject);
+        tvClaimType = view.findViewById(R.id.tvClaimType);
         tvDate = view.findViewById(R.id.tvDate);
+        tvAmount = view.findViewById(R.id.tvAmount);
         tvRemark = view.findViewById(R.id.tvRemark);
-        edRemark = view.findViewById(R.id.edRemark);
-        btnApprove = view.findViewById(R.id.btnApprove);
-        btnReject = view.findViewById(R.id.btnReject);
-        recyclerView = view.findViewById(R.id.recyclerView);
-
         tvStatus = view.findViewById(R.id.tvStatus);
 
-        llButton = view.findViewById(R.id.llButton);
         llAction = view.findViewById(R.id.llAction);
+
+        btnApprove = view.findViewById(R.id.btnApprove);
+        btnReject = view.findViewById(R.id.btnReject);
 
         btnApprove.setOnClickListener(this);
         btnReject.setOnClickListener(this);
 
+        recyclerView = view.findViewById(R.id.recyclerView);
+
+
+        ivPhoto1 = view.findViewById(R.id.ivPhoto1);
+        ivPhoto2 = view.findViewById(R.id.ivPhoto2);
+        ivPhoto3 = view.findViewById(R.id.ivPhoto3);
+
+        btnApprove = view.findViewById(R.id.btnApprove);
+        btnReject = view.findViewById(R.id.btnReject);
+
+        edRemark = view.findViewById(R.id.edRemark);
+
         try {
             String str = getArguments().getString("modelList");
             Gson gson = new Gson();
-            Type type = new TypeToken<ArrayList<LeaveApp>>() {
+            Type type = new TypeToken<ArrayList<ClaimApp>>() {
             }.getType();
-            leaveModelList = gson.fromJson(str, type);
+            claimModelList = gson.fromJson(str, type);
 
-
-            Log.e("MODEL LIST --------- ", "-------------------" + leaveModelList);
+            Log.e("MODEL LIST --------- ", "-------------------" + claimModelList);
 
             setData();
 
@@ -104,63 +108,56 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
             String userStr = CustomSharedPreference.getString(getActivity(), CustomSharedPreference.KEY_USER);
             Gson gson = new Gson();
             loginUser = gson.fromJson(userStr, Login.class);
-            Log.e("HOME_ACTIVITY : ", "--------USER-------" + loginUser);
+            Log.e("UPDATE CLAIM INFO FRG: ", "--------USER-------" + loginUser);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-
         return view;
     }
 
-
     public void setData() {
+        if (claimModelList != null) {
 
-        if (leaveModelList != null) {
+            if (claimModelList.size() > 0) {
 
-            if (leaveModelList.size() > 0) {
+                claimModel = claimModelList.get(0);
 
-                leaveModel = leaveModelList.get(0);
+                tvEmpName.setText("" + claimModel.getEmpName());
+                tvProject.setText("" + claimModel.getProjectTitle());
+                tvClaimType.setText("" + claimModel.getClaimTypeName());
+                tvDate.setText("" + claimModel.getClaimDate());
+                tvAmount.setText("" + claimModel.getClaimAmount() + "/-");
+                tvRemark.setText("" + claimModel.getClaimRemarks());
 
-                tvEmpName.setText("" + leaveModel.getEmpName());
-                tvLeaveType.setText("" + leaveModel.getLeaveTitle());
-                tvDate.setText("" + leaveModel.getLeaveFromdt() + " to " + leaveModel.getLeaveTodt());
-                tvDays.setText("" + leaveModel.getLeaveNumDays() + " days");
-                tvRemark.setText("" + leaveModel.getLeaveEmpReason());
-                if (leaveModel.getLeaveDuration().equals("1")) {
-                    tvDayType.setText("Full Day");
-                } else {
-                    tvDayType.setText("Half Day");
-                }
+                // getLeaveTrail(claimModel.getLeaveId());
+                Log.e("STATUS", "---------*********************------------------1111--------------------- " + claimModel.getExInt1());
 
-                getLeaveTrail(leaveModel.getLeaveId());
-
-
-
-                if (leaveModel.getExInt1() == 1) {
-                    tvStatus.setText("Initial Pending & Final Pending");
+                Log.e("STATUS", "---------*********************-------------------22222-------------------- " + claimModel.getExInt1());
+                if (claimModel.getExInt1() == 1) {
+                    tvStatus.setText("Initial Pending");
                     tvStatus.setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
-                } else if (leaveModel.getExInt1() == 2) {
+                } else if (claimModel.getExInt1() == 2) {
+                    Log.e("222222222", "------------------------------------------------");
                     tvStatus.setText("Final Pending");
                     tvStatus.setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
-                } else if (leaveModel.getExInt1() == 3) {
+                } else if (claimModel.getExInt1() == 3) {
                     tvStatus.setText("Final Approved");
                     tvStatus.setTextColor(getContext().getResources().getColor(R.color.colorApproved));
-                } else if (leaveModel.getExInt1() == 8) {
+                } else if (claimModel.getExInt1() == 8) {
                     tvStatus.setText("Initial Rejected");
                     tvStatus.setTextColor(getContext().getResources().getColor(R.color.colorRejected));
-                } else if (leaveModel.getExInt1() == 9) {
+                } else if (claimModel.getExInt1() == 9) {
                     tvStatus.setText("Final Rejected");
                     tvStatus.setTextColor(getContext().getResources().getColor(R.color.colorRejected));
-                } else if (leaveModel.getExInt1() == 7) {
+                } else if (claimModel.getExInt1() == 7) {
                     tvStatus.setText("Leave Cancelled");
                     tvStatus.setTextColor(getContext().getResources().getColor(R.color.colorPrimaryDark));
                 }
 
 
-                if (leaveModel.getFinAuthEmpId().equalsIgnoreCase(String.valueOf(loginUser.getEmpId()))) {
-
+                if (claimModel.getCaFinAuthEmpId() == loginUser.getEmpId()) {
                     llAction.setVisibility(View.VISIBLE);
 
                 } else {
@@ -168,14 +165,14 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
 
                 }
 
+
             } else {
                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.content_frame, new LeaveApprovalPendingFragment(), "HomeFragment");
+                ft.replace(R.id.content_frame, new ClaimApprovalPendingFragment(), "HomeFragment");
                 ft.commit();
 
             }
         }
-
     }
 
 
@@ -188,24 +185,24 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             final String currDate = sdf.format(System.currentTimeMillis());
 
-            if (leaveModel != null && loginUser != null) {
+            if (claimModel != null && loginUser != null) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
                 builder.setTitle("Confirmation");
-                builder.setMessage("Do you want to APPROVE the leave of employee " + leaveModel.getEmpName() + " from  " + leaveModel.getLeaveFromdt() + " to " + leaveModel.getLeaveTodt() + " for " + leaveModel.getLeaveNumDays() + " days.");
+                builder.setMessage("Do you want to APPROVE the claim of employee " + claimModel.getEmpName() + " ");
                 builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        if (leaveModel.getFinAuthEmpId().equalsIgnoreCase(String.valueOf(loginUser.getEmpId()))) {
+                        if (claimModel.getCaFinAuthEmpId() == loginUser.getEmpId()) {
 
-                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, leaveModel.getLeaveId(), leaveModel.getEmpId(), remark, 3, loginUser.getEmpId(), "" + currDate);
-                            updateLeaveStatus(leaveModel.getLeaveId(), 3, saveLeaveTrail);
+                            SaveClaimTrail saveClaimTrail = new SaveClaimTrail(0, claimModel.getClaimId(), claimModel.getEmpId(), remark, 3, loginUser.getEmpId(), currDate);
+                            updateClaimStatus(claimModel.getClaimId(), 3, saveClaimTrail);
 
-                        } else if (leaveModel.getIniAuthEmpId().equalsIgnoreCase(String.valueOf(loginUser.getEmpId()))) {
+                        } else if (claimModel.getCaIniAuthEmpId() == loginUser.getEmpId()) {
 
-                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, leaveModel.getLeaveId(), leaveModel.getEmpId(), remark, 2, loginUser.getEmpId(), "" + currDate);
-                            updateLeaveStatus(leaveModel.getLeaveId(), 2, saveLeaveTrail);
+                            SaveClaimTrail saveClaimTrail = new SaveClaimTrail(0, claimModel.getClaimId(), claimModel.getEmpId(), remark, 2, loginUser.getEmpId(), currDate);
+                            updateClaimStatus(claimModel.getClaimId(), 2, saveClaimTrail);
 
                         }
 
@@ -236,7 +233,6 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
                 dialog.show();
 
             }
-
 
         } else if (v.getId() == R.id.btnReject) {
 
@@ -246,24 +242,24 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
             final String currDate = sdf.format(System.currentTimeMillis());
 
 
-            if (leaveModel != null && loginUser != null) {
+            if (claimModel != null && loginUser != null) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
                 builder.setTitle("Confirmation");
-                builder.setMessage("Do you want to REJECT the leave of employee " + leaveModel.getEmpName() + " from  " + leaveModel.getLeaveFromdt() + " to " + leaveModel.getLeaveTodt() + " for " + leaveModel.getLeaveNumDays() + " days.");
+                builder.setMessage("Do you want to REJECT the claim of employee " + claimModel.getEmpName() + " ");
                 builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        if (leaveModel.getFinAuthEmpId().equalsIgnoreCase(String.valueOf(loginUser.getEmpId()))) {
+                        if (claimModel.getCaFinAuthEmpId() == loginUser.getEmpId()) {
 
-                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, leaveModel.getLeaveId(), leaveModel.getEmpId(), remark, 9, loginUser.getEmpId(), "" + currDate);
-                            updateLeaveStatus(leaveModel.getLeaveId(), 9, saveLeaveTrail);
+                            SaveClaimTrail saveClaimTrail = new SaveClaimTrail(0, claimModel.getClaimId(), claimModel.getEmpId(), remark, 9, loginUser.getEmpId(), currDate);
+                            updateClaimStatus(claimModel.getClaimId(), 9, saveClaimTrail);
 
-                        } else if (leaveModel.getIniAuthEmpId().equalsIgnoreCase(String.valueOf(loginUser.getEmpId()))) {
+                        } else if (claimModel.getCaIniAuthEmpId() == loginUser.getEmpId()) {
 
-                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, leaveModel.getLeaveId(), leaveModel.getEmpId(), remark, 8, loginUser.getEmpId(), "" + currDate);
-                            updateLeaveStatus(leaveModel.getLeaveId(), 8, saveLeaveTrail);
+                            SaveClaimTrail saveClaimTrail = new SaveClaimTrail(0, claimModel.getClaimId(), claimModel.getEmpId(), remark, 8, loginUser.getEmpId(), currDate);
+                            updateClaimStatus(claimModel.getClaimId(), 8, saveClaimTrail);
 
                         }
 
@@ -299,7 +295,7 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
     }
 
 
-    private void getLeaveTrail(final Integer leaveId) {
+    private void updateClaimStatus(final Integer claimId, int status, final SaveClaimTrail saveClaimTrail) {
 
         String base = Constants.userName + ":" + Constants.password;
         String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
@@ -308,69 +304,17 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
             final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
             commonDialog.show();
 
-            Call<ArrayList<MyLeaveTrailData>> listCall = Constants.myInterface.getLeaveTrail(authHeader, leaveId);
-            listCall.enqueue(new Callback<ArrayList<MyLeaveTrailData>>() {
-                @Override
-                public void onResponse(Call<ArrayList<MyLeaveTrailData>> call, Response<ArrayList<MyLeaveTrailData>> response) {
-                    try {
-                        if (response.body() != null) {
-
-                            Log.e("LEAVE TRAIL DATA : ", " - " + response.body());
-
-                            LeaveTrailAdapter adapter = new LeaveTrailAdapter(response.body(), getContext());
-                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-                            recyclerView.setLayoutManager(mLayoutManager);
-                            recyclerView.setItemAnimator(new DefaultItemAnimator());
-                            recyclerView.setAdapter(adapter);
-
-                            commonDialog.dismiss();
-
-                        } else {
-                            commonDialog.dismiss();
-                            Log.e("Data Null : ", "-----------");
-
-                        }
-                    } catch (Exception e) {
-                        commonDialog.dismiss();
-                        Log.e("Exception : ", "-----------" + e.getMessage());
-                        e.printStackTrace();
-
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ArrayList<MyLeaveTrailData>> call, Throwable t) {
-                    commonDialog.dismiss();
-                    Log.e("onFailure : ", "-----------" + t.getMessage());
-                    t.printStackTrace();
-
-                }
-            });
-        } else {
-            Toast.makeText(getContext(), "No Internet Connection !", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void updateLeaveStatus(final Integer leaveId, int status, final SaveLeaveTrail saveLeaveTrail) {
-
-        String base = Constants.userName + ":" + Constants.password;
-        String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
-
-        if (Constants.isOnline(getContext())) {
-            final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
-            commonDialog.show();
-
-            Call<Info> listCall = Constants.myInterface.updateLeaveStatus(authHeader, leaveId, status);
+            Call<Info> listCall = Constants.myInterface.updateClaimStatus(authHeader, claimId, status);
             listCall.enqueue(new Callback<Info>() {
                 @Override
                 public void onResponse(Call<Info> call, Response<Info> response) {
                     try {
                         if (response.body() != null) {
 
-                            Log.e("UPDATE LEAVE : ", " - " + response.body());
+                            Log.e("UPDATE CLAIM : ", " - " + response.body());
 
                             if (!response.body().getError()) {
-                                saveLeaveTrail(leaveId, saveLeaveTrail);
+                                saveClaimTrail(claimId, saveClaimTrail);
                             }
 
                             commonDialog.dismiss();
@@ -440,7 +384,7 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
         }
     }
 
-    private void saveLeaveTrail(final Integer leaveId, SaveLeaveTrail saveLeaveTrail) {
+    private void saveClaimTrail(final Integer claimId, SaveClaimTrail saveClaimTrail) {
 
         String base = Constants.userName + ":" + Constants.password;
         String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
@@ -449,17 +393,17 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
             final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
             commonDialog.show();
 
-            Call<SaveLeaveTrail> listCall = Constants.myInterface.saveLeaveTrail(authHeader, saveLeaveTrail);
-            listCall.enqueue(new Callback<SaveLeaveTrail>() {
+            Call<SaveClaimTrail> listCall = Constants.myInterface.saveClaimTrail(authHeader, saveClaimTrail);
+            listCall.enqueue(new Callback<SaveClaimTrail>() {
                 @Override
-                public void onResponse(Call<SaveLeaveTrail> call, Response<SaveLeaveTrail> response) {
+                public void onResponse(Call<SaveClaimTrail> call, Response<SaveClaimTrail> response) {
                     try {
                         if (response.body() != null) {
 
-                            Log.e("UPDATE LEAVE : ", " - " + response.body());
+                            Log.e("UPDATE CLAIM : ", " - " + response.body());
 
-                            if (response.body().getTrailPkey() > 0) {
-                                updateLeaveTrailId(leaveId, response.body().getTrailPkey());
+                            if (response.body().getClaimTrailPkey() > 0) {
+                                updateClaimTrailId(claimId, response.body().getClaimTrailPkey());
                             }
 
                             commonDialog.dismiss();
@@ -504,7 +448,7 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
                 }
 
                 @Override
-                public void onFailure(Call<SaveLeaveTrail> call, Throwable t) {
+                public void onFailure(Call<SaveClaimTrail> call, Throwable t) {
                     commonDialog.dismiss();
                     Log.e("onFailure : ", "-----------" + t.getMessage());
                     t.printStackTrace();
@@ -529,7 +473,7 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
         }
     }
 
-    private void updateLeaveTrailId(final Integer leaveId, int trailId) {
+    private void updateClaimTrailId(final Integer claimId, int trailId) {
 
         String base = Constants.userName + ":" + Constants.password;
         String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
@@ -538,24 +482,26 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
             final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
             commonDialog.show();
 
-            Call<Info> listCall = Constants.myInterface.updateLeaveTrailId(authHeader, leaveId, trailId);
+            Call<Info> listCall = Constants.myInterface.updateClaimTrailId(authHeader, claimId, trailId);
             listCall.enqueue(new Callback<Info>() {
                 @Override
                 public void onResponse(Call<Info> call, Response<Info> response) {
                     try {
                         if (response.body() != null) {
 
-                            Log.e("UPDATE LEAVE : ", " - " + response.body());
+                            Log.e("UPDATE CLAIM TRAID ID: ", " - " + response.body());
 
                             if (!response.body().getError()) {
 
                                 Toast.makeText(getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
 
-                                if (leaveModelList.size() > 0) {
-                                    leaveModelList.remove(0);
+
+                                if (claimModelList.size() > 0) {
+                                    claimModelList.remove(0);
                                     setData();
                                     edRemark.setText("");
                                 }
+
 
                             } else {
 
@@ -627,5 +573,6 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
             Toast.makeText(getContext(), "No Internet Connection !", Toast.LENGTH_SHORT).show();
         }
     }
+
 
 }

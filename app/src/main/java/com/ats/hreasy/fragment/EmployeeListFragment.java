@@ -79,27 +79,27 @@ public class EmployeeListFragment extends Fragment {
             }
         });
 
-        if(type.equals("claim")) {
+        if (type.equalsIgnoreCase("claim")) {
             getEmployeeListClaim(loginUser.getEmpId());
-        }else{
+        } else {
             getEmployeeListLeave(loginUser.getEmpId());
         }
 
 
-       // prepareData();
+        // prepareData();
         return view;
     }
 
     private void getEmployeeListLeave(int empId) {
-        Log.e("PARAMETERS : ", "       EMPID : " + empId );
+        Log.e("PARAMETERS : ", "       EMPID : " + empId);
         if (Constants.isOnline(getActivity())) {
             final CommonDialog commonDialog = new CommonDialog(getActivity(), "Loading", "Please Wait...");
             commonDialog.show();
 
-            String base= Constants.userName +":" +Constants.password;
-            String authHeader= "Basic "+ Base64.encodeToString(base.getBytes(),Base64.NO_WRAP);
+            String base = Constants.userName + ":" + Constants.password;
+            String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
 
-            Call<ArrayList<LeaveEmployeeModel>> listCall = Constants.myInterface.getEmployeeListByEmpId(authHeader,empId);
+            Call<ArrayList<LeaveEmployeeModel>> listCall = Constants.myInterface.getEmployeeListByEmpId(authHeader, empId);
             listCall.enqueue(new Callback<ArrayList<LeaveEmployeeModel>>() {
                 @Override
                 public void onResponse(Call<ArrayList<LeaveEmployeeModel>> call, Response<ArrayList<LeaveEmployeeModel>> response) {
@@ -110,8 +110,8 @@ public class EmployeeListFragment extends Fragment {
                             empList.clear();
                             empList = response.body();
 
-                            LeaveEmployeeModel leaveEmployeeModel=new LeaveEmployeeModel(loginUser.getEmpId(),loginUser.getEmpCode(),loginUser.getCompanyId(),loginUser.getEmpCatId(),loginUser.getEmpTypeId(),loginUser.getEmpDeptId(),loginUser.getLocId(),loginUser.getEmpFname(),loginUser.getEmpMname(),loginUser.getEmpSname(),loginUser.getEmpPhoto(),loginUser.getEmpMobile1(),loginUser.getEmpMobile2(),loginUser.getEmpEmail(),loginUser.getEmpAddressTemp(),loginUser.getEmpAddressPerm(),loginUser.getEmpBloodgrp(),loginUser.getEmpEmergencyPerson1(),loginUser.getEmpEmergencyNo1(),loginUser.getEmpEmergencyPerson2(),loginUser.getEmpEmergencyNo2(),loginUser.getEmpRatePerhr(),loginUser.getEmpJoiningDate(),loginUser.getEmpPrevExpYrs(),loginUser.getEmpPrevExpMonths(),loginUser.getEmpLeavingDate(),loginUser.getEmpLeavingReason(),loginUser.getDelStatus(),loginUser.getIsActive(),loginUser.getMakerUserId(),loginUser.getMakerEnterDatetime(),loginUser.getExInt1(),loginUser.getExInt2(),loginUser.getExInt3(),loginUser.getExVar1(),loginUser.getExVar2(),loginUser.getExVar3());
-                            empList.add(0,leaveEmployeeModel);
+                            LeaveEmployeeModel leaveEmployeeModel = new LeaveEmployeeModel(loginUser.getEmpId(), loginUser.getEmpCode(), loginUser.getCompanyId(), loginUser.getEmpCatId(), loginUser.getEmpTypeId(), loginUser.getEmpDeptId(), loginUser.getLocId(), loginUser.getEmpFname(), loginUser.getEmpMname(), loginUser.getEmpSname(), loginUser.getEmpPhoto(), loginUser.getEmpMobile1(), loginUser.getEmpMobile2(), loginUser.getEmpEmail(), loginUser.getEmpAddressTemp(), loginUser.getEmpAddressPerm(), loginUser.getEmpBloodgrp(), loginUser.getEmpEmergencyPerson1(), loginUser.getEmpEmergencyNo1(), loginUser.getEmpEmergencyPerson2(), loginUser.getEmpEmergencyNo2(), loginUser.getEmpRatePerhr(), loginUser.getEmpJoiningDate(), loginUser.getEmpPrevExpYrs(), loginUser.getEmpPrevExpMonths(), loginUser.getEmpLeavingDate(), loginUser.getEmpLeavingReason(), loginUser.getDelStatus(), loginUser.getIsActive(), loginUser.getMakerUserId(), loginUser.getMakerEnterDatetime(), loginUser.getExInt1(), loginUser.getExInt2(), loginUser.getExInt3(), loginUser.getExVar1(), loginUser.getExVar2(), loginUser.getExVar3());
+                            empList.add(0, leaveEmployeeModel);
                             Log.e("Employee List Model : ", "****************" + response.body());
                             mAdapter = new EmployeeListAdapter(empList, getActivity(), type);
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -146,15 +146,15 @@ public class EmployeeListFragment extends Fragment {
     }
 
     private void getEmployeeListClaim(Integer empId) {
-        Log.e("PARAMETERS : ", "       EMPID : " + empId );
+        Log.e("PARAMETERS : ", "       EMPID : " + empId);
         if (Constants.isOnline(getActivity())) {
             final CommonDialog commonDialog = new CommonDialog(getActivity(), "Loading", "Please Wait...");
             commonDialog.show();
 
-            String base= Constants.userName +":" +Constants.password;
-            String authHeader= "Basic "+ Base64.encodeToString(base.getBytes(),Base64.NO_WRAP);
+            String base = Constants.userName + ":" + Constants.password;
+            String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
 
-            Call<ArrayList<LeaveEmployeeModel>> listCall = Constants.myInterface.getEmpListForClaimAuthByEmpId(authHeader,empId);
+            Call<ArrayList<LeaveEmployeeModel>> listCall = Constants.myInterface.getEmpListForClaimAuthByEmpId(authHeader, empId);
             listCall.enqueue(new Callback<ArrayList<LeaveEmployeeModel>>() {
                 @Override
                 public void onResponse(Call<ArrayList<LeaveEmployeeModel>> call, Response<ArrayList<LeaveEmployeeModel>> response) {
@@ -162,12 +162,41 @@ public class EmployeeListFragment extends Fragment {
                         if (response.body() != null) {
 
                             Log.e("Employee List Claim: ", "------------" + response.body());
-                           empList.clear();
-                           empList = response.body();
+                            empList.clear();
+                            empList = response.body();
 
-                           LeaveEmployeeModel leaveEmployeeModel=new LeaveEmployeeModel(loginUser.getEmpId(),loginUser.getEmpCode(),loginUser.getCompanyId(),loginUser.getEmpCatId(),loginUser.getEmpTypeId(),loginUser.getEmpDeptId(),loginUser.getLocId(),loginUser.getEmpFname(),loginUser.getEmpMname(),loginUser.getEmpSname(),loginUser.getEmpPhoto(),loginUser.getEmpMobile1(),loginUser.getEmpMobile2(),loginUser.getEmpEmail(),loginUser.getEmpAddressTemp(),loginUser.getEmpAddressPerm(),loginUser.getEmpBloodgrp(),loginUser.getEmpEmergencyPerson1(),loginUser.getEmpEmergencyNo1(),loginUser.getEmpEmergencyPerson2(),loginUser.getEmpEmergencyNo2(),loginUser.getEmpRatePerhr(),loginUser.getEmpJoiningDate(),loginUser.getEmpPrevExpYrs(),loginUser.getEmpPrevExpMonths(),loginUser.getEmpLeavingDate(),loginUser.getEmpLeavingReason(),loginUser.getDelStatus(),loginUser.getIsActive(),loginUser.getMakerUserId(),loginUser.getMakerEnterDatetime(),loginUser.getExInt1(),loginUser.getExInt2(),loginUser.getExInt3(),loginUser.getExVar1(),loginUser.getExVar2(),loginUser.getExVar3());
-                            empList.add(0,leaveEmployeeModel);
+                            LeaveEmployeeModel leaveEmployeeModel = new LeaveEmployeeModel(loginUser.getEmpId(), loginUser.getEmpCode(), loginUser.getCompanyId(), loginUser.getEmpCatId(), loginUser.getEmpTypeId(), loginUser.getEmpDeptId(), loginUser.getLocId(), loginUser.getEmpFname(), loginUser.getEmpMname(), loginUser.getEmpSname(), loginUser.getEmpPhoto(), loginUser.getEmpMobile1(), loginUser.getEmpMobile2(), loginUser.getEmpEmail(), loginUser.getEmpAddressTemp(), loginUser.getEmpAddressPerm(), loginUser.getEmpBloodgrp(), loginUser.getEmpEmergencyPerson1(), loginUser.getEmpEmergencyNo1(), loginUser.getEmpEmergencyPerson2(), loginUser.getEmpEmergencyNo2(), loginUser.getEmpRatePerhr(), loginUser.getEmpJoiningDate(), loginUser.getEmpPrevExpYrs(), loginUser.getEmpPrevExpMonths(), loginUser.getEmpLeavingDate(), loginUser.getEmpLeavingReason(), loginUser.getDelStatus(), loginUser.getIsActive(), loginUser.getMakerUserId(), loginUser.getMakerEnterDatetime(), loginUser.getExInt1(), loginUser.getExInt2(), loginUser.getExInt3(), loginUser.getExVar1(), loginUser.getExVar2(), loginUser.getExVar3());
+                            empList.add(0, leaveEmployeeModel);
                             Log.e("Employee List Model : ", "****************" + response.body());
+
+                            try {
+
+                               /* if (empList != null) {
+                                    if (empList.size() > 0) {
+
+                                        ArrayList<LeaveEmployeeModel> newEmpList = new ArrayList<>();
+
+                                        for (int i = 0; i < empList.size(); i++) {
+
+                                            if (!newEmpList.contains(empList.get(i))) {
+
+                                                newEmpList.add(empList.get(i));
+
+                                            }
+                                        }
+
+                                      empList.clear();
+                                        empList.addAll(newEmpList);
+
+                                    }
+                                }*/
+
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+
                             mAdapter = new EmployeeListAdapter(empList, getActivity(), type);
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                             recyclerView.setLayoutManager(mLayoutManager);
@@ -202,7 +231,7 @@ public class EmployeeListFragment extends Fragment {
     private void FilterSearch(String s) {
         temp = new ArrayList();
         for (LeaveEmployeeModel d : empList) {
-            if (d.getEmpFname().toLowerCase().contains(s.toLowerCase()) || d.getEmpSname().toLowerCase().contains(s.toLowerCase()) || d.getEmpMname().toLowerCase().contains(s.toLowerCase()) ) {
+            if (d.getEmpFname().toLowerCase().contains(s.toLowerCase()) || d.getEmpSname().toLowerCase().contains(s.toLowerCase()) || d.getEmpMname().toLowerCase().contains(s.toLowerCase())) {
                 temp.add(d);
             }
         }

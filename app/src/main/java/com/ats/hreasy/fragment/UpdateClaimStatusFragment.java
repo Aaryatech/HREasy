@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,15 +18,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ats.hreasy.R;
 import com.ats.hreasy.adapter.LeaveTrailAdapter;
+import com.ats.hreasy.constant.Constants;
 import com.ats.hreasy.model.ClaimApp;
 import com.ats.hreasy.model.ClaimAppTemp;
+import com.ats.hreasy.model.Info;
 import com.ats.hreasy.model.LeaveApp;
 import com.ats.hreasy.model.LeaveTrailTemp;
 import com.ats.hreasy.model.Login;
+import com.ats.hreasy.model.SaveClaimTrail;
 import com.ats.hreasy.model.SaveLeaveTrail;
+import com.ats.hreasy.utils.CommonDialog;
 import com.ats.hreasy.utils.CustomSharedPreference;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -33,6 +39,10 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class UpdateClaimStatusFragment extends Fragment implements View.OnClickListener {
 
@@ -63,6 +73,9 @@ public class UpdateClaimStatusFragment extends Fragment implements View.OnClickL
         tvRemark = view.findViewById(R.id.tvRemark);
         tvStatus = view.findViewById(R.id.tvStatus);
 
+        btnApprove = view.findViewById(R.id.btnApprove);
+        btnReject = view.findViewById(R.id.btnReject);
+
         btnApprove.setOnClickListener(this);
         btnReject.setOnClickListener(this);
 
@@ -81,7 +94,7 @@ public class UpdateClaimStatusFragment extends Fragment implements View.OnClickL
         try {
             String str = getArguments().getString("modelList");
             Gson gson = new Gson();
-            Type type = new TypeToken<ArrayList<LeaveApp>>() {
+            Type type = new TypeToken<ArrayList<ClaimApp>>() {
             }.getType();
             claimModelList = gson.fromJson(str, type);
 
@@ -168,20 +181,20 @@ public class UpdateClaimStatusFragment extends Fragment implements View.OnClickL
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
                 builder.setTitle("Confirmation");
-                builder.setMessage("Do you want to APPROVE the claim of employee " + claimModel.getEmpName() + " " );
+                builder.setMessage("Do you want to APPROVE the claim of employee " + claimModel.getEmpName() + " ");
                 builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
                         if (claimModel.getCaFinAuthEmpId() == loginUser.getEmpId()) {
 
-                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, leaveModel.getLeaveId(), leaveModel.getEmpId(), remark, 3, loginUser.getEmpId(), "" + currDate);
-                            updateLeaveStatus(leaveModel.getLeaveId(), 3, saveLeaveTrail);
+                            SaveClaimTrail saveClaimTrail = new SaveClaimTrail(0, claimModel.getClaimId(), claimModel.getEmpId(), remark, 3, loginUser.getEmpId(), currDate);
+                            updateClaimStatus(claimModel.getClaimId(), 3, saveClaimTrail);
 
-                        } else if (claimModel.getCaIniAuthEmpId()==loginUser.getEmpId()) {
+                        } else if (claimModel.getCaIniAuthEmpId() == loginUser.getEmpId()) {
 
-                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, leaveModel.getLeaveId(), leaveModel.getEmpId(), remark, 2, loginUser.getEmpId(), "" + currDate);
-                            updateLeaveStatus(leaveModel.getLeaveId(), 2, saveLeaveTrail);
+                            SaveClaimTrail saveClaimTrail = new SaveClaimTrail(0, claimModel.getClaimId(), claimModel.getEmpId(), remark, 2, loginUser.getEmpId(), currDate);
+                            updateClaimStatus(claimModel.getClaimId(), 2, saveClaimTrail);
 
                         }
 
@@ -215,6 +228,341 @@ public class UpdateClaimStatusFragment extends Fragment implements View.OnClickL
 
         } else if (v.getId() == R.id.btnReject) {
 
+            final String remark = edRemark.getText().toString();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            final String currDate = sdf.format(System.currentTimeMillis());
+
+
+            if (claimModel != null && loginUser != null) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                builder.setTitle("Confirmation");
+                builder.setMessage("Do you want to REJECT the claim of employee " + claimModel.getEmpName() + " ");
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        if (claimModel.getCaFinAuthEmpId() == loginUser.getEmpId()) {
+
+                            SaveClaimTrail saveClaimTrail = new SaveClaimTrail(0, claimModel.getClaimId(), claimModel.getEmpId(), remark, 9, loginUser.getEmpId(), currDate);
+                            updateClaimStatus(claimModel.getClaimId(), 9, saveClaimTrail);
+
+                        } else if (claimModel.getCaIniAuthEmpId() == loginUser.getEmpId()) {
+
+                            SaveClaimTrail saveClaimTrail = new SaveClaimTrail(0, claimModel.getClaimId(), claimModel.getEmpId(), remark, 8, loginUser.getEmpId(), currDate);
+                            updateClaimStatus(claimModel.getClaimId(), 8, saveClaimTrail);
+
+                        }
+
+                    }
+                });
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+            } else {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                builder.setTitle("Alert");
+                builder.setMessage("Oops something went wrong!");
+
+                builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+            }
+
+        }
+    }
+
+
+    private void updateClaimStatus(final Integer claimId, int status, final SaveClaimTrail saveClaimTrail) {
+
+        String base = Constants.userName + ":" + Constants.password;
+        String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
+
+        if (Constants.isOnline(getContext())) {
+            final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
+            commonDialog.show();
+
+            Call<Info> listCall = Constants.myInterface.updateClaimStatus(authHeader, claimId, status);
+            listCall.enqueue(new Callback<Info>() {
+                @Override
+                public void onResponse(Call<Info> call, Response<Info> response) {
+                    try {
+                        if (response.body() != null) {
+
+                            Log.e("UPDATE CLAIM : ", " - " + response.body());
+
+                            if (!response.body().getError()) {
+                                saveClaimTrail(claimId, saveClaimTrail);
+                            }
+
+                            commonDialog.dismiss();
+
+                        } else {
+                            commonDialog.dismiss();
+                            Log.e("Data Null : ", "-----------");
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                            builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                            builder.setMessage("Unable to process! please try again.");
+
+                            builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+
+                        }
+                    } catch (Exception e) {
+                        commonDialog.dismiss();
+                        Log.e("Exception : ", "-----------" + e.getMessage());
+                        e.printStackTrace();
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                        builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                        builder.setMessage("Oops something went wrong!");
+
+                        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Info> call, Throwable t) {
+                    commonDialog.dismiss();
+                    Log.e("onFailure : ", "-----------" + t.getMessage());
+                    t.printStackTrace();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                    builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                    builder.setMessage("Oops something went wrong!");
+
+                    builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
+                }
+            });
+        } else {
+            Toast.makeText(getContext(), "No Internet Connection !", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void saveClaimTrail(final Integer claimId, SaveClaimTrail saveClaimTrail) {
+
+        String base = Constants.userName + ":" + Constants.password;
+        String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
+
+        if (Constants.isOnline(getContext())) {
+            final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
+            commonDialog.show();
+
+            Call<SaveClaimTrail> listCall = Constants.myInterface.saveClaimTrail(authHeader, saveClaimTrail);
+            listCall.enqueue(new Callback<SaveClaimTrail>() {
+                @Override
+                public void onResponse(Call<SaveClaimTrail> call, Response<SaveClaimTrail> response) {
+                    try {
+                        if (response.body() != null) {
+
+                            Log.e("UPDATE CLAIM : ", " - " + response.body());
+
+                            if (response.body().getClaimTrailPkey() > 0) {
+                                updateClaimTrailId(claimId, response.body().getClaimTrailPkey());
+                            }
+
+                            commonDialog.dismiss();
+
+                        } else {
+                            commonDialog.dismiss();
+                            Log.e("Data Null : ", "-----------");
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                            builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                            builder.setMessage("Unable to process! please try again.");
+
+                            builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+
+                        }
+                    } catch (Exception e) {
+                        commonDialog.dismiss();
+                        Log.e("Exception : ", "-----------" + e.getMessage());
+                        e.printStackTrace();
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                        builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                        builder.setMessage("Oops something went wrong!");
+
+                        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SaveClaimTrail> call, Throwable t) {
+                    commonDialog.dismiss();
+                    Log.e("onFailure : ", "-----------" + t.getMessage());
+                    t.printStackTrace();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                    builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                    builder.setMessage("Oops something went wrong!");
+
+                    builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
+                }
+            });
+        } else {
+            Toast.makeText(getContext(), "No Internet Connection !", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void updateClaimTrailId(final Integer claimId, int trailId) {
+
+        String base = Constants.userName + ":" + Constants.password;
+        String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
+
+        if (Constants.isOnline(getContext())) {
+            final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
+            commonDialog.show();
+
+            Call<Info> listCall = Constants.myInterface.updateClaimTrailId(authHeader, claimId, trailId);
+            listCall.enqueue(new Callback<Info>() {
+                @Override
+                public void onResponse(Call<Info> call, Response<Info> response) {
+                    try {
+                        if (response.body() != null) {
+
+                            Log.e("UPDATE CLAIM TRAID ID: ", " - " + response.body());
+
+                            if (!response.body().getError()) {
+
+                                Toast.makeText(getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
+
+
+                                if (claimModelList.size() > 0) {
+                                    claimModelList.remove(0);
+                                    setData();
+                                    edRemark.setText("");
+                                }
+
+
+                            } else {
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                                builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                                builder.setMessage("Unable to process! please try again.");
+
+                                builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                            }
+
+                            commonDialog.dismiss();
+
+                        } else {
+                            commonDialog.dismiss();
+                            Log.e("Data Null : ", "-----------");
+                            Toast.makeText(getContext(), "FAILED", Toast.LENGTH_SHORT).show();
+
+                        }
+                    } catch (Exception e) {
+                        commonDialog.dismiss();
+                        Log.e("Exception : ", "-----------" + e.getMessage());
+                        e.printStackTrace();
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                        builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                        builder.setMessage("Oops something went wrong!");
+
+                        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Info> call, Throwable t) {
+                    commonDialog.dismiss();
+                    Log.e("onFailure : ", "-----------" + t.getMessage());
+                    t.printStackTrace();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                    builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                    builder.setMessage("Oops something went wrong!");
+
+                    builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
+                }
+            });
+        } else {
+            Toast.makeText(getContext(), "No Internet Connection !", Toast.LENGTH_SHORT).show();
         }
     }
 

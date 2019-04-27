@@ -547,7 +547,7 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
 
                             if (!response.body().getError()) {
 
-                                Toast.makeText(getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
+                               // Toast.makeText(getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
 
 
                                 if (leaveModelList.size() > 0) {

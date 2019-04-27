@@ -85,8 +85,9 @@ public class AddClaimFragment extends Fragment implements AddClaimInterface,View
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view= inflater.inflate(R.layout.fragment_add_claim, container, false);
+
         spType=(Spinner)view.findViewById(R.id.spType);
         spProject=(Spinner)view.findViewById(R.id.spProject);
         edDate=(EditText)view.findViewById(R.id.edDate);
@@ -127,15 +128,6 @@ public class AddClaimFragment extends Fragment implements AddClaimInterface,View
         getClaimType();
         getProjectList(loginUser.getCompanyId());
 
-        projectArray.add("Select Project");
-        projectArray.add("Java");
-        projectArray.add("Android");
-        projectArray.add("Php");
-
-        final ArrayAdapter<String> spinnerAdapter1 = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, projectArray);
-        spinnerAdapter1.setDropDownViewResource(R.layout.spinner_item);
-        // android.R.layout.simple_spinner_dropdown_item
-        spProject.setAdapter(spinnerAdapter1);
 
         try {
             if (staticEmpClaimModel != null) {
@@ -279,11 +271,7 @@ public class AddClaimFragment extends Fragment implements AddClaimInterface,View
         }
     }
 
-    /**
-     * Called when a view has been clicked.
-     *
-     * @param v The view that was clicked.
-     */
+
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.edDate) {
@@ -513,7 +501,7 @@ public class AddClaimFragment extends Fragment implements AddClaimInterface,View
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                             String currDate = sdf.format(System.currentTimeMillis());
 
-                            SaveClaimTrail saveClaimTrail = new SaveClaimTrail(0, model.getClaimId(), staticEmpClaimModel.getEmpId(), "", model.getExInt1(), model.getMakerUserId(), "" + currDate);
+                            SaveClaimTrail saveClaimTrail = new SaveClaimTrail(0, model.getClaimId(), staticEmpClaimModel.getEmpId(), "NA", model.getExInt1(), model.getMakerUserId(), "" + currDate);
                             saveLeaveTrail(model.getClaimId(), saveClaimTrail);
 
                             //commonDialog.dismiss();

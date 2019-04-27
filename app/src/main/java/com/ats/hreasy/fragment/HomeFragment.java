@@ -35,7 +35,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     Login loginUser;
 
     private CardView cvLeaveAppPend, cvClaimAppPend, cvMyLeavePend, cvMyClaimPend;
-    private TextView tvLeaveAppPendingCount,tvLeavependingCount;
+    private TextView tvLeaveAppPendingCount, tvLeavependingCount;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,15 +57,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         cvClaimAppPend = view.findViewById(R.id.cvClaimAppPend);
         cvMyLeavePend = view.findViewById(R.id.cvMyLeavePend);
         cvMyClaimPend = view.findViewById(R.id.cvMyClaimPend);
-        tvLeaveAppPendingCount=view.findViewById(R.id.tvHome_leaveAppPendingCount);
-        tvLeavependingCount=view.findViewById(R.id.tvHome_leavePendingCount);
+        tvLeaveAppPendingCount = view.findViewById(R.id.tvHome_leaveAppPendingCount);
+        tvLeavependingCount = view.findViewById(R.id.tvHome_leavePendingCount);
 
         String userStr = CustomSharedPreference.getString(getActivity(), CustomSharedPreference.KEY_USER);
         Gson gson = new Gson();
         loginUser = gson.fromJson(userStr, Login.class);
         Log.e("HOME_ACTIVITY : ", "--------USER-------" + loginUser);
 
-        getDashboardCount(3);
+        if (loginUser != null) {
+            getDashboardCount(loginUser.getEmpId());
+        }
 
         cvLeaveAppPend.setOnClickListener(this);
         cvClaimAppPend.setOnClickListener(this);
@@ -129,15 +131,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getDashboardCount(Integer empId) {
-        Log.e("PARAMETERS : ", "       EMPID : " + empId );
+        Log.e("PARAMETERS : ", "       EMPID : " + empId);
         if (Constants.isOnline(getActivity())) {
             final CommonDialog commonDialog = new CommonDialog(getActivity(), "Loading", "Please Wait...");
             commonDialog.show();
 
-            String base= Constants.userName +":" +Constants.password;
-            String authHeader= "Basic "+ Base64.encodeToString(base.getBytes(),Base64.NO_WRAP);
+            String base = Constants.userName + ":" + Constants.password;
+            String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
 
-            Call<DashboardCount> listCall = Constants.myInterface.getDashboardCount(authHeader,empId);
+            Call<DashboardCount> listCall = Constants.myInterface.getDashboardCount(authHeader, empId);
             listCall.enqueue(new Callback<DashboardCount>() {
                 @Override
                 public void onResponse(Call<DashboardCount> call, Response<DashboardCount> response) {
@@ -147,14 +149,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                             Log.e("Dashboard Count : ", "------------" + response.body());
 
                             DashboardCount data = response.body();
-                            tvLeaveAppPendingCount.setText(""+data.getPendingRequest()+"/" +data.getInfo());
-                            tvLeavependingCount.setText(""+data.getMyLeave());
+                            tvLeaveAppPendingCount.setText("" + data.getPendingRequest() + "/" + data.getInfo());
+                            tvLeavependingCount.setText("" + data.getMyLeave());
 
-                            if(data.getIsAuthorized()==1)
-                            {
+                            if (data.getIsAuthorized() == 1) {
                                 cvClaimAppPend.setVisibility(View.VISIBLE);
                                 cvLeaveAppPend.setVisibility(View.VISIBLE);
-                            }else{
+                            } else {
                                 cvClaimAppPend.setVisibility(View.GONE);
                                 cvLeaveAppPend.setVisibility(View.GONE);
                             }
@@ -190,17 +191,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, new LeaveApprovalPendingFragment(), "HomeFragment");
             ft.commit();
-        }else  if (v.getId() == R.id.cvClaimAppPend) {
+        } else if (v.getId() == R.id.cvClaimAppPend) {
 
             FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, new ClaimApprovalPendingFragment(), "HomeFragment");
             ft.commit();
-        }else  if (v.getId() == R.id.cvMyLeavePend) {
+        } else if (v.getId() == R.id.cvMyLeavePend) {
 
             FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, new PendingLeaveListFragment(), "HomeFragment");
             ft.commit();
-        }else  if (v.getId() == R.id.cvMyClaimPend) {
+        } else if (v.getId() == R.id.cvMyClaimPend) {
             FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, new PendingClaimListFragment(), "HomeFragment");
             ft.commit();

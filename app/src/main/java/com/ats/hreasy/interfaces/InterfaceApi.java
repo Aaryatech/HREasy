@@ -2,6 +2,7 @@ package com.ats.hreasy.interfaces;
 
 import com.ats.hreasy.model.AuthorityIds;
 import com.ats.hreasy.model.BalanceLeaveModel;
+import com.ats.hreasy.model.ClaimApp;
 import com.ats.hreasy.model.ClaimApply;
 import com.ats.hreasy.model.ClaimHistoryModel;
 import com.ats.hreasy.model.ClaimType;
@@ -77,6 +78,8 @@ public interface InterfaceApi {
     @POST("getClaimAuthIds")
     Call<AuthorityIds> getClaimAuthIds(@Header("Authorization") String authHeader, @Query("empId") int empId,@Query("companyId") int companyId);
 
+
+
     @POST("updateLeaveStatus")
     Call<Info> updateLeaveStatus(@Header("Authorization") String authHeader, @Query("leaveId") int leaveId, @Query("status") int status);
 
@@ -89,6 +92,7 @@ public interface InterfaceApi {
     @POST("updateClaimTrailId")
     Call<Info> updateClaimTrailId(@Header("Authorization") String authHeader, @Query("claimId") int claimId, @Query("trailId") int trailId);
 
+
     @POST("saveLeaveApply")
     Call<LeaveApply> saveLeaveApply(@Header("Authorization") String authHeader,@Body LeaveApply leaveApply);
 
@@ -97,6 +101,15 @@ public interface InterfaceApi {
 
     @POST("saveClaimTrail")
     Call<SaveClaimTrail> saveClaimTrail(@Header("Authorization") String authHeader, @Body SaveClaimTrail saveClaimTrail);
+
+    @POST("updateClaimStatus")
+    Call<Info> updateClaimStatus(@Header("Authorization") String authHeader, @Query("claimId") int claimId, @Query("status") int status);
+
+    @POST("getClaimApplyListForPending")
+    Call<ArrayList<ClaimApp>> getClaimApplyListForPending(@Header("Authorization") String authHeader, @Query("empId") int empId);
+
+    @POST("getClaimApplyListForInformation")
+    Call<ArrayList<ClaimApp>> getClaimApplyListForInfo(@Header("Authorization") String authHeader, @Query("empId") int empId);
 
 
 }
