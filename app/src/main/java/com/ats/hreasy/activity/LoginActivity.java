@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.ats.hreasy.R;
 import com.ats.hreasy.constant.Constants;
+import com.ats.hreasy.fcm.SharedPrefManager;
+import com.ats.hreasy.model.Info;
 import com.ats.hreasy.model.Login;
 import com.ats.hreasy.utils.CommonDialog;
 import com.ats.hreasy.utils.CustomSharedPreference;
@@ -102,7 +104,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
+                                        dialog.dismiss();
                                     }
                                 });
                                 AlertDialog dialog = builder.create();
@@ -115,8 +117,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 String json = gson.toJson(data);
                                 CustomSharedPreference.putString(LoginActivity.this, CustomSharedPreference.KEY_USER, json);
 
-                                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                                finish();
+                                String token = SharedPrefManager.getmInstance(LoginActivity.this).getDeviceToken();
+                                Log.e("Token : ", "----*********************-----" + token);
+
+                                updateToken(data.getEmpId(), token);
+
+//                                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+//                                finish();
                             }
                         } else {
                             commonDialog.dismiss();
@@ -159,7 +166,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void onFailure(Call<Login> call, Throwable t) {
                     commonDialog.dismiss();
-                   // Toast.makeText(LoginActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(LoginActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
                     Log.e("onFailure : ", "-----------" + t.getMessage());
                     t.printStackTrace();
 
@@ -181,4 +188,70 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+
+    private void updateToken(int empId, String token) {
+        if (Constants.isOnline(this)) {
+            final CommonDialog commonDialog = new CommonDialog(this, "Loading", "Please Wait...");
+            commonDialog.show();
+
+            String base = Constants.userName + ":" + Constants.password;
+            String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
+
+            Call<Info> listCall = Constants.myInterface.updateUserToken(authHeader, empId, token);
+            listCall.enqueue(new Callback<Info>() {
+                @Override
+                public void onResponse(Call<Info> call, Response<Info> response) {
+                    try {
+                        if (response.body() != null) {
+
+                            Log.e("INFO Data : ", "------------" + response.body());
+
+                            Info data = response.body();
+                            if (data.getError()) {
+                                commonDialog.dismiss();
+                                //Toast.makeText(LoginActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
+
+                                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                                finish();
+                            } else {
+
+                                commonDialog.dismiss();
+
+                                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                                finish();
+                            }
+                        } else {
+                            commonDialog.dismiss();
+                            //Toast.makeText(LoginActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
+                            Log.e("Data Null : ", "-----------");
+
+                            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                            finish();
+                        }
+                    } catch (Exception e) {
+                        commonDialog.dismiss();
+                        //Toast.makeText(LoginActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
+                        Log.e("Exception : ", "-----------" + e.getMessage());
+                        e.printStackTrace();
+
+                        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Info> call, Throwable t) {
+                    commonDialog.dismiss();
+                    // Toast.makeText(LoginActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
+                    Log.e("onFailure : ", "-----------" + t.getMessage());
+                    t.printStackTrace();
+
+                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    finish();
+                }
+            });
+        } else {
+            Toast.makeText(this, "No Internet Connection !", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

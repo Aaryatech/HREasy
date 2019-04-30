@@ -55,8 +55,8 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
 
         myViewHolder.tv_empName.setText(model.getEmpFname() + " " + model.getEmpMname() + " " + model.getEmpSname());
         myViewHolder.tv_empMob.setText("" + model.getEmpMobile1());
-        String imageUri = String.valueOf(model.getEmpPhoto());
 
+        String imageUri = String.valueOf(model.getEmpPhoto());
         try {
             Picasso.with(context).load(Constants.IMAGE_URL + "" + imageUri).placeholder(context.getResources().getDrawable(R.drawable.profile)).into(myViewHolder.imageView_emp);
 

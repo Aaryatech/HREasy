@@ -13,6 +13,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
@@ -41,6 +43,7 @@ import com.ats.hreasy.model.BalanceLeaveTemp;
 import com.ats.hreasy.model.CurrentYearModel;
 import com.ats.hreasy.model.Info;
 import com.ats.hreasy.model.LeaveApply;
+import com.ats.hreasy.model.LeaveWeeklyOffCount;
 import com.ats.hreasy.model.Login;
 import com.ats.hreasy.model.SaveLeaveTrail;
 import com.ats.hreasy.utils.CommonDialog;
@@ -65,7 +68,7 @@ import static com.ats.hreasy.fragment.LeaveFragment.staticEmpModel;
 public class AddLeaveFragment extends Fragment implements View.OnClickListener, AddLeaveInterface {
 
     public Spinner spType;
-    private EditText edFromDate, edToDate, edDays, edRemark;
+    private EditText edFromDate, edToDate, edDays, edRemark, edWeeklyOff;
     private TextView tvFromDate, tvToDate, tvViewBalnceLeave, tvEmpName, tvEmpDesg;
     private CircleImageView ivPhoto;
     private Button btn_apply;
@@ -77,6 +80,8 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
     String selectedtext;
     CurrentYearModel currentYearModel;
     Login loginUser;
+
+    LeaveWeeklyOffCount leaveWeeklyOffCount;
 
     ArrayList<BalanceLeaveModel> balanceLeaveList = new ArrayList<>();
     ArrayList<String> leaveTypeNameArray = new ArrayList<>();
@@ -100,6 +105,7 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
         tvViewBalnceLeave = view.findViewById(R.id.tv_balanceLeave);
         edDays = view.findViewById(R.id.edTotalDays);
         edRemark = view.findViewById(R.id.edRemark);
+        edWeeklyOff = view.findViewById(R.id.edWeeklyOff);
 
         btn_apply = view.findViewById(R.id.btn_apply);
 
@@ -155,6 +161,27 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        edToDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String from=tvFromDate.getText().toString().trim();
+                String to=tvToDate.getText().toString().trim();
+
+                getLeaveCountByEmp(staticEmpModel.getEmpId(),from,to);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+
+            }
+        });
 
 
         return view;
@@ -264,7 +291,7 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
                 TextView viewType = (TextView) spType.getSelectedView();
                 viewType.setError("required");
 
-            } else if (leaveTypeBalArray.get(spType.getSelectedItemPosition()) < (int)days) {
+            } else if (leaveTypeBalArray.get(spType.getSelectedItemPosition()) < (int) days) {
                 TextView viewType = (TextView) spType.getSelectedView();
                 viewType.setError(null);
 
@@ -953,6 +980,59 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
 
                 @Override
                 public void onFailure(Call<ArrayList<BalanceLeaveModel>> call, Throwable t) {
+                    commonDialog.dismiss();
+                    Log.e("onFailure : ", "-----------" + t.getMessage());
+                    t.printStackTrace();
+
+                }
+            });
+        } else {
+            Toast.makeText(getContext(), "No Internet Connection !", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    private void getLeaveCountByEmp(Integer empId, String fromDate, String toDate) {
+        Log.e("PARAMETERS : ", "        EMP ID : " + empId + "           FROM DATE : " + fromDate + "             TO DATE : " + toDate);
+
+        String base = Constants.userName + ":" + Constants.password;
+        String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
+
+        if (Constants.isOnline(getContext())) {
+            final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
+            commonDialog.show();
+
+            Call<LeaveWeeklyOffCount> listCall = Constants.myInterface.getLeaveCountByEmp(authHeader, empId, fromDate, toDate);
+            listCall.enqueue(new Callback<LeaveWeeklyOffCount>() {
+                @Override
+                public void onResponse(Call<LeaveWeeklyOffCount> call, Response<LeaveWeeklyOffCount> response) {
+                    try {
+                        if (response.body() != null) {
+
+                            Log.e("LEAVE COUNT LIST : ", " - " + response.body());
+
+                            leaveWeeklyOffCount = response.body();
+
+                            edDays.setText("" + leaveWeeklyOffCount.getLeavecount());
+                            edWeeklyOff.setText("" + leaveWeeklyOffCount.getHolidaycount());
+
+                            commonDialog.dismiss();
+
+                        } else {
+                            commonDialog.dismiss();
+                            Log.e("Data Null : ", "-----------");
+
+                        }
+                    } catch (Exception e) {
+                        commonDialog.dismiss();
+                        Log.e("Exception : ", "-----------" + e.getMessage());
+                        e.printStackTrace();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LeaveWeeklyOffCount> call, Throwable t) {
                     commonDialog.dismiss();
                     Log.e("onFailure : ", "-----------" + t.getMessage());
                     t.printStackTrace();

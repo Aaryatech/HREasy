@@ -100,7 +100,14 @@ public class NotificationActivity extends AppCompatActivity {
 
         notificationList1.clear();
         notificationList1 = db.getAllNotification();
-        adapter.notifyDataSetChanged();
+        Log.e("NOTIFICATION","-----------------------------notification---------------"+notificationList1);
+
+        adapter = new NotificationAdapter(notificationList1, this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+
 
         Log.e("NOTIFICATION ACT","------------------- ON_RESUME");
 

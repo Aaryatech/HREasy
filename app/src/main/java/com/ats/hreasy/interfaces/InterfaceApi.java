@@ -15,6 +15,7 @@ import com.ats.hreasy.model.Info;
 import com.ats.hreasy.model.LeaveApp;
 import com.ats.hreasy.model.LeaveApply;
 import com.ats.hreasy.model.LeaveEmployeeModel;
+import com.ats.hreasy.model.LeaveWeeklyOffCount;
 import com.ats.hreasy.model.Login;
 import com.ats.hreasy.model.MyLeaveData;
 import com.ats.hreasy.model.MyLeaveTrailData;
@@ -132,5 +133,10 @@ public interface InterfaceApi {
     @POST("getClaimProofByClaimId")
     Call<ArrayList<ClaimProofList>> getClaimProofList(@Header("Authorization") String authHeader, @Query("claimId") int claimId);
 
+    @POST("updateToken")
+    Call<Info> updateUserToken(@Header("Authorization") String authHeader, @Query("empId") int empId, @Query("token") String token);
+
+    @POST("calculateHolidayBetweenDate")
+    Call<LeaveWeeklyOffCount> getLeaveCountByEmp(@Header("Authorization") String authHeader, @Query("empId") int empId, @Query("fromDate") String fromDate, @Query("toDate") String toDate);
 
 }

@@ -194,7 +194,27 @@
                 android:layout_height="wrap_content"
                 android:editable="false"
                 android:fontFamily="@font/sofiapro_light"
-                android:hint="Total Days"
+                android:hint="No of days"
+                android:inputType="none"
+                android:maxLines="1"
+                android:padding="15dp"
+                android:singleLine="true" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp">
+
+            <EditText
+                android:id="@+id/edWeeklyOff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:fontFamily="@font/sofiapro_light"
+                android:hint="Excluding weekly off*"
                 android:inputType="none"
                 android:maxLines="1"
                 android:padding="15dp"

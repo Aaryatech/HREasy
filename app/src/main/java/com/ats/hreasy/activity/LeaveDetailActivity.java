@@ -79,22 +79,22 @@ public class LeaveDetailActivity extends AppCompatActivity {
 
             if (leaveHistory.getExInt1() == 1) {
                 tvStatus.setText("Initial Pending");
-
+                tvStatus.setTextColor(this.getResources().getColor(R.color.colorPrimaryDark));
             } else if (leaveHistory.getExInt1() == 2) {
                 tvStatus.setText("Final Pending");
-
+                tvStatus.setTextColor(this.getResources().getColor(R.color.colorPrimaryDark));
             } else if (leaveHistory.getExInt1() == 3) {
                 tvStatus.setText("Final Approved");
-
+                tvStatus.setTextColor(this.getResources().getColor(R.color.colorApproved));
             } else if (leaveHistory.getExInt1() == 8) {
                 tvStatus.setText("Initial Rejected");
-
+                tvStatus.setTextColor(this.getResources().getColor(R.color.colorRejected));
             } else if (leaveHistory.getExInt1() == 9) {
                 tvStatus.setText("Final Rejected");
-
+                tvStatus.setTextColor(this.getResources().getColor(R.color.colorRejected));
             } else if (leaveHistory.getExInt1() == 7) {
                 tvStatus.setText("Leave Cancelled");
-
+                tvStatus.setTextColor(this.getResources().getColor(R.color.colorPrimaryDark));
             }
 
             if(leaveHistory.getLeaveDuration().equals("2"))

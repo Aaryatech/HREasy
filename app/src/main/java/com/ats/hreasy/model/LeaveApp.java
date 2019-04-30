@@ -21,6 +21,7 @@ public class LeaveApp {
     private Integer leaveNumDays;
     private String leaveEmpReason;
     private String circulatedTo;
+    private String empPhoto;
 
     public Integer getLeaveId() {
         return leaveId;
@@ -158,6 +159,14 @@ public class LeaveApp {
         this.circulatedTo = circulatedTo;
     }
 
+    public String getEmpPhoto() {
+        return empPhoto;
+    }
+
+    public void setEmpPhoto(String empPhoto) {
+        this.empPhoto = empPhoto;
+    }
+
     @Override
     public String toString() {
         return "LeaveApp{" +
@@ -178,6 +187,7 @@ public class LeaveApp {
                 ", leaveNumDays=" + leaveNumDays +
                 ", leaveEmpReason='" + leaveEmpReason + '\'' +
                 ", circulatedTo='" + circulatedTo + '\'' +
+                ", empPhoto='" + empPhoto + '\'' +
                 '}';
     }
 }

@@ -73,7 +73,7 @@ public class LeaveApprovalPendingAdapter extends RecyclerView.Adapter<LeaveAppro
         holder.tvType.setText(model.getLeaveTitle());
         holder.tvDay.setText(model.getLeaveNumDays() + " days");
 
-        String imageUri = String.valueOf(model.getEmpId());
+        String imageUri = String.valueOf(model.getEmpPhoto());
         try {
             Picasso.with(context).load(Constants.IMAGE_URL + "" + imageUri).placeholder(context.getResources().getDrawable(R.drawable.profile)).into(holder.ivPhoto);
 

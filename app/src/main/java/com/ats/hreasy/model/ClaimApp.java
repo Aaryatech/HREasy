@@ -17,6 +17,7 @@ public class ClaimApp {
     private Integer exInt1;
     private Integer caIniAuthEmpId;
     private Integer caFinAuthEmpId;
+    private String empPhoto;
 
 
     public Integer getClaimId() {
@@ -139,6 +140,14 @@ public class ClaimApp {
         this.caFinAuthEmpId = caFinAuthEmpId;
     }
 
+    public String getEmpPhoto() {
+        return empPhoto;
+    }
+
+    public void setEmpPhoto(String empPhoto) {
+        this.empPhoto = empPhoto;
+    }
+
     @Override
     public String toString() {
         return "ClaimApp{" +
@@ -157,6 +166,7 @@ public class ClaimApp {
                 ", exInt1=" + exInt1 +
                 ", caIniAuthEmpId=" + caIniAuthEmpId +
                 ", caFinAuthEmpId=" + caFinAuthEmpId +
+                ", empPhoto='" + empPhoto + '\'' +
                 '}';
     }
 }

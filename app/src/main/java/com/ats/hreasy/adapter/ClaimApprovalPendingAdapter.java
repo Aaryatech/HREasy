@@ -80,7 +80,7 @@ public class ClaimApprovalPendingAdapter extends RecyclerView.Adapter<ClaimAppro
         holder.tvProject.setText(model.getProjectTitle());
         holder.tvAmount.setText("" + model.getClaimAmount() + "/-");
 
-        String imageUri = String.valueOf(model.getEmpId());
+        String imageUri = String.valueOf(model.getEmpPhoto());
         try {
             Picasso.with(context).load(Constants.IMAGE_URL + "" + imageUri).placeholder(context.getResources().getDrawable(R.drawable.profile)).into(holder.ivPhoto);
 
