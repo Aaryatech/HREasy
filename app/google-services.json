@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "916108756537",
+    "firebase_url": "https://hreasy-1fdf3.firebaseio.com",
+    "project_id": "hreasy-1fdf3",
+    "storage_bucket": "hreasy-1fdf3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:916108756537:android:eeb6c256d6b59eb7",
+        "android_client_info": {
+          "package_name": "com.ats.hreasy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "916108756537-hi4in4bitbgd9ps906m1gqocobhp1ieb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ats.hreasy",
+            "certificate_hash": "37ec8d8f30b65dc2723d50b8b7da23408690dbb7"
+          }
+        },
+        {
+          "client_id": "916108756537-b2m2sqfmcoqkt8nstt5ap3kecrom801l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOVGphkoJFS4kK8P3OXCH0cJd1sfAlXbo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "916108756537-b2m2sqfmcoqkt8nstt5ap3kecrom801l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
