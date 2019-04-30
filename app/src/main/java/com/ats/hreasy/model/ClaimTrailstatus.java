@@ -16,6 +16,7 @@ public class ClaimTrailstatus {
     private String empSname;
     private String empPhoto;
 
+
     public int getClaimTrailPkey() {
         return claimTrailPkey;
     }
