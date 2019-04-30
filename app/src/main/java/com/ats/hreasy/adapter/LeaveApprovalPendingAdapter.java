@@ -12,10 +12,12 @@ import android.widget.TextView;
 
 import com.ats.hreasy.R;
 import com.ats.hreasy.activity.HomeActivity;
+import com.ats.hreasy.constant.Constants;
 import com.ats.hreasy.fragment.UpdateLeaveInfoFragment;
 import com.ats.hreasy.fragment.UpdateLeaveStatusFragment;
 import com.ats.hreasy.model.LeaveApp;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -70,6 +72,14 @@ public class LeaveApprovalPendingAdapter extends RecyclerView.Adapter<LeaveAppro
         holder.tvDate.setText(model.getLeaveFromdt() + " to " + model.getLeaveTodt());
         holder.tvType.setText(model.getLeaveTitle());
         holder.tvDay.setText(model.getLeaveNumDays() + " days");
+
+        String imageUri = String.valueOf(model.getEmpId());
+        try {
+            Picasso.with(context).load(Constants.IMAGE_URL + "" + imageUri).placeholder(context.getResources().getDrawable(R.drawable.profile)).into(holder.ivPhoto);
+
+        } catch (Exception e) {
+
+        }
 
         if (model.getLeaveDuration().equals("1")) {
             holder.tvDayType.setText("Half Day");

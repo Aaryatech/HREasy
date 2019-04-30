@@ -171,10 +171,16 @@
                 android:fontFamily="@font/sofiapro_bold"
                 android:text="Attachment" />
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvAttachment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/ivPhoto1"

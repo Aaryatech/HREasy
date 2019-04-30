@@ -35,7 +35,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     Login loginUser;
 
     private CardView cvLeaveAppPend, cvClaimAppPend, cvMyLeavePend, cvMyClaimPend;
-    private TextView tvLeaveAppPendingCount, tvLeavependingCount;
+    private TextView tvLeaveAppPendingCount, tvLeavependingCount, tvHome_claimAppPendingCount, tvHome_claimPendingCount;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,6 +59,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         cvMyClaimPend = view.findViewById(R.id.cvMyClaimPend);
         tvLeaveAppPendingCount = view.findViewById(R.id.tvHome_leaveAppPendingCount);
         tvLeavependingCount = view.findViewById(R.id.tvHome_leavePendingCount);
+
+        tvHome_claimAppPendingCount = view.findViewById(R.id.tvHome_claimAppPendingCount);
+        tvHome_claimPendingCount = view.findViewById(R.id.tvHome_claimPendingCount);
 
         String userStr = CustomSharedPreference.getString(getActivity(), CustomSharedPreference.KEY_USER);
         Gson gson = new Gson();
@@ -147,19 +150,29 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         if (response.body() != null) {
 
                             Log.e("Dashboard Count : ", "------------" + response.body());
+                            commonDialog.dismiss();
 
                             DashboardCount data = response.body();
                             tvLeaveAppPendingCount.setText("" + data.getPendingRequest() + "/" + data.getInfo());
                             tvLeavependingCount.setText("" + data.getMyLeave());
 
+                            tvHome_claimAppPendingCount.setText("" + data.getPendingClaim() + "/" + data.getInfoClaim());
+                            tvHome_claimPendingCount.setText("" + data.getMyClaim());
+
                             if (data.getIsAuthorized() == 1) {
-                                cvClaimAppPend.setVisibility(View.VISIBLE);
                                 cvLeaveAppPend.setVisibility(View.VISIBLE);
                             } else {
-                                cvClaimAppPend.setVisibility(View.GONE);
                                 cvLeaveAppPend.setVisibility(View.GONE);
                             }
-                            commonDialog.dismiss();
+
+                            if (data.getIsAuthorizedClaim() == 1) {
+                                cvClaimAppPend.setVisibility(View.VISIBLE);
+                            } else {
+                                cvClaimAppPend.setVisibility(View.GONE);
+                            }
+
+
+
                         } else {
                             commonDialog.dismiss();
                             Log.e("Data Null : ", "-----------");

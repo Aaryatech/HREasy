@@ -549,12 +549,27 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
 
                                // Toast.makeText(getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
 
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                                builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                                builder.setMessage("Success");
 
-                                if (leaveModelList.size() > 0) {
-                                    leaveModelList.remove(0);
-                                    setData();
-                                    edRemark.setText("");
-                                }
+                                builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        if (leaveModelList.size() > 0) {
+                                            leaveModelList.remove(0);
+                                            setData();
+                                            edRemark.setText("");
+                                        }
+
+                                        dialog.dismiss();
+                                    }
+                                });
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+
+
 
 
                             } else {

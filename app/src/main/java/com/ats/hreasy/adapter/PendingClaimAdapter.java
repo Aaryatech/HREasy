@@ -13,16 +13,17 @@ import android.widget.TextView;
 
 import com.ats.hreasy.R;
 import com.ats.hreasy.activity.ClaimHistoryActivity;
+import com.ats.hreasy.model.ClaimHistoryModel;
 import com.ats.hreasy.model.ClaimHistoryTemp;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
 public class PendingClaimAdapter extends RecyclerView.Adapter<PendingClaimAdapter.MyViewHolder> {
-    private ArrayList<ClaimHistoryTemp> pendingClaimList;
+    private ArrayList<ClaimHistoryModel> pendingClaimList;
     private Context context;
 
-    public PendingClaimAdapter(ArrayList<ClaimHistoryTemp> pendingClaimList, Context context) {
+    public PendingClaimAdapter(ArrayList<ClaimHistoryModel> pendingClaimList, Context context) {
         this.pendingClaimList = pendingClaimList;
         this.context = context;
     }
@@ -38,12 +39,34 @@ public class PendingClaimAdapter extends RecyclerView.Adapter<PendingClaimAdapte
 
     @Override
     public void onBindViewHolder(@NonNull PendingClaimAdapter.MyViewHolder myViewHolder, int i) {
-        final ClaimHistoryTemp model = pendingClaimList.get(i);
-        myViewHolder.tvDate.setText(model.getDate());
-        myViewHolder.tvClaimType.setText(model.getLeaveType());
-        myViewHolder.tvProject.setText(model.getProjectType());
-        myViewHolder.tvStatus.setText(model.getStatus());
-        myViewHolder.tvAmount.setText("" + model.getAmt() + "/-");
+        final ClaimHistoryModel model = pendingClaimList.get(i);
+        myViewHolder.tvDate.setText(model.getClaimDate());
+        myViewHolder.tvClaimType.setText(model.getClaimTypeTitle());
+        myViewHolder.tvProject.setText(model.getProjectTypeTitle());
+        myViewHolder.tvAmount.setText("" + model.getClaimAmount() + "/-");
+
+
+        if (model.getExInt1() == 1) {
+            myViewHolder.tvStatus.setText("Initial Pending");
+            myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+        } else if (model.getExInt1() == 2) {
+            myViewHolder.tvStatus.setText("Final Pending");
+            myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+        } else if (model.getExInt1() == 3) {
+            myViewHolder.tvStatus.setText("Final Approved");
+            myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorApproved));
+        } else if (model.getExInt1() == 8) {
+            myViewHolder.tvStatus.setText("Initial Rejected");
+            myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorRejected));
+        } else if (model.getExInt1() == 9) {
+            myViewHolder.tvStatus.setText("Final Rejected");
+            myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorRejected));
+        } else if (model.getExInt1() == 7) {
+            myViewHolder.tvStatus.setText("Leave Cancelled");
+            myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+        }
+
+
 
         myViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override

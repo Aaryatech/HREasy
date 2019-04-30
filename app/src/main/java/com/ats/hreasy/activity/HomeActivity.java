@@ -21,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ats.hreasy.R;
+import com.ats.hreasy.constant.Constants;
+import com.ats.hreasy.fcm.SharedPrefManager;
 import com.ats.hreasy.fragment.ClaimApprovalPendingFragment;
 import com.ats.hreasy.fragment.ClaimFragment;
 import com.ats.hreasy.fragment.EmployeeListFragment;
@@ -35,7 +37,9 @@ import com.ats.hreasy.fragment.UpdateLeaveInfoFragment;
 import com.ats.hreasy.fragment.UpdateLeaveStatusFragment;
 import com.ats.hreasy.model.Login;
 import com.ats.hreasy.utils.CustomSharedPreference;
+import com.ats.hreasy.utils.PermissionsUtil;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -51,6 +55,12 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if (PermissionsUtil.checkAndRequestPermissions(this)) {
+        }
+
+        String token = SharedPrefManager.getmInstance(HomeActivity.this).getDeviceToken();
+        Log.e("Token : ", "----*********************-----" + token);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -77,6 +87,14 @@ public class HomeActivity extends AppCompatActivity
         if (loginUser != null) {
             tvNavHeadName.setText("" + loginUser.getEmpFname() + " " + loginUser.getEmpMname() + " " + loginUser.getEmpSname());
             tvNavHeadDesg.setText("" + loginUser.getEmpDeptName());
+
+            try {
+                Picasso.with(HomeActivity.this).load(Constants.IMAGE_URL+""+loginUser.getEmpPhoto()).placeholder(getResources().getDrawable(R.drawable.profile)).into(ivNavHeadPhoto);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
 
         if (loginUser == null) {

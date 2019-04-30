@@ -5,35 +5,15 @@ import com.google.gson.annotations.SerializedName;
 
 public class ClaimTrailstatus {
 
-    @SerializedName("claimTrailPkey")
-    @Expose
     private int claimTrailPkey;
-    @SerializedName("claimId")
-    @Expose
     private int claimId;
-    @SerializedName("empId")
-    @Expose
     private int empId;
-    @SerializedName("empRemarks")
-    @Expose
     private String empRemarks;
-    @SerializedName("claimStatus")
-    @Expose
     private int claimStatus;
-    @SerializedName("makerEnterDatetime")
-    @Expose
     private String makerEnterDatetime;
-    @SerializedName("empFname")
-    @Expose
     private String empFname;
-    @SerializedName("empMname")
-    @Expose
     private String empMname;
-    @SerializedName("empSname")
-    @Expose
     private String empSname;
-    @SerializedName("empPhoto")
-    @Expose
     private String empPhoto;
 
     public int getClaimTrailPkey() {

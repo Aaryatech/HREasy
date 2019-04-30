@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
@@ -20,8 +22,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ats.hreasy.R;
+import com.ats.hreasy.adapter.ClaimAttachmentAdapter;
+import com.ats.hreasy.adapter.ClaimTrailAdapter;
 import com.ats.hreasy.constant.Constants;
 import com.ats.hreasy.model.ClaimApp;
+import com.ats.hreasy.model.ClaimProofList;
+import com.ats.hreasy.model.ClaimTrailstatus;
 import com.ats.hreasy.model.Info;
 import com.ats.hreasy.model.LeaveApp;
 import com.ats.hreasy.model.Login;
@@ -47,7 +53,7 @@ public class UpdateClaimInfoFragment extends Fragment implements View.OnClickLis
     private EditText edRemark;
     private LinearLayout llAction;
 
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerView,rvAttachment;
 
     ClaimApp claimModel;
 
@@ -78,6 +84,7 @@ public class UpdateClaimInfoFragment extends Fragment implements View.OnClickLis
         btnReject.setOnClickListener(this);
 
         recyclerView = view.findViewById(R.id.recyclerView);
+        rvAttachment = view.findViewById(R.id.rvAttachment);
 
 
         ivPhoto1 = view.findViewById(R.id.ivPhoto1);
@@ -131,7 +138,9 @@ public class UpdateClaimInfoFragment extends Fragment implements View.OnClickLis
                 tvAmount.setText("" + claimModel.getClaimAmount() + "/-");
                 tvRemark.setText("" + claimModel.getClaimRemarks());
 
-                // getLeaveTrail(claimModel.getLeaveId());
+                 getClaimTrail(claimModel.getClaimId());
+                 getClaimProofList(claimModel.getClaimId());
+
                 Log.e("STATUS", "---------*********************------------------1111--------------------- " + claimModel.getExInt1());
 
                 Log.e("STATUS", "---------*********************-------------------22222-------------------- " + claimModel.getExInt1());
@@ -291,6 +300,112 @@ public class UpdateClaimInfoFragment extends Fragment implements View.OnClickLis
 
             }
 
+        }
+    }
+
+    private void getClaimTrail(final Integer claimId) {
+
+        String base = Constants.userName + ":" + Constants.password;
+        String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
+
+        if (Constants.isOnline(getContext())) {
+            final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
+            commonDialog.show();
+
+            Call<ArrayList<ClaimTrailstatus>> listCall = Constants.myInterface.getClaimTrail(authHeader, claimId);
+            listCall.enqueue(new Callback<ArrayList<ClaimTrailstatus>>() {
+                @Override
+                public void onResponse(Call<ArrayList<ClaimTrailstatus>> call, Response<ArrayList<ClaimTrailstatus>> response) {
+                    try {
+                        if (response.body() != null) {
+
+                            Log.e("CLAIM TRAIL DATA : ", " - " + response.body());
+
+                            ClaimTrailAdapter adapter = new ClaimTrailAdapter(response.body(), getContext());
+                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+                            recyclerView.setLayoutManager(mLayoutManager);
+                            recyclerView.setItemAnimator(new DefaultItemAnimator());
+                            recyclerView.setAdapter(adapter);
+
+                            commonDialog.dismiss();
+
+                        } else {
+                            commonDialog.dismiss();
+                            Log.e("Data Null : ", "-----------");
+
+                        }
+                    } catch (Exception e) {
+                        commonDialog.dismiss();
+                        Log.e("Exception : ", "-----------" + e.getMessage());
+                        e.printStackTrace();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ArrayList<ClaimTrailstatus>> call, Throwable t) {
+                    commonDialog.dismiss();
+                    Log.e("onFailure : ", "-----------" + t.getMessage());
+                    t.printStackTrace();
+
+                }
+            });
+        } else {
+            Toast.makeText(getContext(), "No Internet Connection !", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void getClaimProofList(final Integer claimId) {
+
+        String base = Constants.userName + ":" + Constants.password;
+        String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
+
+        if (Constants.isOnline(getContext())) {
+            final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
+            commonDialog.show();
+
+            Call<ArrayList<ClaimProofList>> listCall = Constants.myInterface.getClaimProofList(authHeader, claimId);
+            listCall.enqueue(new Callback<ArrayList<ClaimProofList>>() {
+                @Override
+                public void onResponse(Call<ArrayList<ClaimProofList>> call, Response<ArrayList<ClaimProofList>> response) {
+                    try {
+                        if (response.body() != null) {
+
+                            Log.e("CLAIM PROOF DATA : ", " - " + response.body());
+
+                            ClaimAttachmentAdapter adapter = new ClaimAttachmentAdapter(response.body(), getContext());
+//                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(ClaimHistoryActivity.this);
+//                            recyclerView.setLayoutManager(mLayoutManager);
+//                            recyclerView.setItemAnimator(new DefaultItemAnimator());
+//                            recyclerView.setAdapter(adapter);
+                            rvAttachment.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+                            rvAttachment.setAdapter(adapter);
+
+                            commonDialog.dismiss();
+
+                        } else {
+                            commonDialog.dismiss();
+                            Log.e("Data Null : ", "-----------");
+
+                        }
+                    } catch (Exception e) {
+                        commonDialog.dismiss();
+                        Log.e("Exception : ", "-----------" + e.getMessage());
+                        e.printStackTrace();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ArrayList<ClaimProofList>> call, Throwable t) {
+                    commonDialog.dismiss();
+                    Log.e("onFailure : ", "-----------" + t.getMessage());
+                    t.printStackTrace();
+
+                }
+            });
+        } else {
+            Toast.makeText(getContext(), "No Internet Connection !", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -493,14 +608,27 @@ public class UpdateClaimInfoFragment extends Fragment implements View.OnClickLis
 
                             if (!response.body().getError()) {
 
-                                Toast.makeText(getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
+                               // Toast.makeText(getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
 
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+                                builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
+                                builder.setMessage("Success");
 
-                                if (claimModelList.size() > 0) {
-                                    claimModelList.remove(0);
-                                    setData();
-                                    edRemark.setText("");
-                                }
+                                builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        if (claimModelList.size() > 0) {
+                                            claimModelList.remove(0);
+                                            setData();
+                                            edRemark.setText("");
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                });
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+
 
 
                             } else {

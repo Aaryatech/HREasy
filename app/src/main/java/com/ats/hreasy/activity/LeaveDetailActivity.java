@@ -10,19 +10,27 @@ import android.widget.TextView;
 
 import com.ats.hreasy.R;
 import com.ats.hreasy.adapter.LeaveTrailListAdapter;
+import com.ats.hreasy.constant.Constants;
 import com.ats.hreasy.model.Login;
 import com.ats.hreasy.model.MyLeaveData;
 import com.ats.hreasy.model.MyLeaveTrailData;
 import com.ats.hreasy.utils.CustomSharedPreference;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.ats.hreasy.fragment.ClaimFragment.staticEmpClaimModel;
 
 public class LeaveDetailActivity extends AppCompatActivity {
     MyLeaveData leaveHistory;
     public TextView tvLeaveType, tvDayesType, tvDayes, tvDate, tvStatus, tvEmpRemark,tvEmpName,tvEmpDesignation;
     private RecyclerView recyclerView;
     Login loginUser;
+    CircleImageView ivPhoto;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +51,8 @@ public class LeaveDetailActivity extends AppCompatActivity {
         tvEmpDesignation = (TextView) findViewById(R.id.tvEmpDesg);
         recyclerView = findViewById(R.id.recyclerView);
 
+        ivPhoto = findViewById(R.id.ivPhoto);
+
         String userStr = CustomSharedPreference.getString(getApplicationContext(), CustomSharedPreference.KEY_USER);
         Gson gson = new Gson();
         loginUser = gson.fromJson(userStr, Login.class);
@@ -58,6 +68,14 @@ public class LeaveDetailActivity extends AppCompatActivity {
             tvDayes.setText(leaveHistory.getLeaveNumDays()+ " days");
             tvDate.setText(leaveHistory.getLeaveFromdt() + " to " + leaveHistory.getLeaveTodt());
             tvEmpRemark.setText(leaveHistory.getLeaveEmpReason());
+
+            String imageUri = String.valueOf(leaveHistory.getEmpPhoto());
+            try {
+                Picasso.with(getApplicationContext()).load(Constants.IMAGE_URL+""+imageUri).placeholder(getApplicationContext().getResources().getDrawable(R.drawable.profile)).into(ivPhoto);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             if (leaveHistory.getExInt1() == 1) {
                 tvStatus.setText("Initial Pending");

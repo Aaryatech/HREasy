@@ -285,7 +285,7 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
 
             } else {
 
-                final LeaveApply leaveApply = new LeaveApply(0, currentYearModel.getCalYrId(), staticEmpModel.getEmpId(), leaveType, dayType, DateFrom, DateTo, days, strRemark, 1, "", 1, 1, 1, currDate, 1, 0, 0, "", "", "");
+                final LeaveApply leaveApply = new LeaveApply(0, currentYearModel.getCalYrId(), staticEmpModel.getEmpId(), leaveType, dayType, DateFrom, DateTo, days, strRemark, 1, "", 1, 1, loginUser.getUserId(), currDate, 1, 0, 0, "", "", "");
 
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);

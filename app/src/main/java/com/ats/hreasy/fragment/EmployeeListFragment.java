@@ -107,12 +107,26 @@ public class EmployeeListFragment extends Fragment {
                         if (response.body() != null) {
 
                             Log.e("Employee List Leave : ", "------------" + response.body());
+
                             empList.clear();
-                            empList = response.body();
+                            // empList = response.body();
 
                             LeaveEmployeeModel leaveEmployeeModel = new LeaveEmployeeModel(loginUser.getEmpId(), loginUser.getEmpCode(), loginUser.getCompanyId(), loginUser.getEmpCatId(), loginUser.getEmpTypeId(), loginUser.getEmpDeptId(), loginUser.getLocId(), loginUser.getEmpFname(), loginUser.getEmpMname(), loginUser.getEmpSname(), loginUser.getEmpPhoto(), loginUser.getEmpMobile1(), loginUser.getEmpMobile2(), loginUser.getEmpEmail(), loginUser.getEmpAddressTemp(), loginUser.getEmpAddressPerm(), loginUser.getEmpBloodgrp(), loginUser.getEmpEmergencyPerson1(), loginUser.getEmpEmergencyNo1(), loginUser.getEmpEmergencyPerson2(), loginUser.getEmpEmergencyNo2(), loginUser.getEmpRatePerhr(), loginUser.getEmpJoiningDate(), loginUser.getEmpPrevExpYrs(), loginUser.getEmpPrevExpMonths(), loginUser.getEmpLeavingDate(), loginUser.getEmpLeavingReason(), loginUser.getDelStatus(), loginUser.getIsActive(), loginUser.getMakerUserId(), loginUser.getMakerEnterDatetime(), loginUser.getExInt1(), loginUser.getExInt2(), loginUser.getExInt3(), loginUser.getExVar1(), loginUser.getExVar2(), loginUser.getExVar3());
                             empList.add(0, leaveEmployeeModel);
+
+                            if (response.body().size() > 0) {
+                                for (int i = 0; i < response.body().size(); i++) {
+
+                                    if (response.body().get(i).getEmpId() != loginUser.getEmpId()) {
+                                        empList.add(response.body().get(i));
+                                    }
+
+                                }
+                            }
+
+
                             Log.e("Employee List Model : ", "****************" + response.body());
+
                             mAdapter = new EmployeeListAdapter(empList, getActivity(), type);
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                             recyclerView.setLayoutManager(mLayoutManager);
@@ -163,39 +177,22 @@ public class EmployeeListFragment extends Fragment {
 
                             Log.e("Employee List Claim: ", "------------" + response.body());
                             empList.clear();
-                            empList = response.body();
+                           // empList = response.body();
 
                             LeaveEmployeeModel leaveEmployeeModel = new LeaveEmployeeModel(loginUser.getEmpId(), loginUser.getEmpCode(), loginUser.getCompanyId(), loginUser.getEmpCatId(), loginUser.getEmpTypeId(), loginUser.getEmpDeptId(), loginUser.getLocId(), loginUser.getEmpFname(), loginUser.getEmpMname(), loginUser.getEmpSname(), loginUser.getEmpPhoto(), loginUser.getEmpMobile1(), loginUser.getEmpMobile2(), loginUser.getEmpEmail(), loginUser.getEmpAddressTemp(), loginUser.getEmpAddressPerm(), loginUser.getEmpBloodgrp(), loginUser.getEmpEmergencyPerson1(), loginUser.getEmpEmergencyNo1(), loginUser.getEmpEmergencyPerson2(), loginUser.getEmpEmergencyNo2(), loginUser.getEmpRatePerhr(), loginUser.getEmpJoiningDate(), loginUser.getEmpPrevExpYrs(), loginUser.getEmpPrevExpMonths(), loginUser.getEmpLeavingDate(), loginUser.getEmpLeavingReason(), loginUser.getDelStatus(), loginUser.getIsActive(), loginUser.getMakerUserId(), loginUser.getMakerEnterDatetime(), loginUser.getExInt1(), loginUser.getExInt2(), loginUser.getExInt3(), loginUser.getExVar1(), loginUser.getExVar2(), loginUser.getExVar3());
                             empList.add(0, leaveEmployeeModel);
-                            Log.e("Employee List Model : ", "****************" + response.body());
 
-                            try {
+                            if (response.body().size() > 0) {
+                                for (int i = 0; i < response.body().size(); i++) {
 
-                               /* if (empList != null) {
-                                    if (empList.size() > 0) {
-
-                                        ArrayList<LeaveEmployeeModel> newEmpList = new ArrayList<>();
-
-                                        for (int i = 0; i < empList.size(); i++) {
-
-                                            if (!newEmpList.contains(empList.get(i))) {
-
-                                                newEmpList.add(empList.get(i));
-
-                                            }
-                                        }
-
-                                      empList.clear();
-                                        empList.addAll(newEmpList);
-
+                                    if (response.body().get(i).getEmpId() != loginUser.getEmpId()) {
+                                        empList.add(response.body().get(i));
                                     }
-                                }*/
 
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                                }
                             }
 
+                            Log.e("Employee List Model : ", "****************" + response.body());
 
                             mAdapter = new EmployeeListAdapter(empList, getActivity(), type);
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());

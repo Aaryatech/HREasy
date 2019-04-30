@@ -4,6 +4,11 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Login {
+
+    private Integer userId;
+    private String locationIds;
+    private String userName;
+    private String userPwd;
     private Integer empId;
     private String empCode;
     private Integer companyId;
@@ -41,14 +46,48 @@ public class Login {
     private String exVar1;
     private String exVar2;
     private String exVar3;
-    private Object companyName;
-    private Object empCatName;
-    private Object empTypeName;
-    private Object empTypeAccess;
-    private Object empDeptName;
-    private Object locName;
+    private String companyName;
+    private String empCatName;
+    private String empTypeName;
+    private String empTypeAccess;
+    private String empDeptName;
+    private String locName;
+    private String companyLogo;
     private String msg;
     private Boolean error;
+
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public String getLocationIds() {
+        return locationIds;
+    }
+
+    public void setLocationIds(String locationIds) {
+        this.locationIds = locationIds;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserPwd() {
+        return userPwd;
+    }
+
+    public void setUserPwd(String userPwd) {
+        this.userPwd = userPwd;
+    }
 
     public Integer getEmpId() {
         return empId;
@@ -346,52 +385,60 @@ public class Login {
         this.exVar3 = exVar3;
     }
 
-    public Object getCompanyName() {
+    public String getCompanyName() {
         return companyName;
     }
 
-    public void setCompanyName(Object companyName) {
+    public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
 
-    public Object getEmpCatName() {
+    public String getEmpCatName() {
         return empCatName;
     }
 
-    public void setEmpCatName(Object empCatName) {
+    public void setEmpCatName(String empCatName) {
         this.empCatName = empCatName;
     }
 
-    public Object getEmpTypeName() {
+    public String getEmpTypeName() {
         return empTypeName;
     }
 
-    public void setEmpTypeName(Object empTypeName) {
+    public void setEmpTypeName(String empTypeName) {
         this.empTypeName = empTypeName;
     }
 
-    public Object getEmpTypeAccess() {
+    public String getEmpTypeAccess() {
         return empTypeAccess;
     }
 
-    public void setEmpTypeAccess(Object empTypeAccess) {
+    public void setEmpTypeAccess(String empTypeAccess) {
         this.empTypeAccess = empTypeAccess;
     }
 
-    public Object getEmpDeptName() {
+    public String getEmpDeptName() {
         return empDeptName;
     }
 
-    public void setEmpDeptName(Object empDeptName) {
+    public void setEmpDeptName(String empDeptName) {
         this.empDeptName = empDeptName;
     }
 
-    public Object getLocName() {
+    public String getLocName() {
         return locName;
     }
 
-    public void setLocName(Object locName) {
+    public void setLocName(String locName) {
         this.locName = locName;
+    }
+
+    public String getCompanyLogo() {
+        return companyLogo;
+    }
+
+    public void setCompanyLogo(String companyLogo) {
+        this.companyLogo = companyLogo;
     }
 
     public String getMsg() {
@@ -413,7 +460,11 @@ public class Login {
     @Override
     public String toString() {
         return "Login{" +
-                "empId=" + empId +
+                "userId=" + userId +
+                ", locationIds='" + locationIds + '\'' +
+                ", userName='" + userName + '\'' +
+                ", userPwd='" + userPwd + '\'' +
+                ", empId=" + empId +
                 ", empCode='" + empCode + '\'' +
                 ", companyId=" + companyId +
                 ", empCatId=" + empCatId +
@@ -450,12 +501,13 @@ public class Login {
                 ", exVar1='" + exVar1 + '\'' +
                 ", exVar2='" + exVar2 + '\'' +
                 ", exVar3='" + exVar3 + '\'' +
-                ", companyName=" + companyName +
-                ", empCatName=" + empCatName +
-                ", empTypeName=" + empTypeName +
-                ", empTypeAccess=" + empTypeAccess +
-                ", empDeptName=" + empDeptName +
-                ", locName=" + locName +
+                ", companyName='" + companyName + '\'' +
+                ", empCatName='" + empCatName + '\'' +
+                ", empTypeName='" + empTypeName + '\'' +
+                ", empTypeAccess='" + empTypeAccess + '\'' +
+                ", empDeptName='" + empDeptName + '\'' +
+                ", locName='" + locName + '\'' +
+                ", companyLogo='" + companyLogo + '\'' +
                 ", msg='" + msg + '\'' +
                 ", error=" + error +
                 '}';

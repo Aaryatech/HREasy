@@ -35,7 +35,7 @@ import retrofit2.Response;
 public class ClaimApprovalPendingFragment extends Fragment {
 
     private ViewPager viewPager;
-    private TabLayout tab;
+    public static TabLayout tab;
     FragmentPagerAdapter adapterViewPager;
 
     public static ArrayList<ClaimApp> staticPendingClaim = new ArrayList<>();
@@ -172,8 +172,12 @@ public class ClaimApprovalPendingFragment extends Fragment {
                             staticPendingClaim.clear();
                             staticPendingClaim = response.body();
                             // createQuotationPDF(quotList);
+
                             viewPager.setCurrentItem(1);
                             viewPager.setCurrentItem(0);
+
+                            TabLayout.Tab tab0 = tab.getTabAt(0);
+                            tab0.setText("Pending Task (" + staticPendingClaim.size() + ")");
 
                             //  commonDialog.dismiss();
 
@@ -181,6 +185,9 @@ public class ClaimApprovalPendingFragment extends Fragment {
                         } else {
                             //  commonDialog.dismiss();
                             Log.e("Data Null : ", "-----------");
+
+                            viewPager.setCurrentItem(1);
+                            viewPager.setCurrentItem(0);
 
                         }
 
@@ -191,6 +198,10 @@ public class ClaimApprovalPendingFragment extends Fragment {
                         Log.e("Exception : ", "-----------" + e.getMessage());
                         e.printStackTrace();
                         getClaimInfoList(empId);
+
+                        viewPager.setCurrentItem(1);
+                        viewPager.setCurrentItem(0);
+
                     }
                 }
 
@@ -200,6 +211,10 @@ public class ClaimApprovalPendingFragment extends Fragment {
                     Log.e("onFailure : ", "-----------" + t.getMessage());
                     t.printStackTrace();
                     getClaimInfoList(empId);
+
+                    viewPager.setCurrentItem(1);
+                    viewPager.setCurrentItem(0);
+
                 }
             });
         } else {
@@ -233,16 +248,30 @@ public class ClaimApprovalPendingFragment extends Fragment {
                             staticInfoClaim = response.body();
                             // createQuotationPDF(quotList);
 
+                            TabLayout.Tab tab1 = tab.getTabAt(1);
+                            tab1.setText("Info (" + staticInfoClaim.size() + ")");
+
+                            viewPager.setCurrentItem(1);
+                            viewPager.setCurrentItem(0);
+
                             commonDialog.dismiss();
 
                         } else {
                             commonDialog.dismiss();
                             Log.e("Data Null : ", "-----------");
+
+                            viewPager.setCurrentItem(1);
+                            viewPager.setCurrentItem(0);
+
                         }
                     } catch (Exception e) {
                         commonDialog.dismiss();
                         Log.e("Exception : ", "-----------" + e.getMessage());
                         e.printStackTrace();
+
+                        viewPager.setCurrentItem(1);
+                        viewPager.setCurrentItem(0);
+
                     }
                 }
 
@@ -251,6 +280,10 @@ public class ClaimApprovalPendingFragment extends Fragment {
                     commonDialog.dismiss();
                     Log.e("onFailure : ", "-----------" + t.getMessage());
                     t.printStackTrace();
+
+                    viewPager.setCurrentItem(1);
+                    viewPager.setCurrentItem(0);
+
                 }
             });
         } else {

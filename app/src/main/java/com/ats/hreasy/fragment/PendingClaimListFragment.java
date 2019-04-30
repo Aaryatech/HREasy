@@ -19,6 +19,7 @@ import com.ats.hreasy.R;
 import com.ats.hreasy.adapter.PendingClaimAdapter;
 import com.ats.hreasy.adapter.PendingLeaveAdapter;
 import com.ats.hreasy.constant.Constants;
+import com.ats.hreasy.model.ClaimHistoryModel;
 import com.ats.hreasy.model.ClaimHistoryTemp;
 import com.ats.hreasy.model.Login;
 import com.ats.hreasy.model.MyLeaveData;
@@ -41,6 +42,8 @@ public class PendingClaimListFragment extends Fragment {
     PendingClaimAdapter adapter;
 
     Login loginUser;
+
+    ArrayList<ClaimHistoryModel> claimList=new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,7 +74,10 @@ public class PendingClaimListFragment extends Fragment {
                 e.printStackTrace();
             }
 
+            getClaimList(loginUser.getEmpId());
+
         }
+
 
         /*adapter = new PendingClaimAdapter(claimList, getContext());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
@@ -83,7 +89,7 @@ public class PendingClaimListFragment extends Fragment {
     }
 
 
-    /*private void getClaimList(int empId) {
+    private void getClaimList(int empId) {
         Log.e("PARAMETERS : ", "        EMP ID : " + empId);
 
         ArrayList<Integer> statusList = new ArrayList<>();
@@ -97,23 +103,23 @@ public class PendingClaimListFragment extends Fragment {
             final CommonDialog commonDialog = new CommonDialog(getContext(), "Loading", "Please Wait...");
             commonDialog.show();
 
-            Call<ArrayList<MyLeaveData>> listCall = Constants.myInterface.getLeaveStatusList(authHeader, empId, statusList);
-            listCall.enqueue(new Callback<ArrayList<MyLeaveData>>() {
+            Call<ArrayList<ClaimHistoryModel>> listCall = Constants.myInterface.getClaimStatusList(authHeader, empId, statusList);
+            listCall.enqueue(new Callback<ArrayList<ClaimHistoryModel>>() {
                 @Override
-                public void onResponse(Call<ArrayList<MyLeaveData>> call, Response<ArrayList<MyLeaveData>> response) {
+                public void onResponse(Call<ArrayList<ClaimHistoryModel>> call, Response<ArrayList<ClaimHistoryModel>> response) {
                     try {
                         if (response.body() != null) {
 
                             Log.e("LEAVE LIST : ", " ************* " + response.body());
 
-                            LeaveList.clear();
-                            LeaveList = response.body();
+                            claimList.clear();
+                            claimList = response.body();
 
-                            mAdapter = new PendingLeaveAdapter(LeaveList, getActivity(),getActivity(),loginUser.getEmpId());
-                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+                            adapter = new PendingClaimAdapter(claimList, getContext());
+                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                             recyclerView.setLayoutManager(mLayoutManager);
                             recyclerView.setItemAnimator(new DefaultItemAnimator());
-                            recyclerView.setAdapter(mAdapter);
+                            recyclerView.setAdapter(adapter);
 
 
                             commonDialog.dismiss();
@@ -130,7 +136,7 @@ public class PendingClaimListFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Call<ArrayList<MyLeaveData>> call, Throwable t) {
+                public void onFailure(Call<ArrayList<ClaimHistoryModel>> call, Throwable t) {
                     commonDialog.dismiss();
                     Log.e("onFailure : ", "-----------" + t.getMessage());
                     t.printStackTrace();
@@ -139,7 +145,7 @@ public class PendingClaimListFragment extends Fragment {
         } else {
             Toast.makeText(getContext(), "No Internet Connection !", Toast.LENGTH_SHORT).show();
         }
-    }*/
+    }
 
 
 }

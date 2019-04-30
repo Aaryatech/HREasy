@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.ats.hreasy.R;
 import com.ats.hreasy.activity.HomeActivity;
+import com.ats.hreasy.constant.Constants;
 import com.ats.hreasy.fragment.ClaimFragment;
 import com.ats.hreasy.fragment.LeaveFragment;
 import com.ats.hreasy.model.LeaveEmployeeModel;
@@ -52,15 +53,17 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
     public void onBindViewHolder(@NonNull EmployeeListAdapter.MyViewHolder myViewHolder, int i) {
         final LeaveEmployeeModel model = empList.get(i);
 
-            myViewHolder.tv_empName.setText(model.getEmpFname() + " " +model.getEmpMname() + " " + model.getEmpSname());
-            myViewHolder.tv_empMob.setText("" + model.getEmpMobile1());
-            String imageUri = String.valueOf(model.getEmpPhoto());
-            try {
-                Picasso.with(context).load(imageUri).placeholder(context.getResources().getDrawable(R.drawable.profile)).into(myViewHolder.imageView_emp);
+        myViewHolder.tv_empName.setText(model.getEmpFname() + " " + model.getEmpMname() + " " + model.getEmpSname());
+        myViewHolder.tv_empMob.setText("" + model.getEmpMobile1());
+        String imageUri = String.valueOf(model.getEmpPhoto());
 
-            } catch (Exception e) {
+        try {
+            Picasso.with(context).load(Constants.IMAGE_URL + "" + imageUri).placeholder(context.getResources().getDrawable(R.drawable.profile)).into(myViewHolder.imageView_emp);
+
+        } catch (Exception e) {
 
         }
+
         myViewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +83,7 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
                     adf.setArguments(args);
                     activity.getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "EmployeeListFragment").commit();
 
-                }else if (pageType.equalsIgnoreCase("claim")) {
+                } else if (pageType.equalsIgnoreCase("claim")) {
 
                     Gson gson = new Gson();
                     String json = gson.toJson(model);
@@ -100,7 +103,7 @@ public class EmployeeListAdapter extends RecyclerView.Adapter<EmployeeListAdapte
             }
         });
 
-        if (i==0){
+        if (i == 0) {
             myViewHolder.linearLayout.setBackgroundColor(context.getResources().getColor(R.color.colorSelected));
         }
 

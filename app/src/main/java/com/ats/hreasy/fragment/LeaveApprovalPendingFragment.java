@@ -35,7 +35,7 @@ import retrofit2.Response;
 public class LeaveApprovalPendingFragment extends Fragment {
 
     private ViewPager viewPager;
-    private TabLayout tab;
+    public static TabLayout tab;
     FragmentPagerAdapter adapterViewPager;
     public static ArrayList<LeaveApp> staticPendingLeave = new ArrayList<>();
     public static ArrayList<LeaveApp> staticInfoLeave = new ArrayList<>();
@@ -163,10 +163,10 @@ public class LeaveApprovalPendingFragment extends Fragment {
                             Log.e("CURRENT YEAR : ", " - " + response.body());
 
                             getLeaveList(empId, response.body().getCalYrId());
-                           // getLeaveInfoList(empId, response.body().getCalYrId());
+                            // getLeaveInfoList(empId, response.body().getCalYrId());
 
 
-                           // commonDialog.dismiss();
+                            // commonDialog.dismiss();
 
                         } else {
                             commonDialog.dismiss();
@@ -221,35 +221,47 @@ public class LeaveApprovalPendingFragment extends Fragment {
                             staticPendingLeave.clear();
                             staticPendingLeave = response.body();
                             // createQuotationPDF(quotList);
+
                             viewPager.setCurrentItem(1);
                             viewPager.setCurrentItem(0);
 
-                          //  commonDialog.dismiss();
+                            TabLayout.Tab tab0 = tab.getTabAt(0);
+                            tab0.setText("Pending Task (" + staticPendingLeave.size() + ")");
 
+
+                            //  commonDialog.dismiss();
 
 
                         } else {
-                          //  commonDialog.dismiss();
+                            //  commonDialog.dismiss();
                             Log.e("Data Null : ", "-----------");
 
+                            viewPager.setCurrentItem(1);
+                            viewPager.setCurrentItem(0);
                         }
 
                         getLeaveInfoList(empId, currId);
 
                     } catch (Exception e) {
-                       // commonDialog.dismiss();
+                        // commonDialog.dismiss();
                         Log.e("Exception : ", "-----------" + e.getMessage());
                         e.printStackTrace();
                         getLeaveInfoList(empId, currId);
+
+                        viewPager.setCurrentItem(1);
+                        viewPager.setCurrentItem(0);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ArrayList<LeaveApp>> call, Throwable t) {
-                  //  commonDialog.dismiss();
+                    //  commonDialog.dismiss();
                     Log.e("onFailure : ", "-----------" + t.getMessage());
                     t.printStackTrace();
                     getLeaveInfoList(empId, currId);
+
+                    viewPager.setCurrentItem(1);
+                    viewPager.setCurrentItem(0);
                 }
             });
         } else {
@@ -285,16 +297,30 @@ public class LeaveApprovalPendingFragment extends Fragment {
                             staticInfoLeave = response.body();
                             // createQuotationPDF(quotList);
 
+                            TabLayout.Tab tab1 = tab.getTabAt(1);
+                            tab1.setText("Info (" + staticInfoLeave.size() + ")");
+
+                            viewPager.setCurrentItem(1);
+                            viewPager.setCurrentItem(0);
+                            viewPager.setCurrentItem(1);
+                            viewPager.setCurrentItem(0);
+
                             commonDialog.dismiss();
 
                         } else {
                             commonDialog.dismiss();
                             Log.e("Data Null : ", "-----------");
+
+                            viewPager.setCurrentItem(1);
+                            viewPager.setCurrentItem(0);
                         }
                     } catch (Exception e) {
                         commonDialog.dismiss();
                         Log.e("Exception : ", "-----------" + e.getMessage());
                         e.printStackTrace();
+
+                        viewPager.setCurrentItem(1);
+                        viewPager.setCurrentItem(0);
                     }
                 }
 
@@ -303,6 +329,9 @@ public class LeaveApprovalPendingFragment extends Fragment {
                     commonDialog.dismiss();
                     Log.e("onFailure : ", "-----------" + t.getMessage());
                     t.printStackTrace();
+
+                    viewPager.setCurrentItem(1);
+                    viewPager.setCurrentItem(0);
                 }
             });
         } else {

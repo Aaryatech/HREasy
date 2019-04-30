@@ -1,6 +1,11 @@
 package com.ats.hreasy.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +25,8 @@ public class NotificationActivity extends AppCompatActivity {
     NotificationAdapter adapter;
     DatabaseHandler db;
     ArrayList<NotificationTemp> notificationList1=new ArrayList<>();
+
+    private BroadcastReceiver mBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +67,17 @@ public class NotificationActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
+
+
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals("REFRESH_NOTIFICATION")) {
+                    handlePushNotification1(intent);
+                }
+            }
+        };
+
     }
 
     private void getAddData(ArrayList<NotificationTemp> notificationTemps) {
@@ -67,6 +85,46 @@ public class NotificationActivity extends AppCompatActivity {
         notificationTemps.clear();
         db.close();
     }
+
+
+    @Override
+    public void onPause() {
+
+        LocalBroadcastManager.getInstance(NotificationActivity.this).unregisterReceiver(mBroadcastReceiver);
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        notificationList1.clear();
+        notificationList1 = db.getAllNotification();
+        adapter.notifyDataSetChanged();
+
+        Log.e("NOTIFICATION ACT","------------------- ON_RESUME");
+
+        LocalBroadcastManager.getInstance(NotificationActivity.this).registerReceiver(mBroadcastReceiver,
+                new IntentFilter("REFRESH_NOTIFICATION"));
+
+    }
+
+
+    private void handlePushNotification1(Intent intent) {
+        Log.e("handlePushNotification1", "------------------------------------**********");
+
+        notificationList1.clear();
+        notificationList1=db.getAllNotification();
+
+        adapter = new NotificationAdapter(notificationList1, this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+
+    }
+
+
 
     @Override
     public boolean onSupportNavigateUp() {

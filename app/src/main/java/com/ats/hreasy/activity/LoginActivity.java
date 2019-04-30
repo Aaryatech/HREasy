@@ -1,7 +1,9 @@
 package com.ats.hreasy.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -77,8 +79,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             final CommonDialog commonDialog = new CommonDialog(this, "Loading", "Please Wait...");
             commonDialog.show();
 
-            String userName = "aaryatech";
-            String password = "Aaryatech@1cr";
             String base = Constants.userName + ":" + Constants.password;
             String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
 
@@ -92,9 +92,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Log.e("User Data : ", "------------" + response.body());
 
                             Login data = response.body();
-                            if (data == null) {
+                            if (data.getError()) {
                                 commonDialog.dismiss();
-                                Toast.makeText(LoginActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(LoginActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this, R.style.AlertDialogTheme);
+                                builder.setTitle(getResources().getString(R.string.app_name));
+                                builder.setMessage("Oops something went wrong! please check username & password.");
+                                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    }
+                                });
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+
                             } else {
 
                                 commonDialog.dismiss();
@@ -107,23 +120,60 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             }
                         } else {
                             commonDialog.dismiss();
-                            Toast.makeText(LoginActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(LoginActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
                             Log.e("Data Null : ", "-----------");
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this, R.style.AlertDialogTheme);
+                            builder.setTitle(getResources().getString(R.string.app_name));
+                            builder.setMessage("Oops something went wrong! please check username & password.");
+                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
                         }
                     } catch (Exception e) {
                         commonDialog.dismiss();
-                        Toast.makeText(LoginActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(LoginActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
                         Log.e("Exception : ", "-----------" + e.getMessage());
                         e.printStackTrace();
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this, R.style.AlertDialogTheme);
+                        builder.setTitle(getResources().getString(R.string.app_name));
+                        builder.setMessage("Oops something went wrong! please check username & password.");
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Login> call, Throwable t) {
                     commonDialog.dismiss();
-                    Toast.makeText(LoginActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(LoginActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
                     Log.e("onFailure : ", "-----------" + t.getMessage());
                     t.printStackTrace();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this, R.style.AlertDialogTheme);
+                    builder.setTitle(getResources().getString(R.string.app_name));
+                    builder.setMessage("Oops something went wrong! please check username & password.");
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                 }
             });
         } else {
