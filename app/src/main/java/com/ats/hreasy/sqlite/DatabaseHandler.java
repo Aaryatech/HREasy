@@ -55,6 +55,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void deleteAll()
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from "+ TABLE_NOTIFICATION);
+        db.close();
+    }
+
 
     //----------------------------------NOTIFICATION------------------------------------
 

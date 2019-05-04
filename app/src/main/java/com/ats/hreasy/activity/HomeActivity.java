@@ -37,7 +37,9 @@ import com.ats.hreasy.fragment.UpdateClaimStatusFragment;
 import com.ats.hreasy.fragment.UpdateLeaveInfoFragment;
 import com.ats.hreasy.fragment.UpdateLeaveStatusFragment;
 import com.ats.hreasy.model.DashboardCount;
+import com.ats.hreasy.model.Info;
 import com.ats.hreasy.model.Login;
+import com.ats.hreasy.sqlite.DatabaseHandler;
 import com.ats.hreasy.utils.CommonDialog;
 import com.ats.hreasy.utils.CustomSharedPreference;
 import com.ats.hreasy.utils.PermissionsUtil;
@@ -55,7 +57,7 @@ public class HomeActivity extends AppCompatActivity
     boolean doubleBackToExitPressedOnce = false;
     Login loginUser;
 
-    DashboardCount dashboardCount=new DashboardCount();
+    DashboardCount dashboardCount = new DashboardCount();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,7 +223,7 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_add_leave) {
 
-            Log.e("AUTH","------------------------------------ "+dashboardCount.getIsAuthorized());
+            Log.e("AUTH", "------------------------------------ " + dashboardCount.getIsAuthorized());
 
             Fragment adf = new EmployeeListFragment();
             Bundle args = new Bundle();
@@ -263,10 +265,12 @@ public class HomeActivity extends AppCompatActivity
                 public void onClick(DialogInterface dialog, int which) {
 
                     CustomSharedPreference.deletePreference(HomeActivity.this);
-                    Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                    finish();
+
+                    DatabaseHandler db = new DatabaseHandler(HomeActivity.this);
+                    db.deleteAll();
+
+                    updateToken(loginUser.getEmpId(), "");
+
 
                 }
             });
@@ -326,9 +330,90 @@ public class HomeActivity extends AppCompatActivity
                 }
             });
         } else {
-            //Toast.makeText(HomeActivity.this, "No Internet Connection !", Toast.LENGTH_SHORT).show();
+            Toast.makeText(HomeActivity.this, "No Internet Connection !", Toast.LENGTH_SHORT).show();
         }
 
     }
+
+
+    private void updateToken(int empId, String token) {
+        if (Constants.isOnline(this)) {
+            final CommonDialog commonDialog = new CommonDialog(this, "Loading", "Please Wait...");
+            commonDialog.show();
+
+            String base = Constants.userName + ":" + Constants.password;
+            String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
+
+            Call<Info> listCall = Constants.myInterface.updateUserToken(authHeader, empId, token);
+            listCall.enqueue(new Callback<Info>() {
+                @Override
+                public void onResponse(Call<Info> call, Response<Info> response) {
+                    try {
+                        if (response.body() != null) {
+
+                            Log.e("INFO Data : ", "------------" + response.body());
+
+                            Info data = response.body();
+                            if (data.getError()) {
+                                commonDialog.dismiss();
+                                //Toast.makeText(LoginActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
+
+                                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                            } else {
+
+                                commonDialog.dismiss();
+
+                                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                            }
+                        } else {
+                            commonDialog.dismiss();
+                            //Toast.makeText(LoginActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
+                            Log.e("Data Null : ", "-----------");
+
+                            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            finish();
+                        }
+                    } catch (Exception e) {
+                        commonDialog.dismiss();
+                        //Toast.makeText(LoginActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
+                        Log.e("Exception : ", "-----------" + e.getMessage());
+                        e.printStackTrace();
+
+                        Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Info> call, Throwable t) {
+                    commonDialog.dismiss();
+                    // Toast.makeText(LoginActivity.this, "Unable to login", Toast.LENGTH_SHORT).show();
+                    Log.e("onFailure : ", "-----------" + t.getMessage());
+                    t.printStackTrace();
+
+                    Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        } else {
+            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        }
+    }
+
 
 }

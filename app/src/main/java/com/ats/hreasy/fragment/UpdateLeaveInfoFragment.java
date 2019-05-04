@@ -251,12 +251,12 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
 
                         if (leaveModel.getFinAuthEmpId().equalsIgnoreCase(String.valueOf(loginUser.getEmpId()))) {
 
-                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, leaveModel.getLeaveId(), leaveModel.getEmpId(), remark, 3, loginUser.getEmpId(), "" + currDate);
+                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, leaveModel.getLeaveId(), leaveModel.getEmpId(), remark, 3, loginUser.getMakerUserId(), "" + currDate);
                             updateLeaveStatus(leaveModel.getLeaveId(), 3, saveLeaveTrail);
 
                         } else if (leaveModel.getIniAuthEmpId().equalsIgnoreCase(String.valueOf(loginUser.getEmpId()))) {
 
-                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, leaveModel.getLeaveId(), leaveModel.getEmpId(), remark, 2, loginUser.getEmpId(), "" + currDate);
+                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, leaveModel.getLeaveId(), leaveModel.getEmpId(), remark, 2, loginUser.getMakerUserId(), "" + currDate);
                             updateLeaveStatus(leaveModel.getLeaveId(), 2, saveLeaveTrail);
 
                         }
@@ -309,12 +309,12 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
 
                         if (leaveModel.getFinAuthEmpId().equalsIgnoreCase(String.valueOf(loginUser.getEmpId()))) {
 
-                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, leaveModel.getLeaveId(), leaveModel.getEmpId(), remark, 9, loginUser.getEmpId(), "" + currDate);
+                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, leaveModel.getLeaveId(), leaveModel.getEmpId(), remark, 9, loginUser.getMakerUserId(), "" + currDate);
                             updateLeaveStatus(leaveModel.getLeaveId(), 9, saveLeaveTrail);
 
                         } else if (leaveModel.getIniAuthEmpId().equalsIgnoreCase(String.valueOf(loginUser.getEmpId()))) {
 
-                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, leaveModel.getLeaveId(), leaveModel.getEmpId(), remark, 8, loginUser.getEmpId(), "" + currDate);
+                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, leaveModel.getLeaveId(), leaveModel.getEmpId(), remark, 8, loginUser.getMakerUserId(), "" + currDate);
                             updateLeaveStatus(leaveModel.getLeaveId(), 8, saveLeaveTrail);
 
                         }
