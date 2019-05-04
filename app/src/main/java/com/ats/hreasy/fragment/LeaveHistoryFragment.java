@@ -25,6 +25,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,20 +33,21 @@ import retrofit2.Response;
 import static com.ats.hreasy.fragment.LeaveFragment.staticEmpModel;
 
 public class LeaveHistoryFragment extends Fragment implements LeaveHistoryInterface {
-public RecyclerView recyclerView;
-public TextView tv_empName,tv_empDesignation;
-public ImageView iv_empPhoto;
-private ArrayList<MyLeaveData> historyList = new ArrayList<>();
-private LeaveHistoryAdapter mAdapter;
+    public RecyclerView recyclerView;
+    public TextView tv_empName, tv_empDesignation;
+    public CircleImageView iv_empPhoto;
+    private ArrayList<MyLeaveData> historyList = new ArrayList<>();
+    private LeaveHistoryAdapter mAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_leave_history, container, false);
 
-        recyclerView=(RecyclerView)view.findViewById(R.id.recyclerView);
-        tv_empName=(TextView)view.findViewById(R.id.tvEmpName);
-        tv_empDesignation=(TextView)view.findViewById(R.id.tvEmpDesg);
-        iv_empPhoto=(ImageView) view.findViewById(R.id.ivPhoto);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        tv_empName = (TextView) view.findViewById(R.id.tvEmpName);
+        tv_empDesignation = (TextView) view.findViewById(R.id.tvEmpDesg);
+        iv_empPhoto = view.findViewById(R.id.ivPhoto);
 
         try {
             if (staticEmpModel != null) {
@@ -53,9 +55,10 @@ private LeaveHistoryAdapter mAdapter;
                 tv_empName.setText("" + staticEmpModel.getEmpFname() + " " + staticEmpModel.getEmpMname() + " " + staticEmpModel.getEmpSname());
                 tv_empDesignation.setText("" + staticEmpModel.getEmpMobile1());
                 getLeaveList(staticEmpModel.getEmpId());
+
                 String imageUri = String.valueOf(staticEmpModel.getEmpPhoto());
                 try {
-                    Picasso.with(getContext()).load(imageUri).placeholder(getActivity().getResources().getDrawable(R.drawable.profile)).into(iv_empPhoto);
+                    Picasso.with(getContext()).load(Constants.IMAGE_URL + "" + imageUri).placeholder(getActivity().getResources().getDrawable(R.drawable.profile)).into(iv_empPhoto);
 
                 } catch (Exception e) {
                 }
@@ -66,7 +69,7 @@ private LeaveHistoryAdapter mAdapter;
         }
 
 
-       // prepareData();
+        // prepareData();
 
         return view;
     }
@@ -102,12 +105,11 @@ private LeaveHistoryAdapter mAdapter;
                             historyList.clear();
                             historyList = response.body();
 
-                            mAdapter = new LeaveHistoryAdapter(historyList,getActivity());
+                            mAdapter = new LeaveHistoryAdapter(historyList, getActivity());
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
                             recyclerView.setLayoutManager(mLayoutManager);
                             recyclerView.setItemAnimator(new DefaultItemAnimator());
                             recyclerView.setAdapter(mAdapter);
-
 
 
                             commonDialog.dismiss();

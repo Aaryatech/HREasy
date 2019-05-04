@@ -36,11 +36,13 @@ import com.ats.hreasy.utils.CommonDialog;
 import com.ats.hreasy.utils.CustomSharedPreference;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -52,12 +54,14 @@ public class UpdateClaimInfoFragment extends Fragment implements View.OnClickLis
     private Button btnApprove, btnReject;
     private EditText edRemark;
     private LinearLayout llAction;
+    private CircleImageView ivPhoto;
 
-    private RecyclerView recyclerView,rvAttachment;
+    private RecyclerView recyclerView, rvAttachment;
 
     ClaimApp claimModel;
 
     ArrayList<ClaimApp> claimModelList = new ArrayList<>();
+    ClaimApp claimAppModel = new ClaimApp();
 
     Login loginUser;
 
@@ -87,6 +91,8 @@ public class UpdateClaimInfoFragment extends Fragment implements View.OnClickLis
         rvAttachment = view.findViewById(R.id.rvAttachment);
 
 
+        ivPhoto = view.findViewById(R.id.ivPhoto);
+
         ivPhoto1 = view.findViewById(R.id.ivPhoto1);
         ivPhoto2 = view.findViewById(R.id.ivPhoto2);
         ivPhoto3 = view.findViewById(R.id.ivPhoto3);
@@ -95,21 +101,6 @@ public class UpdateClaimInfoFragment extends Fragment implements View.OnClickLis
         btnReject = view.findViewById(R.id.btnReject);
 
         edRemark = view.findViewById(R.id.edRemark);
-
-        try {
-            String str = getArguments().getString("modelList");
-            Gson gson = new Gson();
-            Type type = new TypeToken<ArrayList<ClaimApp>>() {
-            }.getType();
-            claimModelList = gson.fromJson(str, type);
-
-            Log.e("MODEL LIST --------- ", "-------------------" + claimModelList);
-
-            setData();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         try {
             String userStr = CustomSharedPreference.getString(getActivity(), CustomSharedPreference.KEY_USER);
@@ -121,6 +112,28 @@ public class UpdateClaimInfoFragment extends Fragment implements View.OnClickLis
             e.printStackTrace();
         }
 
+
+        try {
+            String str = getArguments().getString("modelList");
+            Gson gson = new Gson();
+            Type type = new TypeToken<ArrayList<ClaimApp>>() {
+            }.getType();
+            claimModelList = gson.fromJson(str, type);
+
+            String str1 = getArguments().getString("model");
+            Gson gson1 = new Gson();
+            claimAppModel = gson1.fromJson(str1, ClaimApp.class);
+
+
+            Log.e("MODEL LIST --------- ", "-------------------" + claimModelList);
+
+            setData();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         return view;
     }
 
@@ -129,7 +142,15 @@ public class UpdateClaimInfoFragment extends Fragment implements View.OnClickLis
 
             if (claimModelList.size() > 0) {
 
-                claimModel = claimModelList.get(0);
+                int pos = 0;
+                for (int i = 0; i < claimModelList.size(); i++) {
+
+                    if (claimAppModel.getClaimId() == claimModelList.get(i).getClaimId()) {
+                        pos = i;
+                    }
+                }
+
+                claimModel = claimModelList.get(pos);
 
                 tvEmpName.setText("" + claimModel.getEmpName());
                 tvProject.setText("" + claimModel.getProjectTitle());
@@ -138,8 +159,16 @@ public class UpdateClaimInfoFragment extends Fragment implements View.OnClickLis
                 tvAmount.setText("" + claimModel.getClaimAmount() + "/-");
                 tvRemark.setText("" + claimModel.getClaimRemarks());
 
-                 getClaimTrail(claimModel.getClaimId());
-                 getClaimProofList(claimModel.getClaimId());
+                String imageUri = String.valueOf(claimModel.getEmpPhoto());
+                try {
+                    Picasso.with(getContext()).load(Constants.IMAGE_URL + "" + imageUri).placeholder(getActivity().getResources().getDrawable(R.drawable.profile)).into(ivPhoto);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                getClaimTrail(claimModel.getClaimId());
+                getClaimProofList(claimModel.getClaimId());
 
                 Log.e("STATUS", "---------*********************------------------1111--------------------- " + claimModel.getExInt1());
 
@@ -608,7 +637,7 @@ public class UpdateClaimInfoFragment extends Fragment implements View.OnClickLis
 
                             if (!response.body().getError()) {
 
-                               // Toast.makeText(getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
+                                // Toast.makeText(getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
 
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
                                 builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
@@ -619,7 +648,16 @@ public class UpdateClaimInfoFragment extends Fragment implements View.OnClickLis
                                     public void onClick(DialogInterface dialog, int which) {
 
                                         if (claimModelList.size() > 0) {
-                                            claimModelList.remove(0);
+
+                                            int pos = 0;
+                                            for (int i = 0; i < claimModelList.size(); i++) {
+
+                                                if (claimAppModel.getClaimId() == claimModelList.get(i).getClaimId()) {
+                                                    pos = i;
+                                                }
+                                            }
+                                            claimModelList.remove(pos);
+
                                             setData();
                                             edRemark.setText("");
                                         }
@@ -628,7 +666,6 @@ public class UpdateClaimInfoFragment extends Fragment implements View.OnClickLis
                                 });
                                 AlertDialog dialog = builder.create();
                                 dialog.show();
-
 
 
                             } else {

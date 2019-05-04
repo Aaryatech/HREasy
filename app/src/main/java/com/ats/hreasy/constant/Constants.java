@@ -20,15 +20,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Constants {
 
-    public static final String BASE_URL ="http://192.168.2.16:8096/";
+    //public static final String BASE_URL ="http://192.168.2.6:8096/";
+    public static final String BASE_URL = "http://132.148.143.124:8080/HrManagementSystem/";
 
-    public static final String userName="aaryatech";
+    public static final String userName = "aaryatech";
 
-    public static final String password ="Aaryatech@1cr";
+    public static final String password = "Aaryatech@1cr";
 
-    public static final String DOC_URL="";
-    public static final String IMAGE_URL="";
-
+    public static final String DOC_URL = "http://132.148.143.124:8080/media/hr/";
+    public static final String IMAGE_URL = "http://132.148.143.124:8080/media/hr/";
 
 
     public static OkHttpClient client = new OkHttpClient.Builder()

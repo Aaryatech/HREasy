@@ -22,7 +22,10 @@ import com.ats.hreasy.utils.CommonDialog;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -85,9 +88,20 @@ public class ClaimHistoryActivity extends AppCompatActivity {
 
         tvProject.setText(claimHistoryTemp.getProjectTypeTitle());
         tvClaimType.setText(claimHistoryTemp.getClaimTypeTitle());
-        tvDate.setText(claimHistoryTemp.getClaimDate());
+//        tvDate.setText(claimHistoryTemp.getClaimDate());
         tvAmount.setText("" + claimHistoryTemp.getClaimAmount());
         tvRemark.setText(claimHistoryTemp.getClaimRemarks());
+
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf1=new SimpleDateFormat("dd-MM-yyyy");
+
+        try {
+            Date date=sdf.parse(claimHistoryTemp.getClaimDate());
+            tvDate.setText(""+sdf1.format(date.getTime()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
 
         if (claimHistoryTemp.getExInt1() == 1) {
             tvStatus.setText("Initial Pending");

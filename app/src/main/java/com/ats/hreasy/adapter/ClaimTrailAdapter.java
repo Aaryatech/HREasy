@@ -27,7 +27,7 @@ public class ClaimTrailAdapter extends RecyclerView.Adapter<ClaimTrailAdapter.My
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvEmpName, tvRemark, tvDate,tvStatus;
+        public TextView tvEmpName, tvRemark, tvDate, tvStatus;
 
         public MyViewHolder(View view) {
             super(view);
@@ -50,27 +50,26 @@ public class ClaimTrailAdapter extends RecyclerView.Adapter<ClaimTrailAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final ClaimTrailstatus model = msgList.get(position);
 
-        holder.tvEmpName.setText(""+model.getEmpFname()+" "+model.getEmpMname()+" "+model.getEmpSname());
+        holder.tvEmpName.setText("" + model.getEmpFname() + " " + model.getEmpMname() + " " + model.getEmpSname());
         holder.tvRemark.setText(model.getEmpRemarks());
 
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        SimpleDateFormat sdf1=new SimpleDateFormat("dd MMM yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("dd MMM yyyy");
 
         try {
-            Date date=sdf.parse(model.getMakerEnterDatetime());
-            String dt=sdf1.format(date.getTime());
+            Date date = sdf.parse(model.getMakerEnterDatetime());
+            String dt = sdf1.format(date.getTime());
             holder.tvDate.setText(dt);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
 
-
         if (model.getClaimStatus() == 1) {
             holder.tvStatus.setText("Initial Pending");
             holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
         } else if (model.getClaimStatus() == 2) {
-            holder.tvStatus.setText("Final Pending");
+            holder.tvStatus.setText("Initial Approved");
             holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
         } else if (model.getClaimStatus() == 3) {
             holder.tvStatus.setText("Final Approved");

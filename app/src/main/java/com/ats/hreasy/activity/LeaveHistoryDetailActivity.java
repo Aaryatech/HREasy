@@ -19,7 +19,10 @@ import com.ats.hreasy.utils.CustomSharedPreference;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -67,9 +70,19 @@ public class LeaveHistoryDetailActivity extends AppCompatActivity {
         if (leaveHistory != null) {
             tvLeaveType.setText(leaveHistory.getLvTitle());
             tvDayes.setText(leaveHistory.getLeaveNumDays() + " days");
-            tvDate.setText(leaveHistory.getLeaveFromdt() + " to " + leaveHistory.getLeaveTodt());
+           // tvDate.setText(leaveHistory.getLeaveFromdt() + " to " + leaveHistory.getLeaveTodt());
             tvEmpRemark.setText(leaveHistory.getLeaveEmpReason());
 
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+
+            try {
+                Date dateFrom = sdf.parse(leaveHistory.getLeaveFromdt());
+                Date dateTo = sdf.parse(leaveHistory.getLeaveTodt());
+                tvDate.setText("" + sdf1.format(dateFrom.getTime()) + " to " + sdf1.format(dateTo.getTime()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             String imageUri = String.valueOf(leaveHistory.getEmpPhoto());
             try {

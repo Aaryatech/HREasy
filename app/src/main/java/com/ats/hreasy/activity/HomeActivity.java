@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,19 +36,26 @@ import com.ats.hreasy.fragment.UpdateClaimInfoFragment;
 import com.ats.hreasy.fragment.UpdateClaimStatusFragment;
 import com.ats.hreasy.fragment.UpdateLeaveInfoFragment;
 import com.ats.hreasy.fragment.UpdateLeaveStatusFragment;
+import com.ats.hreasy.model.DashboardCount;
 import com.ats.hreasy.model.Login;
+import com.ats.hreasy.utils.CommonDialog;
 import com.ats.hreasy.utils.CustomSharedPreference;
 import com.ats.hreasy.utils.PermissionsUtil;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     boolean doubleBackToExitPressedOnce = false;
     Login loginUser;
+
+    DashboardCount dashboardCount=new DashboardCount();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,11 +97,13 @@ public class HomeActivity extends AppCompatActivity
             tvNavHeadDesg.setText("" + loginUser.getEmpDeptName());
 
             try {
-                Picasso.with(HomeActivity.this).load(Constants.IMAGE_URL+""+loginUser.getEmpPhoto()).placeholder(getResources().getDrawable(R.drawable.profile)).into(ivNavHeadPhoto);
+                Picasso.with(HomeActivity.this).load(Constants.IMAGE_URL + "" + loginUser.getEmpPhoto()).placeholder(getResources().getDrawable(R.drawable.profile)).into(ivNavHeadPhoto);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+            getDashboardCount(loginUser.getEmpId());
 
         }
 
@@ -142,7 +152,9 @@ public class HomeActivity extends AppCompatActivity
                 homeFragment instanceof ClaimApprovalPendingFragment && homeFragment.isVisible() ||
                 homeFragment instanceof EmployeeListFragment && homeFragment.isVisible() ||
                 homeFragment instanceof PendingLeaveListFragment && homeFragment.isVisible() ||
-                homeFragment instanceof PendingClaimListFragment && homeFragment.isVisible()) {
+                homeFragment instanceof PendingClaimListFragment && homeFragment.isVisible() ||
+                homeFragment instanceof LeaveFragment && homeFragment.isVisible() ||
+                homeFragment instanceof ClaimFragment && homeFragment.isVisible()) {
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, new HomeFragment(), "Exit");
@@ -209,19 +221,38 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_add_leave) {
 
+            Log.e("AUTH","------------------------------------ "+dashboardCount.getIsAuthorized());
+
             Fragment adf = new EmployeeListFragment();
             Bundle args = new Bundle();
             args.putString("type", "leave");
+            args.putString("isAuth", "" + dashboardCount.getIsAuthorized());
             adf.setArguments(args);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "HomeFragment").commit();
+
+
+//
+//            Fragment adf = new EmployeeListFragment();
+//            Bundle args = new Bundle();
+//            args.putString("type", "leave");
+//            adf.setArguments(args);
+//            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "HomeFragment").commit();
 
         } else if (id == R.id.nav_add_claim) {
 
             Fragment adf = new EmployeeListFragment();
             Bundle args = new Bundle();
             args.putString("type", "claim");
+            args.putString("isAuth", "" + dashboardCount.getIsAuthorizedClaim());
             adf.setArguments(args);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "HomeFragment").commit();
+
+
+//            Fragment adf = new EmployeeListFragment();
+//            Bundle args = new Bundle();
+//            args.putString("type", "claim");
+//            adf.setArguments(args);
+//            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "HomeFragment").commit();
 
         } else if (id == R.id.nav_logout) {
             AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this, R.style.AlertDialogTheme);
@@ -253,4 +284,51 @@ public class HomeActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+    private void getDashboardCount(Integer empId) {
+        Log.e("PARAMETERS : ", "       EMPID : " + empId);
+        if (Constants.isOnline(HomeActivity.this)) {
+            final CommonDialog commonDialog = new CommonDialog(HomeActivity.this, "Loading", "Please Wait...");
+            commonDialog.show();
+
+            String base = Constants.userName + ":" + Constants.password;
+            String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
+
+            Call<DashboardCount> listCall = Constants.myInterface.getDashboardCount(authHeader, empId);
+            listCall.enqueue(new Callback<DashboardCount>() {
+                @Override
+                public void onResponse(Call<DashboardCount> call, Response<DashboardCount> response) {
+                    try {
+                        if (response.body() != null) {
+
+                            Log.e("Dashboard Count : ", "------------" + response.body());
+                            commonDialog.dismiss();
+
+                            dashboardCount = response.body();
+
+                        } else {
+                            commonDialog.dismiss();
+                            Log.e("Data Null : ", "-----------");
+                        }
+                    } catch (Exception e) {
+                        commonDialog.dismiss();
+                        Log.e("Exception : ", "-----------" + e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<DashboardCount> call, Throwable t) {
+                    commonDialog.dismiss();
+                    Log.e("onFailure : ", "-----------" + t.getMessage());
+                    t.printStackTrace();
+                }
+            });
+        } else {
+            //Toast.makeText(HomeActivity.this, "No Internet Connection !", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
 }

@@ -43,7 +43,7 @@ public class PendingClaimListFragment extends Fragment {
 
     Login loginUser;
 
-    ArrayList<ClaimHistoryModel> claimList=new ArrayList<>();
+    ArrayList<ClaimHistoryModel> claimList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,11 +64,11 @@ public class PendingClaimListFragment extends Fragment {
         if (loginUser != null) {
             tvEmpName.setText("" + loginUser.getEmpFname() + " " + loginUser.getEmpMname() + " " + loginUser.getEmpSname());
             tvEmpDesg.setText("" + loginUser.getEmpMobile1());
-           // getLeaveList(loginUser.getEmpId());
+            // getLeaveList(loginUser.getEmpId());
 
             String imageUri = String.valueOf(loginUser.getEmpPhoto());
             try {
-                Picasso.with(getContext()).load(imageUri).placeholder(getActivity().getResources().getDrawable(R.drawable.profile)).into(ivPhoto);
+                Picasso.with(getContext()).load(Constants.IMAGE_URL + "" + imageUri).placeholder(getActivity().getResources().getDrawable(R.drawable.profile)).into(ivPhoto);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -115,7 +115,7 @@ public class PendingClaimListFragment extends Fragment {
                             claimList.clear();
                             claimList = response.body();
 
-                            adapter = new PendingClaimAdapter(claimList, getContext());
+                            adapter = new PendingClaimAdapter(claimList, getContext(), loginUser.getUserId());
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                             recyclerView.setLayoutManager(mLayoutManager);
                             recyclerView.setItemAnimator(new DefaultItemAnimator());

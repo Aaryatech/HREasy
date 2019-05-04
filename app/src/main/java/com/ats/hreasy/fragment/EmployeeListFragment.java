@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ats.hreasy.R;
+import com.ats.hreasy.activity.HomeActivity;
 import com.ats.hreasy.adapter.EmployeeListAdapter;
 import com.ats.hreasy.constant.Constants;
 import com.ats.hreasy.model.LeaveEmployeeModel;
@@ -37,7 +38,7 @@ public class EmployeeListFragment extends Fragment {
     private RecyclerView recyclerView;
     private EmployeeListAdapter mAdapter;
     private EditText ed_search;
-    static String type;
+    static String type, isAuth;
     Login loginUser;
 
     @Override
@@ -58,7 +59,46 @@ public class EmployeeListFragment extends Fragment {
 
         try {
             type = getArguments().getString("type");
+            isAuth = getArguments().getString("isAuth");
+
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (isAuth.equalsIgnoreCase("1")) {
+
+            if (type.equalsIgnoreCase("claim")) {
+                getEmployeeListClaim(loginUser.getEmpId());
+            } else {
+                getEmployeeListLeave(loginUser.getEmpId());
+            }
+
+        } else {
+
+            LeaveEmployeeModel leaveEmployeeModel = new LeaveEmployeeModel(loginUser.getEmpId(), loginUser.getEmpCode(), loginUser.getCompanyId(), loginUser.getEmpCatId(), loginUser.getEmpTypeId(), loginUser.getEmpDeptId(), loginUser.getLocId(), loginUser.getEmpFname(), loginUser.getEmpMname(), loginUser.getEmpSname(), loginUser.getEmpPhoto(), loginUser.getEmpMobile1(), loginUser.getEmpMobile2(), loginUser.getEmpEmail(), loginUser.getEmpAddressTemp(), loginUser.getEmpAddressPerm(), loginUser.getEmpBloodgrp(), loginUser.getEmpEmergencyPerson1(), loginUser.getEmpEmergencyNo1(), loginUser.getEmpEmergencyPerson2(), loginUser.getEmpEmergencyNo2(), loginUser.getEmpRatePerhr(), loginUser.getEmpJoiningDate(), loginUser.getEmpPrevExpYrs(), loginUser.getEmpPrevExpMonths(), loginUser.getEmpLeavingDate(), loginUser.getEmpLeavingReason(), loginUser.getDelStatus(), loginUser.getIsActive(), loginUser.getMakerUserId(), loginUser.getMakerEnterDatetime(), loginUser.getExInt1(), loginUser.getExInt2(), loginUser.getExInt3(), loginUser.getExVar1(), loginUser.getExVar2(), loginUser.getExVar3());
+
+            Gson gson1 = new Gson();
+            String json = gson1.toJson(leaveEmployeeModel);
+
+            if (type.equalsIgnoreCase("claim")) {
+
+                ClaimFragment adf = new ClaimFragment();
+                Bundle args = new Bundle();
+                args.putString("empModel", json);
+                adf.setArguments(args);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "HomeFragment").commit();
+
+            } else {
+
+                LeaveFragment adf = new LeaveFragment();
+                Bundle args = new Bundle();
+                args.putString("empModel", json);
+                adf.setArguments(args);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "HomeFragment").commit();
+
+            }
+
+
         }
 
         ed_search.addTextChangedListener(new TextWatcher() {
@@ -78,12 +118,6 @@ public class EmployeeListFragment extends Fragment {
 
             }
         });
-
-        if (type.equalsIgnoreCase("claim")) {
-            getEmployeeListClaim(loginUser.getEmpId());
-        } else {
-            getEmployeeListLeave(loginUser.getEmpId());
-        }
 
 
         // prepareData();
@@ -177,7 +211,7 @@ public class EmployeeListFragment extends Fragment {
 
                             Log.e("Employee List Claim: ", "------------" + response.body());
                             empList.clear();
-                           // empList = response.body();
+                            // empList = response.body();
 
                             LeaveEmployeeModel leaveEmployeeModel = new LeaveEmployeeModel(loginUser.getEmpId(), loginUser.getEmpCode(), loginUser.getCompanyId(), loginUser.getEmpCatId(), loginUser.getEmpTypeId(), loginUser.getEmpDeptId(), loginUser.getLocId(), loginUser.getEmpFname(), loginUser.getEmpMname(), loginUser.getEmpSname(), loginUser.getEmpPhoto(), loginUser.getEmpMobile1(), loginUser.getEmpMobile2(), loginUser.getEmpEmail(), loginUser.getEmpAddressTemp(), loginUser.getEmpAddressPerm(), loginUser.getEmpBloodgrp(), loginUser.getEmpEmergencyPerson1(), loginUser.getEmpEmergencyNo1(), loginUser.getEmpEmergencyPerson2(), loginUser.getEmpEmergencyNo2(), loginUser.getEmpRatePerhr(), loginUser.getEmpJoiningDate(), loginUser.getEmpPrevExpYrs(), loginUser.getEmpPrevExpMonths(), loginUser.getEmpLeavingDate(), loginUser.getEmpLeavingReason(), loginUser.getDelStatus(), loginUser.getIsActive(), loginUser.getMakerUserId(), loginUser.getMakerEnterDatetime(), loginUser.getExInt1(), loginUser.getExInt2(), loginUser.getExInt3(), loginUser.getExVar1(), loginUser.getExVar2(), loginUser.getExVar3());
                             empList.add(0, leaveEmployeeModel);

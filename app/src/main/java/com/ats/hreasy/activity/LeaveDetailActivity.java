@@ -18,7 +18,10 @@ import com.ats.hreasy.utils.CustomSharedPreference;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -26,7 +29,7 @@ import static com.ats.hreasy.fragment.ClaimFragment.staticEmpClaimModel;
 
 public class LeaveDetailActivity extends AppCompatActivity {
     MyLeaveData leaveHistory;
-    public TextView tvLeaveType, tvDayesType, tvDayes, tvDate, tvStatus, tvEmpRemark,tvEmpName,tvEmpDesignation;
+    public TextView tvLeaveType, tvDayesType, tvDayes, tvDate, tvStatus, tvEmpRemark, tvEmpName, tvEmpDesignation;
     private RecyclerView recyclerView;
     Login loginUser;
     CircleImageView ivPhoto;
@@ -61,17 +64,28 @@ public class LeaveDetailActivity extends AppCompatActivity {
         String upcomingStr = getIntent().getStringExtra("model");
         leaveHistory = gson.fromJson(upcomingStr, MyLeaveData.class);
         Log.e("responce", "-----------------------" + leaveHistory);
-        tvEmpName.setText(leaveHistory.getEmpFname()+ " "+leaveHistory.getEmpMname()+" " +leaveHistory.getEmpSname());
+        tvEmpName.setText(leaveHistory.getEmpFname() + " " + leaveHistory.getEmpMname() + " " + leaveHistory.getEmpSname());
 
-        if(leaveHistory!=null) {
+        if (leaveHistory != null) {
             tvLeaveType.setText(leaveHistory.getLvTitle());
-            tvDayes.setText(leaveHistory.getLeaveNumDays()+ " days");
-            tvDate.setText(leaveHistory.getLeaveFromdt() + " to " + leaveHistory.getLeaveTodt());
+            tvDayes.setText(leaveHistory.getLeaveNumDays() + " days");
+           // tvDate.setText(leaveHistory.getLeaveFromdt() + " to " + leaveHistory.getLeaveTodt());
             tvEmpRemark.setText(leaveHistory.getLeaveEmpReason());
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+
+            try {
+                Date dateFrom = sdf.parse(leaveHistory.getLeaveFromdt());
+                Date dateTo = sdf.parse(leaveHistory.getLeaveTodt());
+                tvDate.setText("" + sdf1.format(dateFrom.getTime()) + " to " + sdf1.format(dateTo.getTime()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             String imageUri = String.valueOf(leaveHistory.getEmpPhoto());
             try {
-                Picasso.with(getApplicationContext()).load(Constants.IMAGE_URL+""+imageUri).placeholder(getApplicationContext().getResources().getDrawable(R.drawable.profile)).into(ivPhoto);
+                Picasso.with(getApplicationContext()).load(Constants.IMAGE_URL + "" + imageUri).placeholder(getApplicationContext().getResources().getDrawable(R.drawable.profile)).into(ivPhoto);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -97,15 +111,13 @@ public class LeaveDetailActivity extends AppCompatActivity {
                 tvStatus.setTextColor(this.getResources().getColor(R.color.colorPrimaryDark));
             }
 
-            if(leaveHistory.getLeaveDuration().equals("2"))
-            {
+            if (leaveHistory.getLeaveDuration().equals("2")) {
                 tvDayesType.setText("Full Day");
-            }else {
+            } else {
                 tvDayesType.setText("Half Day");
             }
 
         }
-
 
 
         if (leaveHistory.getGetLeaveStatusList() != null) {

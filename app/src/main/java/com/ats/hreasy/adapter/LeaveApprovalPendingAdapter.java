@@ -19,7 +19,10 @@ import com.ats.hreasy.model.LeaveApp;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -69,9 +72,23 @@ public class LeaveApprovalPendingAdapter extends RecyclerView.Adapter<LeaveAppro
 
         holder.tvEmpName.setText(model.getEmpName());
         //holder.tvEmpDesg.setText(model.getName());
-        holder.tvDate.setText(model.getLeaveFromdt() + " to " + model.getLeaveTodt());
+//        holder.tvDate.setText(model.getLeaveFromdt() + " to " + model.getLeaveTodt());
         holder.tvType.setText(model.getLeaveTitle());
         holder.tvDay.setText(model.getLeaveNumDays() + " days");
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+
+        try {
+            Date d1 = sdf.parse(model.getLeaveFromdt());
+            Date d2 = sdf.parse(model.getLeaveTodt());
+
+            holder.tvDate.setText("" + sdf1.format(d1.getTime()) + " to " + sdf1.format(d2.getTime()));
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
 
         String imageUri = String.valueOf(model.getEmpPhoto());
         try {

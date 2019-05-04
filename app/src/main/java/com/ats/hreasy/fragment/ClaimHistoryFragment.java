@@ -25,6 +25,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,7 +36,7 @@ import static com.ats.hreasy.fragment.ClaimFragment.staticEmpClaimModel;
 public class ClaimHistoryFragment extends Fragment implements ClaimHistoryInterface {
     public RecyclerView recyclerView;
     public TextView tv_empName,tv_empDesignation;
-    public ImageView iv_empPhoto;
+    public CircleImageView iv_empPhoto;
     private ClaimHistoryAdapter mAdapter;
     private ArrayList<ClaimHistoryModel> claimHistoryList = new ArrayList<>();
     @Override
@@ -47,7 +48,7 @@ public class ClaimHistoryFragment extends Fragment implements ClaimHistoryInterf
         recyclerView=(RecyclerView)view.findViewById(R.id.recyclerView);
         tv_empName=(TextView)view.findViewById(R.id.tvEmpName);
         tv_empDesignation=(TextView)view.findViewById(R.id.tvEmpDesg);
-        iv_empPhoto=(ImageView) view.findViewById(R.id.ivPhoto);
+        iv_empPhoto= view.findViewById(R.id.ivPhoto);
 
         try {
             if (staticEmpClaimModel != null) {
@@ -55,9 +56,10 @@ public class ClaimHistoryFragment extends Fragment implements ClaimHistoryInterf
                 tv_empName.setText("" + staticEmpClaimModel.getEmpFname() + " " + staticEmpClaimModel.getEmpMname() + " " + staticEmpClaimModel.getEmpSname());
                 tv_empDesignation.setText("" + staticEmpClaimModel.getEmpMobile1());
                 getClaimList(staticEmpClaimModel.getEmpId());
+
                 String imageUri = String.valueOf(staticEmpClaimModel.getEmpPhoto());
                 try {
-                    Picasso.with(getContext()).load(imageUri).placeholder(getActivity().getResources().getDrawable(R.drawable.profile)).into(iv_empPhoto);
+                    Picasso.with(getContext()).load(Constants.IMAGE_URL+""+imageUri).placeholder(getActivity().getResources().getDrawable(R.drawable.profile)).into(iv_empPhoto);
 
                 } catch (Exception e) {
                 }

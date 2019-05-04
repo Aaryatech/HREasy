@@ -127,19 +127,29 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
         String userStr = CustomSharedPreference.getString(getActivity(), CustomSharedPreference.KEY_USER);
         Gson gson = new Gson();
         loginUser = gson.fromJson(userStr, Login.class);
-        Log.e("HOME_ACTIVITY : ", "--------USER-------" + loginUser);
+        // Log.e("HOME_ACTIVITY : ", "--------USER-------" + loginUser);
 
 
         Date todayDate = Calendar.getInstance().getTime();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd");
         String currentDate = formatter.format(todayDate);
-        Log.e("Mytag", "todayString" + currentDate);
+
+        fromDateMillis = todayDate.getTime();
+        toDateMillis = todayDate.getTime();
+
+        //  Log.e("Mytag", "todayString" + currentDate);
         edFromDate.setText(currentDate);
 
         String toDate = edFromDate.getText().toString();
         edToDate.setText(toDate);
 
-        getDays(edFromDate.getText().toString().trim(), edToDate.getText().toString().trim());
+        String from = formatter1.format(todayDate);
+        String to = formatter1.format(todayDate);
+
+        getLeaveCountByEmp(staticEmpModel.getEmpId(), from, to);
+
+        //getDays(edFromDate.getText().toString().trim(), edToDate.getText().toString().trim());
 
         try {
             if (staticEmpModel != null) {
@@ -149,7 +159,7 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
 
                 String imageUri = String.valueOf(staticEmpModel.getEmpPhoto());
                 try {
-                    Picasso.with(getContext()).load(imageUri).placeholder(getActivity().getResources().getDrawable(R.drawable.profile)).into(ivPhoto);
+                    Picasso.with(getContext()).load(Constants.IMAGE_URL + "" + imageUri).placeholder(getActivity().getResources().getDrawable(R.drawable.profile)).into(ivPhoto);
 
                 } catch (Exception e) {
                 }
@@ -162,27 +172,6 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
             e.printStackTrace();
         }
 
-        edToDate.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String from=tvFromDate.getText().toString().trim();
-                String to=tvToDate.getText().toString().trim();
-
-                getLeaveCountByEmp(staticEmpModel.getEmpId(),from,to);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-
-            }
-        });
-
 
         return view;
     }
@@ -191,16 +180,22 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.edFromDate) {
+
             int yr, mn, dy;
+
             Calendar purchaseCal;
+
             long minDate = 0;
+
             purchaseCal = Calendar.getInstance();
             purchaseCal.add(Calendar.DAY_OF_MONTH, -7);
             minDate = purchaseCal.getTime().getTime();
             purchaseCal.setTimeInMillis(fromDateMillis);
+
             yr = purchaseCal.get(Calendar.YEAR);
             mn = purchaseCal.get(Calendar.MONTH);
             dy = purchaseCal.get(Calendar.DAY_OF_MONTH);
+
             DatePickerDialog dialog = new DatePickerDialog(getContext(), fromDateListener, yr, mn, dy);
             dialog.getDatePicker().setMinDate(minDate);
             dialog.show();
@@ -208,8 +203,11 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
         } else if (v.getId() == R.id.edToDate) {
 
             int yr, mn, dy;
+
             long minValue = 0;
+
             Calendar purchaseCal;
+
             SimpleDateFormat formatter1 = new SimpleDateFormat("dd-MM-yyyy");
             String fromDate = edFromDate.getText().toString().trim();
             Date fromdate = null;
@@ -227,6 +225,7 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
             yr = purchaseCal.get(Calendar.YEAR);
             mn = purchaseCal.get(Calendar.MONTH);
             dy = purchaseCal.get(Calendar.DAY_OF_MONTH);
+
             DatePickerDialog dialog = new DatePickerDialog(getContext(), toDateListener, yr, mn, dy);
             dialog.getDatePicker().setMinDate(fromdate.getTime());
             //dialog.getDatePicker().setMinDate(purchaseCal.getTimeInMillis());
@@ -270,10 +269,10 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             final String currDate = sdf.format(System.currentTimeMillis());
 
-            Log.e("fromDate", "-------------" + strFromDate);
-            Log.e("fromTo", "-------------" + strTodate);
-            Log.e("Dayes", "-------------" + strTotalDayes);
-            Log.e("Remark", "-------------" + strRemark);
+            //  Log.e("fromDate", "-------------" + strFromDate);
+            //  Log.e("fromTo", "-------------" + strTodate);
+            //  Log.e("Dayes", "-------------" + strTotalDayes);
+            //  Log.e("Remark", "-------------" + strRemark);
             //Log.e("Model","-------------"+staticEmpModel);
 
             String dayType = "2";
@@ -759,6 +758,7 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
             edFromDate.setText(dd + "-" + mm + "-" + yyyy);
             edToDate.setText(dd + "-" + mm + "-" + yyyy);
             tvFromDate.setText(yyyy + "-" + mm + "-" + dd);
+            tvToDate.setText(yyyy + "-" + mm + "-" + dd);
 
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DATE, -7);
@@ -769,7 +769,26 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
             calendar.set(Calendar.HOUR, 0);
             fromDateMillis = calendar.getTimeInMillis();
 
-            getDays(edFromDate.getText().toString().trim(), edToDate.getText().toString().trim());
+
+            SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+
+            try {
+                Date d1 = sdf1.parse(edFromDate.getText().toString().trim());
+                Date d2 = sdf1.parse(edToDate.getText().toString().trim());
+
+                String from = sdf2.format(d1.getTime());
+                String to = sdf2.format(d2.getTime());
+
+                getLeaveCountByEmp(staticEmpModel.getEmpId(), from, to);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
+            //getDays(edFromDate.getText().toString().trim(), edToDate.getText().toString().trim());
+
 
         }
     };
@@ -782,6 +801,7 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
             dd = dayOfMonth;
             edToDate.setText(dd + "-" + mm + "-" + yyyy);
             tvToDate.setText(yyyy + "-" + mm + "-" + dd);
+
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DATE, -7);
             calendar.set(yyyy, mm - 1, dd);
@@ -791,7 +811,22 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
             calendar.set(Calendar.HOUR, 0);
             toDateMillis = calendar.getTimeInMillis();
 
-            getDays(edFromDate.getText().toString().trim(), edToDate.getText().toString().trim());
+            SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+
+            try {
+                Date d1 = sdf1.parse(edFromDate.getText().toString().trim());
+                Date d2 = sdf1.parse(edToDate.getText().toString().trim());
+
+                String from = sdf2.format(d1.getTime());
+                String to = sdf2.format(d2.getTime());
+
+                getLeaveCountByEmp(staticEmpModel.getEmpId(), from, to);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            // getDays(edFromDate.getText().toString().trim(), edToDate.getText().toString().trim());
         }
     };
 

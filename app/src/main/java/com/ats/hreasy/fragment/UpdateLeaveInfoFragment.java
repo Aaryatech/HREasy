@@ -33,11 +33,15 @@ import com.ats.hreasy.utils.CommonDialog;
 import com.ats.hreasy.utils.CustomSharedPreference;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Type;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,12 +53,13 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
     private TextView tvEmpName, tvEmpDesg, tvLeaveType, tvDayType, tvDays, tvRemark, tvDate, tvStatus;
     private EditText edRemark;
     private Button btnApprove, btnReject;
-    private ImageView ivPhoto;
+    private CircleImageView ivPhoto;
     private LinearLayout llButton, llAction;
 
     private RecyclerView recyclerView;
 
     ArrayList<LeaveApp> leaveModelList = new ArrayList<>();
+    LeaveApp leaveAppModel = new LeaveApp();
 
     Login loginUser;
 
@@ -85,11 +90,25 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
         btnReject.setOnClickListener(this);
 
         try {
+            String userStr = CustomSharedPreference.getString(getActivity(), CustomSharedPreference.KEY_USER);
+            Gson gson = new Gson();
+            loginUser = gson.fromJson(userStr, Login.class);
+            Log.e("HOME_ACTIVITY : ", "--------USER-------" + loginUser);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
             String str = getArguments().getString("modelList");
             Gson gson = new Gson();
             Type type = new TypeToken<ArrayList<LeaveApp>>() {
             }.getType();
             leaveModelList = gson.fromJson(str, type);
+
+            String str1 = getArguments().getString("model");
+            Gson gson1 = new Gson();
+            leaveAppModel = gson1.fromJson(str1, LeaveApp.class);
 
 
             Log.e("MODEL LIST --------- ", "-------------------" + leaveModelList);
@@ -100,15 +119,7 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
             e.printStackTrace();
         }
 
-        try {
-            String userStr = CustomSharedPreference.getString(getActivity(), CustomSharedPreference.KEY_USER);
-            Gson gson = new Gson();
-            loginUser = gson.fromJson(userStr, Login.class);
-            Log.e("HOME_ACTIVITY : ", "--------USER-------" + loginUser);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
 
         return view;
@@ -121,21 +132,62 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
 
             if (leaveModelList.size() > 0) {
 
-                leaveModel = leaveModelList.get(0);
+                int pos = 0;
+                for (int i = 0; i < leaveModelList.size(); i++) {
+
+                    if (leaveAppModel.getLeaveId() == leaveModelList.get(i).getLeaveId()) {
+                        pos = i;
+                    }
+                }
+
+                leaveModel = leaveModelList.get(pos);
+
+
+                try {
+                    Log.e("FINAL AUTH ID : ", "------------------------ " + leaveModel.getFinAuthEmpId() + " ------------------------------- EMP ID : " + loginUser.getEmpId());
+
+                    if (leaveModel.getFinAuthEmpId().equalsIgnoreCase(String.valueOf(loginUser.getEmpId()))) {
+
+                        llAction.setVisibility(View.VISIBLE);
+
+                    } else {
+                        llAction.setVisibility(View.GONE);
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 tvEmpName.setText("" + leaveModel.getEmpName());
                 tvLeaveType.setText("" + leaveModel.getLeaveTitle());
-                tvDate.setText("" + leaveModel.getLeaveFromdt() + " to " + leaveModel.getLeaveTodt());
+                //tvDate.setText("" + leaveModel.getLeaveFromdt() + " to " + leaveModel.getLeaveTodt());
                 tvDays.setText("" + leaveModel.getLeaveNumDays() + " days");
                 tvRemark.setText("" + leaveModel.getLeaveEmpReason());
-                if (leaveModel.getLeaveDuration().equals("1")) {
-                    tvDayType.setText("Full Day");
-                } else {
-                    tvDayType.setText("Half Day");
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+
+                try {
+                    Date d1 = sdf.parse(leaveModel.getLeaveFromdt());
+                    Date d2 = sdf.parse(leaveModel.getLeaveTodt());
+
+                    tvDate.setText("" + sdf1.format(d1.getTime()) + " to " + sdf1.format(d2.getTime()));
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
 
-                getLeaveTrail(leaveModel.getLeaveId());
+                String imageUri = String.valueOf(leaveModel.getEmpPhoto());
+                try {
+                    Picasso.with(getContext()).load(Constants.IMAGE_URL + "" + imageUri).placeholder(getActivity().getResources().getDrawable(R.drawable.profile)).into(ivPhoto);
 
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+                getLeaveTrail(leaveModel.getLeaveId());
 
 
                 if (leaveModel.getExInt1() == 1) {
@@ -159,14 +211,14 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
                 }
 
 
-                if (leaveModel.getFinAuthEmpId().equalsIgnoreCase(String.valueOf(loginUser.getEmpId()))) {
-
-                    llAction.setVisibility(View.VISIBLE);
-
+                if (leaveModel.getLeaveDuration().equals("1")) {
+                    tvDayType.setText("Full Day");
                 } else {
-                    llAction.setVisibility(View.GONE);
-
+                    tvDayType.setText("Half Day");
                 }
+
+                Toast.makeText(getContext(), "FIN AUTH ID : " + leaveModel.getFinAuthEmpId(), Toast.LENGTH_SHORT).show();
+
 
             } else {
                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
@@ -549,7 +601,7 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
 
                             if (!response.body().getError()) {
 
-                               // Toast.makeText(getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
+                                // Toast.makeText(getContext(), "SUCCESS", Toast.LENGTH_SHORT).show();
 
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
                                 builder.setTitle("" + getActivity().getResources().getString(R.string.app_name));
@@ -560,8 +612,19 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
                                     public void onClick(DialogInterface dialog, int which) {
 
                                         if (leaveModelList.size() > 0) {
-                                            leaveModelList.remove(0);
+
+                                            int pos = 0;
+                                            for (int i = 0; i < leaveModelList.size(); i++) {
+
+                                                if (leaveAppModel.getLeaveId() == leaveModelList.get(i).getLeaveId()) {
+                                                    pos = i;
+                                                }
+                                            }
+
+                                            leaveModelList.remove(pos);
+
                                             setData();
+
                                             edRemark.setText("");
                                         }
 
@@ -570,7 +633,6 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
                                 });
                                 AlertDialog dialog = builder.create();
                                 dialog.show();
-
 
 
                             } else {

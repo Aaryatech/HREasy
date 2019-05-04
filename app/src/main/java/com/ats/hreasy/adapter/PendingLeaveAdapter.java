@@ -30,8 +30,10 @@ import com.ats.hreasy.model.SaveLeaveTrail;
 import com.ats.hreasy.utils.CommonDialog;
 import com.google.gson.Gson;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,13 +67,25 @@ public class PendingLeaveAdapter extends RecyclerView.Adapter<PendingLeaveAdapte
         final MyLeaveData model = pendingLeaveList.get(i);
         myViewHolder.tvType.setText(model.getLvTitle());
         myViewHolder.tvDay.setText("" + model.getLeaveNumDays() + " days");
-        myViewHolder.tvDate.setText("" + model.getLeaveFromdt() + " to " + model.getLeaveTodt());
+       // myViewHolder.tvDate.setText("" + model.getLeaveFromdt() + " to " + model.getLeaveTodt());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+
+        try {
+            Date dateFrom = sdf.parse(model.getLeaveFromdt());
+            Date dateTo = sdf.parse(model.getLeaveTodt());
+            myViewHolder.tvDate.setText("" + sdf1.format(dateFrom.getTime()) + " to " + sdf1.format(dateTo.getTime()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         if (model.getExInt1() == 1) {
             myViewHolder.tvCancel.setVisibility(View.VISIBLE);
             myViewHolder.tvStatus.setText("Initial Pending");
             myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
         } else if (model.getExInt1() == 2) {
+            myViewHolder.tvCancel.setVisibility(View.VISIBLE);
             myViewHolder.tvStatus.setText("Final Pending");
             myViewHolder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
         } else if (model.getExInt1() == 3) {

@@ -104,6 +104,21 @@
                 android:textSize="15sp" />
         </LinearLayout>
 
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:id="@+id/tvCancel"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_background"
+            android:fontFamily="@font/sofiapro_bold"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Cancel Leave"
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="15sp"
+            android:visibility="gone" />
+
 
     </LinearLayout>
 

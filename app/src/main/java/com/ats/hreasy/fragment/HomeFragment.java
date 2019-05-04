@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.ats.hreasy.R;
 import com.ats.hreasy.constant.Constants;
 import com.ats.hreasy.model.DashboardCount;
+import com.ats.hreasy.model.LeaveEmployeeModel;
 import com.ats.hreasy.model.Login;
 import com.ats.hreasy.utils.CommonDialog;
 import com.ats.hreasy.utils.CustomSharedPreference;
@@ -36,6 +37,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private CardView cvLeaveAppPend, cvClaimAppPend, cvMyLeavePend, cvMyClaimPend;
     private TextView tvLeaveAppPendingCount, tvLeavependingCount, tvHome_claimAppPendingCount, tvHome_claimPendingCount;
+
+    DashboardCount dashboardCount=new DashboardCount();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -111,6 +114,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 Fragment adf = new EmployeeListFragment();
                 Bundle args = new Bundle();
                 args.putString("type", "leave");
+                args.putString("isAuth", "" + dashboardCount.getIsAuthorized());
                 adf.setArguments(args);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "HomeFragment").commit();
 
@@ -124,6 +128,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 Fragment adf = new EmployeeListFragment();
                 Bundle args = new Bundle();
                 args.putString("type", "claim");
+                args.putString("isAuth", "" + dashboardCount.getIsAuthorizedClaim());
                 adf.setArguments(args);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, adf, "HomeFragment").commit();
 
@@ -153,6 +158,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                             commonDialog.dismiss();
 
                             DashboardCount data = response.body();
+                            dashboardCount = data;
+
                             tvLeaveAppPendingCount.setText("" + data.getPendingRequest() + "/" + data.getInfo());
                             tvLeavependingCount.setText("" + data.getMyLeave());
 
@@ -170,7 +177,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                             } else {
                                 cvClaimAppPend.setVisibility(View.GONE);
                             }
-
 
 
                         } else {

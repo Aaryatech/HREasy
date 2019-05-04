@@ -53,7 +53,7 @@ public class LeaveTrailListAdapter extends RecyclerView.Adapter<LeaveTrailListAd
             holder.tvEmpName.setText(model.getEmpFname()+ " "+model.getEmpSname());
             holder.tvRemark.setText(model.getEmpRemarks());
 
-            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
             SimpleDateFormat sdf1=new SimpleDateFormat("dd MMM yyyy");
 
             try {

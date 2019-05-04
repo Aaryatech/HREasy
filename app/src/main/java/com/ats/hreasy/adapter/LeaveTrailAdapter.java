@@ -53,7 +53,7 @@ public class LeaveTrailAdapter extends RecyclerView.Adapter<LeaveTrailAdapter.My
         holder.tvEmpName.setText(""+model.getEmpFname()+" "+model.getEmpMname()+" "+model.getEmpSname());
         holder.tvRemark.setText(model.getEmpRemarks());
 
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
         SimpleDateFormat sdf1=new SimpleDateFormat("dd MMM yyyy");
 
         try {
@@ -70,7 +70,7 @@ public class LeaveTrailAdapter extends RecyclerView.Adapter<LeaveTrailAdapter.My
             holder.tvStatus.setText("Initial Pending");
             holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
         } else if (model.getLeaveStatus() == 2) {
-            holder.tvStatus.setText("Final Pending");
+            holder.tvStatus.setText("Initial Approved");
             holder.tvStatus.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
         } else if (model.getLeaveStatus() == 3) {
             holder.tvStatus.setText("Final Approved");

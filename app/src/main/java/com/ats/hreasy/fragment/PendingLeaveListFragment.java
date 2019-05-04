@@ -62,7 +62,7 @@ public class PendingLeaveListFragment extends Fragment {
 
             String imageUri = String.valueOf(loginUser.getEmpPhoto());
             try {
-                Picasso.with(getContext()).load(imageUri).placeholder(getActivity().getResources().getDrawable(R.drawable.profile)).into(iv_empPhoto);
+                Picasso.with(getContext()).load(Constants.IMAGE_URL + "" + imageUri).placeholder(getActivity().getResources().getDrawable(R.drawable.profile)).into(iv_empPhoto);
 
             } catch (Exception e) {
                 e.printStackTrace();

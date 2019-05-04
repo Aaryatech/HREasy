@@ -169,7 +169,7 @@ public class AddClaimFragment extends Fragment implements AddClaimInterface, Vie
 
                 String imageUri = String.valueOf(staticEmpClaimModel.getEmpPhoto());
                 try {
-                    Picasso.with(getContext()).load(imageUri).placeholder(getActivity().getResources().getDrawable(R.drawable.profile)).into(ivPhoto);
+                    Picasso.with(getContext()).load(Constants.IMAGE_URL+""+imageUri).placeholder(getActivity().getResources().getDrawable(R.drawable.profile)).into(ivPhoto);
 
                 } catch (Exception e) {
                 }
