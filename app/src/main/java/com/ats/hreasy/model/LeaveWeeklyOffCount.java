@@ -2,22 +2,22 @@ package com.ats.hreasy.model;
 
 public class LeaveWeeklyOffCount {
 
-    private Integer leavecount;
-    private Integer holidaycount;
+    private float leavecount;
+    private float holidaycount;
 
-    public Integer getLeavecount() {
+    public float getLeavecount() {
         return leavecount;
     }
 
-    public void setLeavecount(Integer leavecount) {
+    public void setLeavecount(float leavecount) {
         this.leavecount = leavecount;
     }
 
-    public Integer getHolidaycount() {
+    public float getHolidaycount() {
         return holidaycount;
     }
 
-    public void setHolidaycount(Integer holidaycount) {
+    public void setHolidaycount(float holidaycount) {
         this.holidaycount = holidaycount;
     }
 

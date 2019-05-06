@@ -12,6 +12,7 @@ public class MyLeaveTrailData {
     private String empMname;
     private String empSname;
     private String empPhoto;
+    private String userName;
 
     public Integer getTrailPkey() {
         return trailPkey;
@@ -93,6 +94,14 @@ public class MyLeaveTrailData {
         this.empPhoto = empPhoto;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     @Override
     public String toString() {
         return "MyLeaveTrailData{" +
@@ -106,6 +115,7 @@ public class MyLeaveTrailData {
                 ", empMname='" + empMname + '\'' +
                 ", empSname='" + empSname + '\'' +
                 ", empPhoto='" + empPhoto + '\'' +
+                ", userName='" + userName + '\'' +
                 '}';
     }
 }

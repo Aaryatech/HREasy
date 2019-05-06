@@ -103,7 +103,7 @@ public class PendingLeaveAdapter extends RecyclerView.Adapter<PendingLeaveAdapte
         }
 
 
-        if (model.getLeaveDuration().equals("2")) {
+        if (model.getLeaveDuration().equals("1")) {
             myViewHolder.tvDayType.setText("Full Day");
         } else {
             myViewHolder.tvDayType.setText("Half Day");

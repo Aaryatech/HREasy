@@ -124,7 +124,6 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
         }
 
 
-
         return view;
     }
 
@@ -173,7 +172,6 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
                 }
 
 
-
                 getLeaveTrail(leaveModel.getLeaveId());
 
                 if (leaveModel.getExInt1() == 1) {
@@ -197,8 +195,7 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
                 }
 
 
-
-                if (leaveModel.getLeaveDuration().equals("1")) {
+                if (leaveModel.getLeaveDuration().equals("2")) {
                     tvDayType.setText("Half Day");
                 } else {
                     tvDayType.setText("Full Day");
@@ -225,9 +222,9 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
             final String currDate = sdf.format(System.currentTimeMillis());
 
             String dayType;
-            if (leaveModel.getLeaveDuration().equalsIgnoreCase("1")) {
+            if (leaveModel.getLeaveDuration().equalsIgnoreCase("2")) {
                 dayType = "Half day";
-            } else if (leaveModel.getLeaveDuration().equalsIgnoreCase("2")) {
+            } else if (leaveModel.getLeaveDuration().equalsIgnoreCase("1")) {
                 dayType = "Full day";
             }
 
@@ -243,12 +240,12 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
 
                         if (leaveModel.getFinAuthEmpId().equalsIgnoreCase(String.valueOf(loginUser.getEmpId()))) {
 
-                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, leaveModel.getLeaveId(), leaveModel.getEmpId(), remark, 3, loginUser.getMakerUserId(), "" + currDate);
+                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, leaveModel.getLeaveId(), leaveModel.getEmpId(), remark, 3, loginUser.getUserId(), "" + currDate);
                             updateLeaveStatus(leaveModel.getLeaveId(), 3, saveLeaveTrail);
 
                         } else if (leaveModel.getIniAuthEmpId().equalsIgnoreCase(String.valueOf(loginUser.getEmpId()))) {
 
-                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, leaveModel.getLeaveId(), leaveModel.getEmpId(), remark, 2, loginUser.getMakerUserId(), "" + currDate);
+                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, leaveModel.getLeaveId(), leaveModel.getEmpId(), remark, 2, loginUser.getUserId(), "" + currDate);
                             updateLeaveStatus(leaveModel.getLeaveId(), 2, saveLeaveTrail);
 
                         }
@@ -301,12 +298,12 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
 
                         if (leaveModel.getFinAuthEmpId().equalsIgnoreCase(String.valueOf(loginUser.getEmpId()))) {
 
-                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, leaveModel.getLeaveId(), leaveModel.getEmpId(), remark, 9, loginUser.getMakerUserId(), "" + currDate);
+                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, leaveModel.getLeaveId(), leaveModel.getEmpId(), remark, 9, loginUser.getUserId(), "" + currDate);
                             updateLeaveStatus(leaveModel.getLeaveId(), 9, saveLeaveTrail);
 
                         } else if (leaveModel.getIniAuthEmpId().equalsIgnoreCase(String.valueOf(loginUser.getEmpId()))) {
 
-                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, leaveModel.getLeaveId(), leaveModel.getEmpId(), remark, 8, loginUser.getMakerUserId(), "" + currDate);
+                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, leaveModel.getLeaveId(), leaveModel.getEmpId(), remark, 8, loginUser.getUserId(), "" + currDate);
                             updateLeaveStatus(leaveModel.getLeaveId(), 8, saveLeaveTrail);
 
                         }

@@ -50,7 +50,7 @@ public class LeaveTrailListAdapter extends RecyclerView.Adapter<LeaveTrailListAd
         public void onBindViewHolder(LeaveTrailListAdapter.MyViewHolder holder, int position) {
             final MyLeaveTrailData model = msgList.get(position);
 
-            holder.tvEmpName.setText(model.getEmpFname()+ " "+model.getEmpSname());
+            holder.tvEmpName.setText(model.getUserName());
             holder.tvRemark.setText(model.getEmpRemarks());
 
             SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
@@ -65,13 +65,6 @@ public class LeaveTrailListAdapter extends RecyclerView.Adapter<LeaveTrailListAd
             }
 
 
-
-            if(model.getLeaveStatus()==1) {
-                holder.tvStatus.setText("Pending");
-            }else if(model.getLeaveStatus()==2)
-            {
-                holder.tvStatus.setText("Rejected");
-            }
 
 
             if (model.getLeaveStatus() == 1) {

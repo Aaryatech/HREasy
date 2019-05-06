@@ -84,7 +84,7 @@ public class LeaveHistoryAdapter extends RecyclerView.Adapter<LeaveHistoryAdapte
         }
 
 
-        if (model.getLeaveDuration().equals("2")) {
+        if (model.getLeaveDuration().equals("1")) {
             myViewHolder.tvDayType.setText("Full Day");
         } else {
             myViewHolder.tvDayType.setText("Half Day");

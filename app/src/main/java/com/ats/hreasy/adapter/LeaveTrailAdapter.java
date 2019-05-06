@@ -50,7 +50,7 @@ public class LeaveTrailAdapter extends RecyclerView.Adapter<LeaveTrailAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final MyLeaveTrailData model = msgList.get(position);
 
-        holder.tvEmpName.setText(""+model.getEmpFname()+" "+model.getEmpMname()+" "+model.getEmpSname());
+        holder.tvEmpName.setText(""+model.getUserName());
         holder.tvRemark.setText(model.getEmpRemarks());
 
         SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");

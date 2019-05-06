@@ -562,7 +562,7 @@ public class AddClaimFragment extends Fragment implements AddClaimInterface, Vie
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                             String currDate = sdf.format(System.currentTimeMillis());
 
-                            SaveClaimTrail saveClaimTrail = new SaveClaimTrail(0, model.getClaimId(), staticEmpClaimModel.getEmpId(), "NA", model.getExInt1(), model.getMakerUserId(), "" + currDate);
+                            SaveClaimTrail saveClaimTrail = new SaveClaimTrail(0, model.getClaimId(), staticEmpClaimModel.getEmpId(), "NA", model.getExInt1(), loginUser.getUserId(), "" + currDate);
                             saveClaimTrail(model.getClaimId(), saveClaimTrail);
 
                             //commonDialog.dismiss();

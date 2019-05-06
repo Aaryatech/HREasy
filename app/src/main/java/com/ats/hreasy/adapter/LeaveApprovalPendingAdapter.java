@@ -98,7 +98,7 @@ public class LeaveApprovalPendingAdapter extends RecyclerView.Adapter<LeaveAppro
 
         }
 
-        if (model.getLeaveDuration().equals("1")) {
+        if (model.getLeaveDuration().equals("2")) {
             holder.tvDayType.setText("Half Day");
         } else {
             holder.tvDayType.setText("Full Day");

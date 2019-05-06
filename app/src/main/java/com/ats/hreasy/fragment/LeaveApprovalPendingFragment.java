@@ -277,6 +277,7 @@ public class LeaveApprovalPendingFragment extends Fragment {
         statusList.add(1);
 
 
+
         String base = Constants.userName + ":" + Constants.password;
         String authHeader = "Basic " + Base64.encodeToString(base.getBytes(), Base64.NO_WRAP);
 

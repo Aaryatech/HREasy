@@ -18,7 +18,7 @@ public class LeaveApp {
     private String leaveDuration;
     private String leaveFromdt;
     private String leaveTodt;
-    private Integer leaveNumDays;
+    private float leaveNumDays;
     private String leaveEmpReason;
     private String circulatedTo;
     private String empPhoto;
@@ -135,11 +135,11 @@ public class LeaveApp {
         this.leaveTodt = leaveTodt;
     }
 
-    public Integer getLeaveNumDays() {
+    public float getLeaveNumDays() {
         return leaveNumDays;
     }
 
-    public void setLeaveNumDays(Integer leaveNumDays) {
+    public void setLeaveNumDays(float leaveNumDays) {
         this.leaveNumDays = leaveNumDays;
     }
 

@@ -25,6 +25,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -173,6 +174,53 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
         }
 
 
+        rbHalfDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+                    SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+
+                    try {
+                        Date d1 = sdf1.parse(edFromDate.getText().toString().trim());
+                        Date d2 = sdf1.parse(edToDate.getText().toString().trim());
+
+                        String from = sdf2.format(d1.getTime());
+                        String to = sdf2.format(d2.getTime());
+
+                        getLeaveCountByEmp(staticEmpModel.getEmpId(), from, to);
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        rbFullDay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+                    SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+
+                    try {
+                        Date d1 = sdf1.parse(edFromDate.getText().toString().trim());
+                        Date d2 = sdf1.parse(edToDate.getText().toString().trim());
+
+                        String from = sdf2.format(d1.getTime());
+                        String to = sdf2.format(d2.getTime());
+
+                        getLeaveCountByEmp(staticEmpModel.getEmpId(), from, to);
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+
         return view;
     }
 
@@ -275,11 +323,11 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
             //  Log.e("Remark", "-------------" + strRemark);
             //Log.e("Model","-------------"+staticEmpModel);
 
-            String dayType = "2";
+            String dayType = "1";
             if (rbFullDay.isChecked()) {
-                dayType = "2";
-            } else if (rbHalfDay.isChecked()) {
                 dayType = "1";
+            } else if (rbHalfDay.isChecked()) {
+                dayType = "2";
             }
 
 //            Toast.makeText(getContext(), "BAL LEAVE : -------------- " + leaveTypeBalArray.get(spType.getSelectedItemPosition()), Toast.LENGTH_SHORT).show();
@@ -465,7 +513,7 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                             String currDate = sdf.format(System.currentTimeMillis());
 
-                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, model.getLeaveId(), staticEmpModel.getEmpId(), "", model.getExInt1(), model.getMakerUserId(), "" + currDate);
+                            SaveLeaveTrail saveLeaveTrail = new SaveLeaveTrail(0, model.getLeaveId(), staticEmpModel.getEmpId(), "", model.getExInt1(), loginUser.getUserId(), "" + currDate);
                             saveLeaveTrail(model.getLeaveId(), saveLeaveTrail);
 
                             //commonDialog.dismiss();
@@ -1048,8 +1096,18 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
 
                             leaveWeeklyOffCount = response.body();
 
-                            edDays.setText("" + leaveWeeklyOffCount.getLeavecount());
-                            edWeeklyOff.setText("" + leaveWeeklyOffCount.getHolidaycount());
+                            float leaveCount = leaveWeeklyOffCount.getLeavecount();
+                            float holidayCount = leaveWeeklyOffCount.getHolidaycount();
+
+                            if (rbHalfDay.isChecked()) {
+                                leaveCount = leaveCount / 2;
+                            }
+
+//                            edDays.setText("" + leaveWeeklyOffCount.getLeavecount());
+//                            edWeeklyOff.setText("" + leaveWeeklyOffCount.getHolidaycount());
+
+                            edDays.setText("" + leaveCount);
+                            edWeeklyOff.setText("" + holidayCount);
 
                             commonDialog.dismiss();
 

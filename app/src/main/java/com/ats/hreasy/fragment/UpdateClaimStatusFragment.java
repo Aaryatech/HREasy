@@ -224,12 +224,12 @@ public class UpdateClaimStatusFragment extends Fragment implements View.OnClickL
 
                         if (claimModel.getCaFinAuthEmpId() == loginUser.getEmpId()) {
 
-                            SaveClaimTrail saveClaimTrail = new SaveClaimTrail(0, claimModel.getClaimId(), claimModel.getEmpId(), remark, 3, loginUser.getMakerUserId(), currDate);
+                            SaveClaimTrail saveClaimTrail = new SaveClaimTrail(0, claimModel.getClaimId(), claimModel.getEmpId(), remark, 3, loginUser.getUserId(), currDate);
                             updateClaimStatus(claimModel.getClaimId(), 3, saveClaimTrail);
 
                         } else if (claimModel.getCaIniAuthEmpId() == loginUser.getEmpId()) {
 
-                            SaveClaimTrail saveClaimTrail = new SaveClaimTrail(0, claimModel.getClaimId(), claimModel.getEmpId(), remark, 2, loginUser.getMakerUserId(), currDate);
+                            SaveClaimTrail saveClaimTrail = new SaveClaimTrail(0, claimModel.getClaimId(), claimModel.getEmpId(), remark, 2, loginUser.getUserId(), currDate);
                             updateClaimStatus(claimModel.getClaimId(), 2, saveClaimTrail);
 
                         }
@@ -281,12 +281,12 @@ public class UpdateClaimStatusFragment extends Fragment implements View.OnClickL
 
                         if (claimModel.getCaFinAuthEmpId() == loginUser.getEmpId()) {
 
-                            SaveClaimTrail saveClaimTrail = new SaveClaimTrail(0, claimModel.getClaimId(), claimModel.getEmpId(), remark, 9, loginUser.getMakerUserId(), currDate);
+                            SaveClaimTrail saveClaimTrail = new SaveClaimTrail(0, claimModel.getClaimId(), claimModel.getEmpId(), remark, 9, loginUser.getUserId(), currDate);
                             updateClaimStatus(claimModel.getClaimId(), 9, saveClaimTrail);
 
                         } else if (claimModel.getCaIniAuthEmpId() == loginUser.getEmpId()) {
 
-                            SaveClaimTrail saveClaimTrail = new SaveClaimTrail(0, claimModel.getClaimId(), claimModel.getEmpId(), remark, 8, loginUser.getMakerUserId(), currDate);
+                            SaveClaimTrail saveClaimTrail = new SaveClaimTrail(0, claimModel.getClaimId(), claimModel.getEmpId(), remark, 8, loginUser.getUserId(), currDate);
                             updateClaimStatus(claimModel.getClaimId(), 8, saveClaimTrail);
 
                         }

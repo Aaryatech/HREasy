@@ -112,7 +112,7 @@ public class LeaveHistoryDetailActivity extends AppCompatActivity {
                 tvStatus.setTextColor(this.getResources().getColor(R.color.colorPrimaryDark));
             }
 
-            if (leaveHistory.getLeaveDuration().equals("2")) {
+            if (leaveHistory.getLeaveDuration().equals("1")) {
                 tvDayesType.setText("Full Day");
             } else {
                 tvDayesType.setText("Half Day");

@@ -15,7 +15,7 @@ public class ClaimTrailstatus {
     private String empMname;
     private String empSname;
     private String empPhoto;
-
+    private String userName;
 
     public int getClaimTrailPkey() {
         return claimTrailPkey;
@@ -97,6 +97,14 @@ public class ClaimTrailstatus {
         this.empPhoto = empPhoto;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     @Override
     public String toString() {
         return "ClaimTrailstatus{" +
@@ -110,6 +118,7 @@ public class ClaimTrailstatus {
                 ", empMname='" + empMname + '\'' +
                 ", empSname='" + empSname + '\'' +
                 ", empPhoto='" + empPhoto + '\'' +
+                ", userName='" + userName + '\'' +
                 '}';
     }
 }

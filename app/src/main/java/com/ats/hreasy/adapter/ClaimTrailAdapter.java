@@ -50,7 +50,7 @@ public class ClaimTrailAdapter extends RecyclerView.Adapter<ClaimTrailAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
         final ClaimTrailstatus model = msgList.get(position);
 
-        holder.tvEmpName.setText("" + model.getEmpFname() + " " + model.getEmpMname() + " " + model.getEmpSname());
+        holder.tvEmpName.setText("" + model.getUserName());
         holder.tvRemark.setText(model.getEmpRemarks());
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
