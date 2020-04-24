@@ -136,7 +136,6 @@ public class UpdateClaimStatusFragment extends Fragment implements View.OnClickL
         }
 
 
-
         return view;
     }
 
@@ -210,14 +209,14 @@ public class UpdateClaimStatusFragment extends Fragment implements View.OnClickL
 
             final String remark = edRemark.getText().toString();
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             final String currDate = sdf.format(System.currentTimeMillis());
 
             if (claimModel != null && loginUser != null) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
                 builder.setTitle("Confirmation");
-                builder.setMessage("Do you want to APPROVE the claim of employee " + claimModel.getEmpName() + " ");
+                builder.setMessage("Do you want to APPROVE the claim of " + claimModel.getEmpName() + " for Rs. " + claimModel.getClaimAmount() + "/-");
                 builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -266,7 +265,7 @@ public class UpdateClaimStatusFragment extends Fragment implements View.OnClickL
 
             final String remark = edRemark.getText().toString();
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             final String currDate = sdf.format(System.currentTimeMillis());
 
 
@@ -274,7 +273,7 @@ public class UpdateClaimStatusFragment extends Fragment implements View.OnClickL
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
                 builder.setTitle("Confirmation");
-                builder.setMessage("Do you want to REJECT the claim of employee " + claimModel.getEmpName() + " ");
+                builder.setMessage("Do you want to REJECT the claim of " + claimModel.getEmpName() + " for Rs. " + claimModel.getClaimAmount() + "/-");
                 builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

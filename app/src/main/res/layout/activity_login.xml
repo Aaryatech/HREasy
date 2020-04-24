@@ -104,10 +104,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
+            android:padding="15dp"
             android:text="Forgot Password"
             android:textColor="@color/colorBlack"
             android:textSize="15sp"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
 
     </LinearLayout>

@@ -116,6 +116,7 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
             leaveAppModel = gson1.fromJson(str1, LeaveApp.class);
 
             Log.e("MODEL LIST --------- ", "-------------------" + leaveModelList);
+            Log.e("MODEL  --------- ", "-------------------" + leaveAppModel);
 
             setData();
 
@@ -129,19 +130,28 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
 
     public void setData() {
 
+        Log.e("setData  --------- ", "-------------------" + leaveModelList);
         if (leaveModelList != null) {
 
             if (leaveModelList.size() > 0) {
 
                 int pos = 0;
                 for (int i = 0; i < leaveModelList.size(); i++) {
-
-                    if (leaveAppModel.getLeaveId() == leaveModelList.get(i).getLeaveId()) {
+                    Log.e("ID  --------- ", "------------leaveAppModel.getLeaveId()-------" + leaveAppModel.getLeaveId());
+                    Log.e("ID2  --------- ", "----------leaveModelList.get(i).getLeaveId()---------" + leaveModelList.get(i).getLeaveId());
+                    if (String.valueOf(leaveAppModel.getLeaveId()) .equalsIgnoreCase(String.valueOf(leaveModelList.get(i).getLeaveId())) ) {
+                        Log.e("MATCH  --------- ", "-------------------" + i);
                         pos = i;
+                        break;
+                    }else{
+                        Log.e("NOT MATCH  --------- ", "-------------------" + i);
                     }
                 }
 
+                Log.e("POS  --------- ", "-------------------" + pos);
                 leaveModel = leaveModelList.get(pos);
+                Log.e("BEAN  --------- ", "-------------------" + leaveModel);
+
 
                 tvEmpName.setText("" + leaveModel.getEmpName());
                 tvLeaveType.setText("" + leaveModel.getLeaveTitle());
@@ -218,7 +228,7 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
 
             final String remark = edRemark.getText().toString();
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             final String currDate = sdf.format(System.currentTimeMillis());
 
             String dayType;
@@ -228,12 +238,32 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
                 dayType = "Full day";
             }
 
+            SimpleDateFormat sdf_ymd = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf_dmy = new SimpleDateFormat("dd-MM-yyyy");
+
+            String fromDate = "", toDate = "";
+
+            try {
+                Date d1 = sdf_ymd.parse(leaveModel.getLeaveFromdt());
+                Date d2 = sdf_ymd.parse(leaveModel.getLeaveTodt());
+
+                fromDate = sdf_dmy.format(d1.getTime());
+                toDate = sdf_dmy.format(d2.getTime());
+
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+
+                fromDate = leaveModel.getLeaveFromdt();
+                toDate = leaveModel.getLeaveTodt();
+            }
 
             if (leaveModel != null && loginUser != null) {
 
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
                 builder.setTitle("Confirmation");
-                builder.setMessage("Do you want to APPROVE the leave of employee " + leaveModel.getEmpName() + " from  " + leaveModel.getLeaveFromdt() + " to " + leaveModel.getLeaveTodt() + " for " + leaveModel.getLeaveNumDays() + " days.");
+                builder.setMessage("Do you want to APPROVE the leave of employee " + leaveModel.getEmpName() + " from  " + fromDate + " to " + toDate + " for " + leaveModel.getLeaveNumDays() + " days.");
                 builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -283,15 +313,34 @@ public class UpdateLeaveStatusFragment extends Fragment implements View.OnClickL
 
             final String remark = edRemark.getText().toString();
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             final String currDate = sdf.format(System.currentTimeMillis());
 
+            SimpleDateFormat sdf_ymd = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf_dmy = new SimpleDateFormat("dd-MM-yyyy");
+
+            String fromDate = "", toDate = "";
+
+            try {
+                Date d1 = sdf_ymd.parse(leaveModel.getLeaveFromdt());
+                Date d2 = sdf_ymd.parse(leaveModel.getLeaveTodt());
+
+                fromDate = sdf_dmy.format(d1.getTime());
+                toDate = sdf_dmy.format(d2.getTime());
+
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+
+                fromDate = leaveModel.getLeaveFromdt();
+                toDate = leaveModel.getLeaveTodt();
+            }
 
             if (leaveModel != null && loginUser != null) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
                 builder.setTitle("Confirmation");
-                builder.setMessage("Do you want to REJECT the leave of employee " + leaveModel.getEmpName() + " from  " + leaveModel.getLeaveFromdt() + " to " + leaveModel.getLeaveTodt() + " for " + leaveModel.getLeaveNumDays() + " days.");
+                builder.setMessage("Do you want to REJECT the leave of employee " + leaveModel.getEmpName() + " from  " + fromDate + " to " + toDate + " for " + leaveModel.getLeaveNumDays() + " days.");
                 builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

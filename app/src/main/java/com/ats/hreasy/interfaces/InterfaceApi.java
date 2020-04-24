@@ -11,6 +11,7 @@ import com.ats.hreasy.model.ClaimTrailstatus;
 import com.ats.hreasy.model.ClaimType;
 import com.ats.hreasy.model.CurrentYearModel;
 import com.ats.hreasy.model.DashboardCount;
+import com.ats.hreasy.model.ForgetPass;
 import com.ats.hreasy.model.Info;
 import com.ats.hreasy.model.LeaveApp;
 import com.ats.hreasy.model.LeaveApply;
@@ -138,5 +139,16 @@ public interface InterfaceApi {
 
     @POST("calculateHolidayBetweenDate")
     Call<LeaveWeeklyOffCount> getLeaveCountByEmp(@Header("Authorization") String authHeader, @Query("empId") int empId, @Query("fromDate") String fromDate, @Query("toDate") String toDate);
+
+    @POST("updateIsVistStatus")
+    Call<Info> updatePassword(@Header("Authorization") String authHeader, @Query("empId") int empId, @Query("password") String password);
+
+    @Multipart
+    @POST("updateEmpProfPicForApp")
+    Call<Info> profileImageUpload(@Header("Authorization") String authHeader, @Query("empId") int empId, @Part MultipartBody.Part profilePic);
+
+    @POST("checkUserName")
+    Call<ForgetPass> forgetPassword(@Header("Authorization") String authHeader, @Query("inputValue") String inputValue);
+
 
 }

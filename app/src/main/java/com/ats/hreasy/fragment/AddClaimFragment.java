@@ -380,7 +380,7 @@ public class AddClaimFragment extends Fragment implements AddClaimInterface, Vie
 
             final String DateTo = formatter3.format(ToDate);
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             final String currDate = sdf.format(System.currentTimeMillis());
 
             int claimType = claimTypeIdList.get(spType.getSelectedItemPosition());

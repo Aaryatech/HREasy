@@ -210,17 +210,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, new LeaveApprovalPendingFragment(), "HomeFragment");
             ft.commit();
+
         } else if (v.getId() == R.id.cvClaimAppPend) {
 
             FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, new ClaimApprovalPendingFragment(), "HomeFragment");
             ft.commit();
+
         } else if (v.getId() == R.id.cvMyLeavePend) {
 
             FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, new PendingLeaveListFragment(), "HomeFragment");
             ft.commit();
+
         } else if (v.getId() == R.id.cvMyClaimPend) {
+
             FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, new PendingClaimListFragment(), "HomeFragment");
             ft.commit();

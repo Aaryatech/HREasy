@@ -236,14 +236,34 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
 
             final String remark = edRemark.getText().toString();
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             final String currDate = sdf.format(System.currentTimeMillis());
+
+            SimpleDateFormat sdf_ymd = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf_dmy = new SimpleDateFormat("dd-MM-yyyy");
+
+            String fromDate = "", toDate = "";
+
+            try {
+                Date d1 = sdf_ymd.parse(leaveModel.getLeaveFromdt());
+                Date d2 = sdf_ymd.parse(leaveModel.getLeaveTodt());
+
+                fromDate = sdf_dmy.format(d1.getTime());
+                toDate = sdf_dmy.format(d2.getTime());
+
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+
+                fromDate = leaveModel.getLeaveFromdt();
+                toDate = leaveModel.getLeaveTodt();
+            }
 
             if (leaveModel != null && loginUser != null) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
                 builder.setTitle("Confirmation");
-                builder.setMessage("Do you want to APPROVE the leave of employee " + leaveModel.getEmpName() + " from  " + leaveModel.getLeaveFromdt() + " to " + leaveModel.getLeaveTodt() + " for " + leaveModel.getLeaveNumDays() + " days.");
+                builder.setMessage("Do you want to APPROVE the leave of employee " + leaveModel.getEmpName() + " from  " + fromDate + " to " + toDate + " for " + leaveModel.getLeaveNumDays() + " days.");
                 builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -293,15 +313,34 @@ public class UpdateLeaveInfoFragment extends Fragment implements View.OnClickLis
 
             final String remark = edRemark.getText().toString();
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             final String currDate = sdf.format(System.currentTimeMillis());
 
+            SimpleDateFormat sdf_ymd = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf_dmy = new SimpleDateFormat("dd-MM-yyyy");
+
+            String fromDate = "", toDate = "";
+
+            try {
+                Date d1 = sdf_ymd.parse(leaveModel.getLeaveFromdt());
+                Date d2 = sdf_ymd.parse(leaveModel.getLeaveTodt());
+
+                fromDate = sdf_dmy.format(d1.getTime());
+                toDate = sdf_dmy.format(d2.getTime());
+
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+
+                fromDate = leaveModel.getLeaveFromdt();
+                toDate = leaveModel.getLeaveTodt();
+            }
 
             if (leaveModel != null && loginUser != null) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
                 builder.setTitle("Confirmation");
-                builder.setMessage("Do you want to REJECT the leave of employee " + leaveModel.getEmpName() + " from  " + leaveModel.getLeaveFromdt() + " to " + leaveModel.getLeaveTodt() + " for " + leaveModel.getLeaveNumDays() + " days.");
+                builder.setMessage("Do you want to REJECT the leave of employee " + leaveModel.getEmpName() + " from  " + fromDate + " to " + toDate + " for " + leaveModel.getLeaveNumDays() + " days.");
                 builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

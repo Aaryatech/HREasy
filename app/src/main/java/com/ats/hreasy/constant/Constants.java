@@ -21,15 +21,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Constants {
 
 
-   // public static final String BASE_URL ="http://192.168.2.11:8096/";
-    public static final String BASE_URL = "http://132.148.143.124:8080/HrManagementSystem/";
+    //public static final String BASE_URL ="http://192.168.2.16:8093/";
+    //public static final String BASE_URL = "http://132.148.143.124:8080/HrManagementSystem/";
+    public static final String BASE_URL = "http://ifbthrms.infrabeat.com:8181/HrManagementSystem/";
 
     public static final String userName = "aaryatech";
 
     public static final String password = "Aaryatech@1cr";
 
-    public static final String DOC_URL = "http://132.148.143.124:8080/media/hr/";
-    public static final String IMAGE_URL = "http://132.148.143.124:8080/media/hr/";
+    public static final String DOC_URL = "http://ifbthrms.infrabeat.com:8181/hr/";
+    public static final String IMAGE_URL = "http://ifbthrms.infrabeat.com:8181/hr/";
 
 
 

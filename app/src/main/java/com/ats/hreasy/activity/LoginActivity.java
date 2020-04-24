@@ -42,6 +42,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         tv_forgotPass = (TextView) findViewById(R.id.tv_forgotPassword);
         btn_login = (Button) findViewById(R.id.btn_login);
 
+        tv_forgotPass.setOnClickListener(this);
+
         btn_login.setOnClickListener(this);
 
     }
@@ -72,6 +74,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             if (isValidUserName && isValidPass) {
                 doLogin(strUserName, strPass);
             }
+        }else if (v.getId()==R.id.tv_forgotPassword){
+            startActivity(new Intent(LoginActivity.this,ForgetPasswordActivity.class));
+            finish();
+
         }
     }
 

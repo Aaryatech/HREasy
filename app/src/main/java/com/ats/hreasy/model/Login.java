@@ -53,6 +53,7 @@ public class Login {
     private String empDeptName;
     private String locName;
     private String companyLogo;
+    private Integer isVisit;
     private String msg;
     private Boolean error;
 
@@ -457,6 +458,14 @@ public class Login {
         this.error = error;
     }
 
+    public Integer getIsVisit() {
+        return isVisit;
+    }
+
+    public void setIsVisit(Integer isVisit) {
+        this.isVisit = isVisit;
+    }
+
     @Override
     public String toString() {
         return "Login{" +
@@ -508,6 +517,7 @@ public class Login {
                 ", empDeptName='" + empDeptName + '\'' +
                 ", locName='" + locName + '\'' +
                 ", companyLogo='" + companyLogo + '\'' +
+                ", isVisit=" + isVisit +
                 ", msg='" + msg + '\'' +
                 ", error=" + error +
                 '}';

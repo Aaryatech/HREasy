@@ -314,7 +314,7 @@ public class AddLeaveFragment extends Fragment implements View.OnClickListener, 
 
             final String DateFrom = formatter3.format(FromDate);
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             final String currDate = sdf.format(System.currentTimeMillis());
 
             //  Log.e("fromDate", "-------------" + strFromDate);
